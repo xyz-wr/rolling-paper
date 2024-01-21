@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "papers")
@@ -21,6 +24,9 @@ public class Paper extends BaseTimeEntity{
 
     @Enumerated(EnumType.STRING)
     private IsPublic isPublic;
+
+    @OneToMany(mappedBy = "paper", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages = new ArrayList<>();
 
     @Builder
     public Paper(Long id, String title, IsPublic isPublic) {

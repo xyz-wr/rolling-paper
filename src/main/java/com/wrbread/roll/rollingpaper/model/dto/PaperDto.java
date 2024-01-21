@@ -9,6 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,6 +26,8 @@ public class PaperDto {
     @NotNull(message = "공개 여부는 필수 입력 값입니다.")
     private IsPublic isPublic;
 
+    private List<MessageDto> messages = new ArrayList<>();
+
     public Paper toEntity() { //빌더 패턴을 사용해 dto를 엔티티로 변환
         return Paper.builder()
                 .id(id)
@@ -34,5 +40,8 @@ public class PaperDto {
         this.id = paper.getId();
         this.title = paper.getTitle();
         this.isPublic = paper.getIsPublic();
+        this.messages = paper.getMessages().stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
     }
 }

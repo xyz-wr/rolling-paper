@@ -43,6 +43,7 @@ class MessageRepositoryTest {
 
         messageRepository.save(message);
         Long messageId= message.getId();
+
         // when
         Message result = messageRepository.findByPaperIdAndId(paperId, messageId);
 

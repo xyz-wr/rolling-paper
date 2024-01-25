@@ -8,9 +8,11 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class AuthDto {
     @Getter
+    @Setter
     @NoArgsConstructor
     public static class LoginDto {
         private String email;
@@ -24,8 +26,11 @@ public class AuthDto {
     }
 
     @Getter
+    @Setter
     @NoArgsConstructor
     public static class SignupDto {
+        private Long id;
+
         @NotBlank(message = "이메일은 필수 입력 값입니다.")
         private String nickname;
 
@@ -42,6 +47,7 @@ public class AuthDto {
 
         public User toEntity(String codename, String password) {
             return User.builder()
+                    .id(id)
                     .nickname(nickname)
                     .email(email)
                     .password(password)
@@ -52,6 +58,7 @@ public class AuthDto {
     }
 
     @Getter
+    @Setter
     @NoArgsConstructor
     public static class TokenDto {
         private String accessToken;

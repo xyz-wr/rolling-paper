@@ -23,7 +23,7 @@ public class UserService {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
     @Transactional
-    public void join(AuthDto.SignupDto signupDto) {
+    public User join(AuthDto.SignupDto signupDto) {
         if (checkNickname(signupDto.getNickname())) {
             throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
@@ -37,7 +37,7 @@ public class UserService {
         }
 
         User user = signupDto.toEntity(generateRandomString(), passwordEncoder.encode(signupDto.getPassword()));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     /** codename 랜덤 생성*/

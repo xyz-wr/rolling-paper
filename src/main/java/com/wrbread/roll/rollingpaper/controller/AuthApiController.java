@@ -1,14 +1,18 @@
 package com.wrbread.roll.rollingpaper.controller;
 
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
+import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.service.AuthService;
 import com.wrbread.roll.rollingpaper.service.UserService;
 import com.wrbread.roll.rollingpaper.util.SecurityUtil;
+import com.wrbread.roll.rollingpaper.util.UriCreator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @Slf4j
 @RestController
@@ -24,8 +28,11 @@ public class AuthApiController {
     // 회원가입
     @PostMapping("/join")
     public ResponseEntity<Void> signup(@RequestBody @Valid AuthDto.SignupDto signupDto) {
-        userService.join(signupDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        User user = userService.join(signupDto);
+
+        URI location = UriCreator.createUri("/api/auth/join", user.getId());
+
+        return ResponseEntity.created(location).build();
     }
 
     // 로그인 -> 토큰 발급

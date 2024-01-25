@@ -3,3 +3,8 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+jwt:
+  secret: ab8c1c1d244f7bfb2d8c9f9b6e98b5ad5e8e7f682621432b49545d4b7e78f0f6 #프로젝트의 실제 secret과 다르게 설정
+  refresh-token-seconds: 1209600 #14일
+  access-token-seconds: 43200 #12시간

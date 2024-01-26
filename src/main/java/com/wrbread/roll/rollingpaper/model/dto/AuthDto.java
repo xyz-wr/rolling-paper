@@ -4,6 +4,7 @@ import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
@@ -68,5 +69,27 @@ public class AuthDto {
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
         }
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class EmailDto {
+        @Email
+        @NotBlank(message = "이메일은 필수 입력값입니다.")
+        private String email;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class EmailCheckDto {
+        @Email
+        @NotEmpty(message = "이메일을 입력해 주세요")
+        private String email;
+
+        @NotEmpty(message = "인증 번호를 입력해 주세요")
+        private String authKey;
+
     }
 }

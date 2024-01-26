@@ -3,6 +3,7 @@ package com.wrbread.roll.rollingpaper.service;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
+import com.wrbread.roll.rollingpaper.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    private final RandomUtil randomUtil;
 
     @Transactional
     public User join(AuthDto.SignupDto signupDto) {
@@ -36,25 +37,9 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        User user = signupDto.toEntity(generateRandomString(), passwordEncoder.encode(signupDto.getPassword()));
+        User user = signupDto.toEntity(randomUtil.generateRandomString(), passwordEncoder.encode(signupDto.getPassword()));
         return userRepository.save(user);
     }
-
-    /** codename 랜덤 생성*/
-    public static String generateRandomString() {
-        int length = 6; // 원하는 문자열 길이
-        Random random = new Random();
-        StringBuilder stringBuilder = new StringBuilder(length);
-
-        for (int i = 0; i < length; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            char randomChar = CHARACTERS.charAt(randomIndex);
-            stringBuilder.append(randomChar);
-        }
-
-        return stringBuilder.toString();
-    }
-
 
     /** 이메일 중복 체크
      * 회원가입 기능 구현 시 사용

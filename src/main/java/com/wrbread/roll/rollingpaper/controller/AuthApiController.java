@@ -25,7 +25,7 @@ public class AuthApiController {
 
     private final long COOKIE_EXPIRATION = 7776000; // 90일
 
-    // 회원가입
+    /** 회원가입 */
     @PostMapping("/join")
     public ResponseEntity<Void> signup(@RequestBody @Valid AuthDto.SignupDto signupDto) {
         User user = userService.join(signupDto);
@@ -35,7 +35,7 @@ public class AuthApiController {
         return ResponseEntity.created(location).build();
     }
 
-    // 로그인 -> 토큰 발급
+    /** 로그인 -> 토큰 발급 */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthDto.LoginDto loginDto) {
         // User 등록 및 Refresh Token 저장
@@ -64,7 +64,7 @@ public class AuthApiController {
         }
     }
 
-    // 토큰 재발급
+    /** 토큰 재발급 */
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@CookieValue("refresh-token") String requestRefreshToken,
                                      @RequestHeader("Authorization") String requestAccessToken) {
@@ -96,7 +96,7 @@ public class AuthApiController {
         }
     }
 
-    // 로그아웃
+    /** 로그아웃 */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String requestAccessToken) {
         authService.logout(requestAccessToken);
@@ -114,5 +114,23 @@ public class AuthApiController {
     @PostMapping("/test")
     public String test() {
         return SecurityUtil.getCurrentUsername();
+    }
+
+    /** 이메일 전송 */
+    @PostMapping("/email")
+    public ResponseEntity<Void> sendEmail(@RequestBody @Valid AuthDto.EmailDto request) {
+        authService.sendAuthEmail(request);
+        return ResponseEntity.ok().build();
+    }
+
+    /** 이메일 인증번호 확인 */
+    @PostMapping("/checkEmail")
+    public String checkEmail(@RequestBody @Valid AuthDto.EmailCheckDto emailCheckDto) {
+        boolean check = authService.checkAuthEmail(emailCheckDto.getEmail(),emailCheckDto.getAuthKey());
+        if(check) {
+            return "인증되었습니다.";
+        } else {
+            return "잘못된 인증번호입니다.";
+        }
     }
 }

@@ -4,13 +4,14 @@ import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import com.wrbread.roll.rollingpaper.util.RandomUtil;
+import com.wrbread.roll.rollingpaper.util.SecurityUtil;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Random;
 
 @Slf4j
 @Service
@@ -57,4 +58,11 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
+    /** 유저 이메일 조회 */
+    public User verifiedEmail() {
+        String email = SecurityUtil.getCurrentUsername();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+        return user;
+    }
 }

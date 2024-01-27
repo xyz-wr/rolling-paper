@@ -28,8 +28,14 @@ public class Paper extends BaseTimeEntity{
     @OneToMany(mappedBy = "paper", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
     @Builder
-    public Paper(Long id, String title, IsPublic isPublic) {
+    public Paper(User user, Long id, String title, IsPublic isPublic) {
+        this.user = user;
         this.id = id;
         this.title = title;
         this.isPublic = isPublic;

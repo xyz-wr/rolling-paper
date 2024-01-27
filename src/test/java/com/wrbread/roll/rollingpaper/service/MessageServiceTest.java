@@ -4,15 +4,20 @@ import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
+import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
+import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,21 +38,30 @@ class MessageServiceTest {
     @MockBean
     private PaperRepository paperRepository;
 
+    @MockBean
+    private UserRepository userRepository;
     @Autowired
     private MessageService messageService;
 
     @Test
-    @DisplayName("메시지 저장")
+    @WithMockUser(roles = "USER")
+    @DisplayName("메시지 저장 테스트")
     void testSaveMessage() {
-
         //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .email(email)
+                .build();
+
         Long paperId = 1L;
         PaperDto paperDto = new PaperDto();
         paperDto.setId(paperId);
         paperDto.setTitle("Test Paper");
         paperDto.setIsPublic(IsPublic.PUBLIC);
 
-        Paper paper = paperDto.toEntity();
+        Paper paper = paperDto.toEntity(user);
 
         //given
         MessageDto messageDto = new MessageDto();
@@ -56,6 +70,8 @@ class MessageServiceTest {
 
         Message message = messageDto.toEntity(paper);
 
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
         when(paperRepository.findById(paperId)).thenReturn(Optional.of(paper));
         when(messageRepository.save(any(Message.class))).thenReturn(message);
 
@@ -70,16 +86,25 @@ class MessageServiceTest {
     }
 
     @Test
-    @DisplayName("메시지 조회")
+    @WithMockUser(roles = "USER")
+    @DisplayName("메시지 조회 테스트")
     void testGetMessage() {
         //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
         Long paperId = 1L;
         PaperDto paperDto = new PaperDto();
         paperDto.setId(paperId);
         paperDto.setTitle("Test Paper");
         paperDto.setIsPublic(IsPublic.PUBLIC);
 
-        Paper paper = paperDto.toEntity();
+        Paper paper = paperDto.toEntity(user);
 
         Long messageId = 1L;
         MessageDto messageDto = new MessageDto();
@@ -89,6 +114,8 @@ class MessageServiceTest {
 
         Message message = messageDto.toEntity(paper);
 
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
         when(messageRepository.findByPaperIdAndId(paperId, messageId)).thenReturn(message);
 
         //when
@@ -105,16 +132,25 @@ class MessageServiceTest {
     }
 
     @Test
-    @DisplayName("메시지 수정")
+    @WithMockUser(roles = "USER")
+    @DisplayName("메시지 수정 테스트")
     void testUpdateMessage() {
         //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
         Long paperId = 1L;
         PaperDto paperDto = new PaperDto();
         paperDto.setId(paperId);
         paperDto.setTitle("Test Paper");
         paperDto.setIsPublic(IsPublic.PUBLIC);
 
-        Paper paper = paperDto.toEntity();
+        Paper paper = paperDto.toEntity(user);
 
         Long messageId = 1L;
         MessageDto updatedMessageDto = new MessageDto();
@@ -129,6 +165,8 @@ class MessageServiceTest {
                 .content(updatedMessageDto.getContent())
                 .build();
 
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
         when(messageRepository.findByPaperIdAndId(paperId, messageId)).thenReturn(message);
         when(messageRepository.save(any(Message.class))).thenReturn(message);
 
@@ -146,16 +184,25 @@ class MessageServiceTest {
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     @DisplayName("특정 롤링페이퍼의 전체 메시지 조회")
     void testGetMessages() {
         //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
         Long paperId = 1L;
         PaperDto paperDto = new PaperDto();
         paperDto.setId(paperId);
         paperDto.setTitle("Test Paper");
         paperDto.setIsPublic(IsPublic.PUBLIC);
 
-        Paper paper = paperDto.toEntity();
+        Paper paper = paperDto.toEntity(user);
 
         Long messageId = 1L;
         MessageDto updatedMessageDto = new MessageDto();
@@ -177,6 +224,8 @@ class MessageServiceTest {
                 .content(updatedMessageDto.getContent())
                 .build();
 
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
         when(paperRepository.findById(paperId)).thenReturn(Optional.of(paper));
         when(messageRepository.findByPaper(paper)).thenReturn(Arrays.asList(message1, message2));
 
@@ -192,17 +241,26 @@ class MessageServiceTest {
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     @DisplayName("메시지 삭제")
     void testDeleteMessage() {
+        //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
         Long paperId = 1L;
         PaperDto paperDto = new PaperDto();
         paperDto.setId(paperId);
         paperDto.setTitle("Test Paper");
         paperDto.setIsPublic(IsPublic.PUBLIC);
 
-        Paper paper = paperDto.toEntity();
+        Paper paper = paperDto.toEntity(user);
 
-        //given
         Long messageId = 1L;
         MessageDto updatedMessageDto = new MessageDto();
         updatedMessageDto.setId(messageId);
@@ -216,6 +274,8 @@ class MessageServiceTest {
                 .content(updatedMessageDto.getContent())
                 .build();
 
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
         when(messageRepository.findByPaperIdAndId(paperId, messageId)).thenReturn(message);
 
         //when

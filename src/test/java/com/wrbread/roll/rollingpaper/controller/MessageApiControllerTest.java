@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
+import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.service.MessageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -49,11 +51,16 @@ class MessageApiControllerTest {
     private MessageService messageService;
 
     @Test
-    @DisplayName("메시지 저장")
+    @WithMockUser(roles = "USER")
+    @DisplayName("메시지 저장 테스트")
     void testSaveMessage() throws Exception {
         //given
+        User user = User.builder()
+                .email("test@gmail.com")
+                .build();
+
         Long paperId = 1L;
-        Paper paper = new Paper(paperId, "title", PUBLIC);
+        Paper paper = new Paper(user, paperId, "title", PUBLIC);
 
         MessageDto messageDto = new MessageDto();
         messageDto.setName("name");
@@ -85,11 +92,16 @@ class MessageApiControllerTest {
     }
 
     @Test
-    @DisplayName("메시지 조회")
+    @WithMockUser(roles = "USER")
+    @DisplayName("메시지 조회 테스트")
     void testGetMessage() throws Exception {
         //given
+        User user = User.builder()
+                .email("test@gmail.com")
+                .build();
+
         Long paperId = 1L;
-        Paper paper = new Paper(paperId, "title", PUBLIC);
+        Paper paper = new Paper(user, paperId, "title", PUBLIC);
 
         Long messageId = 1L;
         MessageDto messageDto = new MessageDto();
@@ -121,11 +133,16 @@ class MessageApiControllerTest {
     }
 
     @Test
-    @DisplayName("메시지 수정")
+    @WithMockUser(roles = "USER")
+    @DisplayName("메시지 수정 테스트")
     void testUpdateMessage() throws Exception {
         // Given
+        User user = User.builder()
+                .email("test@gmail.com")
+                .build();
+
         Long paperId = 1L;
-        Paper paper = new Paper(paperId, "title", PUBLIC);
+        Paper paper = new Paper(user, paperId, "title", PUBLIC);
 
         Long messageId = 1L;
         MessageDto updatedMessageDto = new MessageDto();
@@ -163,11 +180,16 @@ class MessageApiControllerTest {
     }
 
     @Test
-    @DisplayName("특정 롤링페이퍼의 전체 메시지 조회")
+    @WithMockUser(roles = "USER")
+    @DisplayName("특정 롤링페이퍼의 전체 메시지 조회 테스트")
     void testGetMessages() throws Exception {
         // Given
+        User user = User.builder()
+                .email("test@gmail.com")
+                .build();
+
         Long paperId = 1L;
-        Paper paper = new Paper(paperId, "title", PUBLIC);
+        Paper paper = new Paper(user, paperId, "title", PUBLIC);
 
         List<Message> messages = Arrays.asList(
                 new Message(paper, 1L, "name1", "Test Content1"),
@@ -204,7 +226,8 @@ class MessageApiControllerTest {
     }
 
     @Test
-    @DisplayName("메시지 삭제")
+    @WithMockUser(roles = "USER")
+    @DisplayName("메시지 삭제 테스트")
     void testDeleteMessage() throws Exception {
         // Given
         Long paperId = 1L;

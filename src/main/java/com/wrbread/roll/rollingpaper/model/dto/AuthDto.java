@@ -92,4 +92,18 @@ public class AuthDto {
         private String authKey;
 
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class UserDto {
+        private String codename;
+
+        private String nickname;
+
+        public UserDto(User user) {
+            this.codename = user.getCodename();
+            this.nickname = user.getNickname();
+        }
+    }
 }

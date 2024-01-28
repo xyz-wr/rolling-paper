@@ -172,6 +172,7 @@ public class InvitationService {
         }
     }
 
+    /** invitation과 paper의 관계 끊기*/
     public void deleteInvitationsForPaper(Paper paper) {
         List<Invitation> invitations = invitationRepository.findByPaper(paper);
 

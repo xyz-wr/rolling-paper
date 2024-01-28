@@ -221,4 +221,21 @@ class InvitationServiceTest {
         assertEquals(2, acceptedUsers.size());
     }
 
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("rejectInvitation 테스트")
+    public void testDeleteInvitationsForPaper() {
+        // 테스트에 필요한 데이터 설정
+        Paper paper = new Paper();
+        Invitation invitation1 = new Invitation();
+        Invitation invitation2 = new Invitation();
+        List<Invitation> invitations = Arrays.asList(invitation1, invitation2);
+
+        when(invitationRepository.findByPaper(paper)).thenReturn(invitations);
+
+        invitationService.deleteInvitationsForPaper(paper);
+
+        verify(invitationRepository, times(1)).delete(invitation1);
+        verify(invitationRepository, times(1)).delete(invitation2);
+    }
 }

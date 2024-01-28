@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -188,4 +187,37 @@ class InvitationRepositoryTest {
         assertNotNull(results);
         assertEquals(2, results.size());
     }
+
+    @Test
+    @DisplayName("findByPaper 테스트")
+    public void testFindByPaper() {
+        Paper paper = Paper.builder()
+                .title("Paper")
+                .isPublic(IsPublic.PUBLIC)
+                .build();
+        paperRepository.save(paper);
+
+        Invitation invitation1 = Invitation.builder()
+                .paper(paper)
+                .status(InvitationStatus.ACCEPTED)
+                .build();
+
+        Invitation invitation2 = Invitation.builder()
+                .paper(paper)
+                .status(InvitationStatus.ACCEPTED)
+                .build();
+
+        List<Invitation> invitations = Arrays.asList(invitation1, invitation2);
+        invitationRepository.saveAll(invitations);
+
+        // when
+        List<Invitation> results = invitationRepository.findByPaper(paper);
+
+        //then
+        assertNotNull(results);
+        assertEquals(2, results.size());
+        assertTrue(results.contains(invitation1));
+        assertTrue(results.contains(invitation2));
+    }
+
 }

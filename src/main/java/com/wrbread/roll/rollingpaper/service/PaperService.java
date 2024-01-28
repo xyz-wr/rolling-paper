@@ -1,9 +1,12 @@
 package com.wrbread.roll.rollingpaper.service;
 
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
+import com.wrbread.roll.rollingpaper.model.entity.Invitation;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
+import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
+import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,10 @@ public class PaperService {
     private final PaperRepository paperRepository;
 
     private final UserService userService;
+
+    private final InvitationService invitationService;
+
+    private final InvitationRepository invitationRepository;
 
     /** 롤링 페이퍼 등록 */
     public Paper savePaper(PaperDto paperDto) {
@@ -36,13 +43,9 @@ public class PaperService {
         Paper paper = paperRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        boolean isOwner = paper.getUser().getId().equals(user.getId());
-
-        //친구 공개인 경우 허락된 유저인지 확인 && 추후에 초대장 수락 유저 추가
+        //친구 공개인 경우 허락된 유저인지 확인
         if (paper.getIsPublic().equals(IsPublic.FRIEND)) {
-            if (!isOwner) {
-                throw new IllegalArgumentException("해당 권한이 없습니다.");
-            }
+            invitationService.checkOwnerAndAccepted(user, paper);
         }
 
         return paper;
@@ -57,12 +60,7 @@ public class PaperService {
         Paper paper = paperRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        boolean isOwner = paper.getUser().getId().equals(user.getId());
-
-        // 작성자인지 확인
-        if (!isOwner) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
-        }
+        checkOwner(user, paper);
 
         paper.updatePaper(paperDto);
 
@@ -79,25 +77,38 @@ public class PaperService {
     public List<Paper> getFriendPapers() {
         User user = userService.verifiedEmail();
 
-        return paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND);
+        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND);
+
+        //초대 수락한 책 추가
+        List<Invitation> invitations = invitationRepository.findAllByReceiverAndStatus(user, InvitationStatus.ACCEPTED);
+        for (Invitation invitation : invitations) {
+            papers.add(invitation.getPaper());
+        }
+
+        return papers;
     }
 
 
-    /** 롤링 페이퍼 삭제 */
+    /** 롤링 페이퍼 삭제
+     * 롤링 페이퍼 작성자만 수정 가능
+     * */
     public void deletePaper(Long id) {
         User user = userService.verifiedEmail();
 
         Paper paper = paperRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        boolean isOwner = paper.getUser().getId().equals(user.getId());
-
-        // 작성자인지 확인
-        if (!isOwner) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
-        }
+        checkOwner(user, paper);
 
         paperRepository.delete(paper);
     }
 
+    /** 롤링 페이퍼를 작성한 유저인지 확인 */
+    public void checkOwner(User user, Paper paper) {
+        boolean isOwner = paper.getUser().getId().equals(user.getId());
+
+        if (!isOwner) {
+            throw new IllegalArgumentException("해당 권한이 없습니다.");
+        }
+    }
 }

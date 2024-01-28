@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -154,5 +155,37 @@ class InvitationRepositoryTest {
         assertEquals(2, results.size());
         assertTrue(results.contains(invitation1));
         assertTrue(results.contains(invitation2));
+    }
+
+    @Test
+    @DisplayName("findAllByReceiverAndStatus 테스트")
+    public void testFindAllByReceiverAndStatus() {
+        // given
+        User receiver = User.builder()
+                .nickname("testNickname")
+                .email("receiver@gmail.com")
+                .build();
+        userRepository.save(receiver);
+
+        Invitation invitation1 = Invitation.builder()
+                .status(InvitationStatus.ACCEPTED)
+                .receiver(receiver)
+                .build();
+
+        Invitation invitation2 = Invitation.builder()
+                .status(InvitationStatus.ACCEPTED)
+                .receiver(receiver)
+                .build();
+
+        List<Invitation> invitations = Arrays.asList(invitation1, invitation2);
+        invitationRepository.saveAll(invitations);
+
+
+        // when
+        List<Invitation> results = invitationRepository.findAllByReceiverAndStatus(receiver, InvitationStatus.ACCEPTED);
+
+        // then
+        assertNotNull(results);
+        assertEquals(2, results.size());
     }
 }

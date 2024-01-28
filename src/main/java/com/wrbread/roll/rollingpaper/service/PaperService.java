@@ -100,6 +100,7 @@ public class PaperService {
 
         checkOwner(user, paper);
 
+        invitationService.deleteInvitationsForPaper(paper);
         paperRepository.delete(paper);
     }
 
@@ -111,4 +112,6 @@ public class PaperService {
             throw new IllegalArgumentException("해당 권한이 없습니다.");
         }
     }
+
+
 }

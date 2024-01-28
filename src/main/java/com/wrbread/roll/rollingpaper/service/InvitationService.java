@@ -171,4 +171,12 @@ public class InvitationService {
             throw new IllegalArgumentException("해당 권한이 없습니다.");
         }
     }
+
+    public void deleteInvitationsForPaper(Paper paper) {
+        List<Invitation> invitations = invitationRepository.findByPaper(paper);
+
+        for (Invitation invitation : invitations) {
+            invitationRepository.delete(invitation);
+        }
+    }
 }

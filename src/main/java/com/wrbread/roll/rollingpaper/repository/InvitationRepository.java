@@ -19,4 +19,5 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
 
     List<Invitation> findAllByReceiverAndStatus(User receiver, InvitationStatus status);
 
+    List<Invitation> findByPaper(Paper paper);
 }

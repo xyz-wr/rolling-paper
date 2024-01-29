@@ -52,6 +52,7 @@ class MessageServiceTest {
                 .getAuthentication();
         String email = authentication.getName();
         User user = User.builder()
+                .id(1L)
                 .email(email)
                 .build();
 
@@ -68,7 +69,7 @@ class MessageServiceTest {
         messageDto.setName("Test Name");
         messageDto.setContent("Test Content");
 
-        Message message = messageDto.toEntity(paper);
+        Message message = messageDto.toEntity(user, paper);
 
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
@@ -112,7 +113,7 @@ class MessageServiceTest {
         messageDto.setName("Test Name");
         messageDto.setContent("Test Content");
 
-        Message message = messageDto.toEntity(paper);
+        Message message = messageDto.toEntity(user, paper);
 
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
@@ -160,6 +161,7 @@ class MessageServiceTest {
 
         Message message = Message.builder()
                 .id(1L)
+                .user(user)
                 .paper(paper)
                 .name(updatedMessageDto.getName())
                 .content(updatedMessageDto.getContent())
@@ -269,6 +271,7 @@ class MessageServiceTest {
 
         Message message = Message.builder()
                 .id(1L)
+                .user(user)
                 .paper(paper)
                 .name(updatedMessageDto.getName())
                 .content(updatedMessageDto.getContent())

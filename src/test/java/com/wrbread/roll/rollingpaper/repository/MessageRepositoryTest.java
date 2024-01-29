@@ -74,8 +74,18 @@ class MessageRepositoryTest {
         messageDto2.setName("name2");
         messageDto2.setContent("content2");
 
-        Message message1 = new Message(paper, messageDto1.getId(), messageDto1.getName(), messageDto1.getContent());
-        Message message2 = new Message(paper, messageDto2.getId(), messageDto2.getName(), messageDto2.getContent());
+        Message message1 = Message.builder()
+                .paper(paper)
+                .id(messageDto1.getId())
+                .name(messageDto1.getName())
+                .content(messageDto1.getContent()).build();
+
+        Message message2 = Message.builder()
+                .paper(paper)
+                .id(messageDto2.getId())
+                .name(messageDto2.getName())
+                .content(messageDto2.getContent()).build();
+//        Message message2 = new Message(paper, messageDto2.getId(), messageDto2.getName(), messageDto2.getContent());
 
 
         List<Message> messages = Arrays.asList(message1, message2);

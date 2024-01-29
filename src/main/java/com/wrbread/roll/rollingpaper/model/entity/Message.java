@@ -25,8 +25,14 @@ public class Message extends BaseTimeEntity{
     @JoinColumn(name = "paper_id")
     private Paper paper;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
     @Builder
-    public Message(Paper paper, Long id, String name, String content) {
+    public Message(User user, Paper paper, Long id, String name, String content) {
+        this.user = user;
         this.paper = paper;
         this.id = id;
         this.name = name;

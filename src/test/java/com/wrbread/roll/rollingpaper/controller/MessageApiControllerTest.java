@@ -66,7 +66,7 @@ class MessageApiControllerTest {
         messageDto.setName("name");
         messageDto.setContent("Lorem Ipsum is dummy text used in the printing and typesetting industry since the 1500s.");
 
-        Message message = new Message(paper, 1L, messageDto.getName(), messageDto.getContent());
+        Message message = new Message(user, paper, 1L, messageDto.getName(), messageDto.getContent());
         given(messageService.saveMessages(any(Long.class), any(MessageDto.class))).willReturn(message);
 
         String content = objectMapper.writeValueAsString(messageDto);
@@ -97,6 +97,7 @@ class MessageApiControllerTest {
     void testGetMessage() throws Exception {
         //given
         User user = User.builder()
+                .id(1L)
                 .email("test@gmail.com")
                 .build();
 
@@ -110,7 +111,7 @@ class MessageApiControllerTest {
         messageDto.setName("name");
         messageDto.setContent("Lorem Ipsum is dummy text used in the printing and typesetting industry since the 1500s.");
 
-        given(messageService.getMessage(any(Long.class), any(Long.class))).willReturn(messageDto.toEntity(paper));
+        given(messageService.getMessage(any(Long.class), any(Long.class))).willReturn(messageDto.toEntity(user, paper));
 
         URI uri = UriComponentsBuilder
                 .newInstance()
@@ -138,6 +139,7 @@ class MessageApiControllerTest {
     void testUpdateMessage() throws Exception {
         // Given
         User user = User.builder()
+                .id(1L)
                 .email("test@gmail.com")
                 .build();
 
@@ -152,7 +154,7 @@ class MessageApiControllerTest {
         updatedMessageDto.setContent("Lorem Ipsum is dummy text");
 
         given(messageService.updateMessage(any(Long.class), any(Long.class), any(MessageDto.class)))
-                .willReturn(new Message(paper, messageId, updatedMessageDto.getName(), updatedMessageDto.getContent()));
+                .willReturn(new Message(user, paper, messageId, updatedMessageDto.getName(), updatedMessageDto.getContent()));
 
 
         String content = objectMapper.writeValueAsString(updatedMessageDto);
@@ -185,6 +187,7 @@ class MessageApiControllerTest {
     void testGetMessages() throws Exception {
         // Given
         User user = User.builder()
+                .id(1L)
                 .email("test@gmail.com")
                 .build();
 
@@ -192,8 +195,8 @@ class MessageApiControllerTest {
         Paper paper = new Paper(user, paperId, "title", PUBLIC);
 
         List<Message> messages = Arrays.asList(
-                new Message(paper, 1L, "name1", "Test Content1"),
-                new Message(paper, 2L, "name2", "Test Content2")
+                new Message(user, paper, 1L, "name1", "Test Content1"),
+                new Message(user, paper, 2L, "name2", "Test Content2")
         );
 
         given(messageService.getMessages(paperId)).willReturn(messages);

@@ -2,6 +2,7 @@ package com.wrbread.roll.rollingpaper.service;
 
 import com.wrbread.roll.rollingpaper.model.dto.InvitationDto;
 import com.wrbread.roll.rollingpaper.model.entity.Invitation;
+import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;

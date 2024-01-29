@@ -6,7 +6,6 @@ import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest
@@ -67,8 +68,8 @@ class PaperServiceTest {
         Paper savedPaper = paperService.savePaper(paperDto);
 
         // then
-        Assertions.assertEquals(savedPaper.getTitle(), "Test Paper");
-        Assertions.assertEquals(savedPaper.getIsPublic(), IsPublic.PUBLIC);
+        assertEquals(savedPaper.getTitle(), "Test Paper");
+        assertEquals(savedPaper.getIsPublic(), IsPublic.PUBLIC);
 
         verify(paperRepository, times(1)).save(any());
     }
@@ -102,9 +103,9 @@ class PaperServiceTest {
         Paper getPaper = paperService.getPaper(paperId);
 
         // then
-        Assertions.assertEquals(getPaper.getId(), paperId);
-        Assertions.assertEquals(getPaper.getTitle(), "Test Paper");
-        Assertions.assertEquals(getPaper.getIsPublic(), IsPublic.PUBLIC);
+        assertEquals(getPaper.getId(), paperId);
+        assertEquals(getPaper.getTitle(), "Test Paper");
+        assertEquals(getPaper.getIsPublic(), IsPublic.PUBLIC);
 
         // verify
         verify(userRepository, times(1)).findByEmail(email);
@@ -146,9 +147,9 @@ class PaperServiceTest {
         Paper updatedPaper = paperService.updatePaper(paperId, updatedPaperDto);
 
         // then
-        Assertions.assertEquals(updatedPaper.getId(), paperId);
-        Assertions.assertEquals(updatedPaper.getTitle(), "Updated Paper");
-        Assertions.assertEquals(updatedPaper.getIsPublic(), IsPublic.PUBLIC);
+        assertEquals(updatedPaper.getId(), paperId);
+        assertEquals(updatedPaper.getTitle(), "Updated Paper");
+        assertEquals(updatedPaper.getIsPublic(), IsPublic.PUBLIC);
 
         // verify
         verify(userRepository, times(1)).findByEmail(email);
@@ -183,9 +184,9 @@ class PaperServiceTest {
         List<Paper> publicPapers = paperService.getPublicPapers();
 
         // then
-        Assertions.assertEquals(publicPapers.size(), 2);
-        Assertions.assertTrue(publicPapers.contains(paper1));
-        Assertions.assertTrue(publicPapers.contains(paper2));
+        assertEquals(publicPapers.size(), 2);
+        assertTrue(publicPapers.contains(paper1));
+        assertTrue(publicPapers.contains(paper2));
 
         // verify
         verify(paperRepository, times(1)).findByIsPublic(IsPublic.PUBLIC);
@@ -228,9 +229,9 @@ class PaperServiceTest {
         List<Paper> friendPapers = paperService.getFriendPapers();
 
         // then
-        Assertions.assertEquals(friendPapers.size(), 2);
-        Assertions.assertTrue(friendPapers.contains(paper1));
-        Assertions.assertTrue(friendPapers.contains(paper2));
+        assertEquals(friendPapers.size(), 2);
+        assertTrue(friendPapers.contains(paper1));
+        assertTrue(friendPapers.contains(paper2));
 
         // verify
         verify(userRepository, times(1)).findByEmail(email);

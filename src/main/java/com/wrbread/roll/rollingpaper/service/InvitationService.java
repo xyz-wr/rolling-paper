@@ -8,6 +8,7 @@ import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
+import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import com.wrbread.roll.rollingpaper.util.SecurityUtil;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +30,11 @@ public class InvitationService {
     private final PaperRepository paperRepository;
 
     private final InvitationRepository invitationRepository;
+
+    private final MessageRepository messageRepository;
+
+    private final UserService userService;
+
 
     /** 다이어리 초대 요청
      * 자기 자신은 초대 불가
@@ -121,6 +128,31 @@ public class InvitationService {
 
         invitation.reject();
         invitationRepository.save(invitation);
+    }
+
+    /** 롤링 페이퍼 초대 수락 철회 -> 롤링 페이퍼 탈퇴
+     * 초대장을 수락한 사람인지 확인 후 invitationStatus 상태 변경
+     * 롤링 페이퍼 탈퇴 시 작성했던 메시지 전부 삭제
+     * */
+    public void withdrawInvitation(Long paperId) {
+        User user = userService.verifiedEmail();
+
+        Paper paper = paperRepository.findById(paperId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        // 초대장을 수락한 사람인지 확인
+        Optional<Invitation> acceptedInvitation = invitationRepository.findByPaperAndReceiverAndStatus(paper, user, InvitationStatus.ACCEPTED);
+
+        if (!acceptedInvitation.isPresent()) {
+            throw new EntityNotFoundException("해당 권한이 없습니다.");
+        } else {
+            Invitation invitation = acceptedInvitation.get();
+            invitation.withdraw();
+            invitationRepository.save(invitation);
+        }
+
+        List<Message> messages = messageRepository.findByPaperAndUser(paper, user);
+        messageRepository.deleteAll(messages);
     }
 
     /** 참여 요청 받은 롤링 페이퍼의 초대장 전체 리스트 */

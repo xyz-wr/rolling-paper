@@ -63,4 +63,11 @@ public class InvitationApiController {
         return ResponseEntity.ok(responseDtos);
     }
 
+    /** 롤링 페이퍼 탈퇴 */
+    @DeleteMapping("/papers/{paper-id}/withdraw")
+    public ResponseEntity<Void> withdrawInvitation(@PathVariable("paper-id") Long paperId) {
+
+        invitationService.withdrawInvitation(paperId);
+        return ResponseEntity.noContent().build();
+    }
 }

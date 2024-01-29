@@ -33,6 +33,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -145,6 +146,30 @@ class InvitationApiControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
+    @DisplayName("롤링 페이퍼 탈퇴 테스트")
+    void testWithdrawInvitation() throws Exception {
+        // given
+        Long paperId = 1L;
+
+        doNothing().when(invitationService).withdrawInvitation(paperId);
+
+        URI uri = UriComponentsBuilder
+                .newInstance()
+                .path("/api/invitations/papers/{paper-id}/withdraw")
+                .buildAndExpand(paperId)
+                .toUri();
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                MockMvcRequestBuilders.delete(uri));
+
+        // then
+        actions
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
     @DisplayName("롤링 페이퍼 초대 요청 리스트")
     void testReceivedInvitation() throws Exception {
         //given
@@ -189,8 +214,7 @@ class InvitationApiControllerTest {
                 .toUri();
 
         // when
-        ResultActions actions = mockMvc.perform(
-                MockMvcRequestBuilders.get(uri)
+        ResultActions actions = mockMvc.perform(get(uri)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -245,7 +269,7 @@ class InvitationApiControllerTest {
 
         // when
         ResultActions actions = mockMvc.perform(
-                MockMvcRequestBuilders.get(uri)
+                get(uri)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 

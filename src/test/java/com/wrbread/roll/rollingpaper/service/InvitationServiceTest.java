@@ -3,11 +3,13 @@ package com.wrbread.roll.rollingpaper.service;
 import com.wrbread.roll.rollingpaper.model.dto.InvitationDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Invitation;
+import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
+import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -46,10 +48,16 @@ class InvitationServiceTest {
     private UserRepository userRepository;
 
     @MockBean
+    private MessageRepository messageRepository;
+
+    @MockBean
     private InvitationRepository invitationRepository;
 
     @Autowired
     private InvitationService invitationService;
+
+    @Autowired
+    private UserService userService;
 
     @Test
     @WithMockUser(roles = "USER")
@@ -158,6 +166,63 @@ class InvitationServiceTest {
 
     @Test
     @WithMockUser(roles = "USER")
+    @DisplayName("withdrawInvitation 테스트")
+    public void testWithdrawInvitation() {
+        //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String recEmail = authentication.getName();
+
+        User receiver = User.builder()
+                .email(recEmail)
+                .build();
+
+        Paper paper = Paper.builder()
+                .id(1L)
+                .title("Test Paper")
+                .isPublic(IsPublic.FRIEND)
+                .build();
+
+        Message message1 = Message.builder()
+                .id(1L)
+                .user(receiver)
+                .paper(paper)
+                .name("testMessage")
+                .content("testContent")
+                .build();
+
+        Message message2 = Message.builder()
+                .id(2L)
+                .user(receiver)
+                .paper(paper)
+                .name("testMessage")
+                .content("testContent")
+                .build();
+
+        Long invitationId = 1L;
+        Invitation invitation = Invitation.builder()
+                .id(invitationId)
+                .paper(paper)
+                .status(InvitationStatus.ACCEPTED)
+                .receiver(receiver)
+                .build();
+
+        when(userRepository.findByEmail(recEmail)).thenReturn(java.util.Optional.of(receiver));
+        when(paperRepository.findById(1L)).thenReturn(Optional.of(paper));
+        when(invitationRepository.findByPaperAndReceiverAndStatus(paper, receiver, InvitationStatus.ACCEPTED)).thenReturn(Optional.of(invitation));
+        when(messageRepository.findByPaperAndUser(paper, receiver)).thenReturn(Arrays.asList(message1, message2));
+
+        // when
+        invitationService.withdrawInvitation(invitationId);
+
+        // then
+        assertEquals(InvitationStatus.WITHDRAW, invitation.getStatus());
+        verify(invitationRepository, times(1)).save(invitation);
+        verify(messageRepository, times(1)).deleteAll(Arrays.asList(message1, message2));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
     @DisplayName("getReceivedInvitations 테스트")
     public void testGetReceivedInvitations() {
         // given
@@ -238,4 +303,5 @@ class InvitationServiceTest {
         verify(invitationRepository, times(1)).delete(invitation1);
         verify(invitationRepository, times(1)).delete(invitation2);
     }
+
 }

@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -90,6 +91,39 @@ class InvitationRepositoryTest {
         assertNotNull(result);
         assertEquals(paper, result.getPaper());
         assertEquals(receiver, result.getReceiver());
+    }
+
+    @Test
+    @DisplayName("findByPaperAndReceiverAndStatus 테스트")
+    public void testFindByPaperAndReceiverAndStatus() {
+        User receiver = User.builder()
+                .nickname("testNickname")
+                .email("receiver@gmail.com")
+                .build();
+        userRepository.save(receiver);
+
+        Paper paper = Paper.builder()
+                .title("Paper")
+                .isPublic(IsPublic.PUBLIC)
+                .build();
+        paperRepository.save(paper);
+
+        Invitation invitation = Invitation.builder()
+                .paper(paper)
+                .receiver(receiver)
+                .status(InvitationStatus.ACCEPTED)
+                .receiver(receiver)
+                .build();
+        invitationRepository.save(invitation);
+
+        // when
+        Optional<Invitation> result = invitationRepository.findByPaperAndReceiverAndStatus(paper, receiver, InvitationStatus.ACCEPTED);
+
+        //then
+        assertTrue(result.isPresent());
+        assertEquals(paper, result.get().getPaper());
+        assertEquals(receiver, result.get().getReceiver());
+        assertEquals(InvitationStatus.ACCEPTED, result.get().getStatus());
     }
 
     @Test

@@ -45,4 +45,9 @@ public class Invitation extends BaseTimeEntity{
     public void reject() { //초대장 거절
         this.status = InvitationStatus.REJECTED;
     }
+
+    public void withdraw() { //초대장 거절
+        this.status = InvitationStatus.WITHDRAW;
+    }
+
 }

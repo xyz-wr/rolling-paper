@@ -9,7 +9,6 @@ import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
@@ -80,8 +80,8 @@ class MessageServiceTest {
         Message savedMessage = messageService.saveMessages(paperId, messageDto);
 
         //then
-        Assertions.assertEquals(savedMessage.getName(), "Test Name", "1자 이상 10자 이하로 작성해주세요.");
-        Assertions.assertEquals(savedMessage.getContent(), "Test Content", "1자 이상 250자 이하로 작성해주세요.");
+        assertEquals(savedMessage.getName(), "Test Name", "1자 이상 10자 이하로 작성해주세요.");
+        assertEquals(savedMessage.getContent(), "Test Content", "1자 이상 250자 이하로 작성해주세요.");
 
         verify(messageRepository, times(1)).save(any());
     }
@@ -123,10 +123,10 @@ class MessageServiceTest {
         Message getMessage = messageService.getMessage(paperId, messageId);
 
         //then
-        Assertions.assertEquals(getMessage.getId(), messageId);
-        Assertions.assertEquals(getMessage.getPaper().getId(), paperId);
-        Assertions.assertEquals(getMessage.getName(), "Test Name");
-        Assertions.assertEquals(getMessage.getContent(), "Test Content");
+        assertEquals(getMessage.getId(), messageId);
+        assertEquals(getMessage.getPaper().getId(), paperId);
+        assertEquals(getMessage.getName(), "Test Name");
+        assertEquals(getMessage.getContent(), "Test Content");
 
         // verify
         verify(messageRepository, times(1)).findByPaperIdAndId(paperId, messageId);
@@ -176,10 +176,10 @@ class MessageServiceTest {
         Message updatedMessage = messageService.updateMessage(paperId, messageId, updatedMessageDto);
 
         //then
-        Assertions.assertEquals(updatedMessage.getId(), messageId);
-        Assertions.assertEquals(updatedMessage.getPaper().getId(), paperId);
-        Assertions.assertEquals(updatedMessage.getName(), "Updated Name");
-        Assertions.assertEquals(updatedMessage.getContent(), "Updated Content");
+        assertEquals(updatedMessage.getId(), messageId);
+        assertEquals(updatedMessage.getPaper().getId(), paperId);
+        assertEquals(updatedMessage.getName(), "Updated Name");
+        assertEquals(updatedMessage.getContent(), "Updated Content");
 
         verify(messageRepository, times(1)).findByPaperIdAndId(paperId, messageId);
         verify(messageRepository, times(1)).save(any());
@@ -235,7 +235,7 @@ class MessageServiceTest {
         List<Message> messages = messageService.getMessages(paperId);
 
         // Then
-        Assertions.assertEquals(messages.size(), 2);
+        assertEquals(messages.size(), 2);
 
         verify(paperRepository, times(1)).findById(paperId);
         verify(messageRepository, times(1)).findByPaper(paper);

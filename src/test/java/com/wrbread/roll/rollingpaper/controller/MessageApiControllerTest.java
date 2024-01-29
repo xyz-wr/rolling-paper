@@ -245,8 +245,7 @@ class MessageApiControllerTest {
                 .toUri();
 
         // When
-        ResultActions actions = mockMvc.perform(
-                MockMvcRequestBuilders.delete(uri));
+        ResultActions actions = mockMvc.perform(delete(uri));
 
         // Then
         actions

@@ -1,11 +1,12 @@
 package com.wrbread.roll.rollingpaper.service;
 
+import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
+import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
-import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
 import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,11 +28,20 @@ public class MessageService {
 
     private final InvitationService invitationService;
 
-    private final InvitationRepository invitationRepository;
 
     /** 롤링 페이퍼 아이디 및 메시지 아이디 조회 */
     public Message findByPaperIdAndMessageId(Long paperId, Long messageId) {
-        return messageRepository.findByPaperIdAndId(paperId, messageId);
+        Optional<Paper> paper = paperRepository.findById(paperId);
+        if (paper.isEmpty()) {
+            throw new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND);
+        }
+
+        Optional<Message> message = messageRepository.findById(messageId);
+        if (message.isEmpty()) {
+            throw new BusinessLogicException(ExceptionCode.MESSAGE_NOT_FOUND);
+        }
+
+        return message.get();
     }
 
     /** 메시지 등록
@@ -40,7 +51,7 @@ public class MessageService {
         User user = userService.verifiedEmail();
 
         Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 롤링 페이퍼가 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
         invitationService.checkOwnerAndAccepted(user, paper);
 
@@ -56,7 +67,6 @@ public class MessageService {
         User user = userService.verifiedEmail();
 
         Message message = findByPaperIdAndMessageId(paperId, messageId);
-        System.out.println(message.getId());
 
         invitationService.checkOwnerAndAccepted(user, message.getPaper());
         checkWriter(user, message);
@@ -86,7 +96,7 @@ public class MessageService {
         User user = userService.verifiedEmail();
 
         Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 롤링 페이퍼가 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
         if (paper.getIsPublic().equals(IsPublic.FRIEND)) {
             invitationService.checkOwnerAndAccepted(user, paper);
@@ -109,12 +119,11 @@ public class MessageService {
     }
 
 
-    /** 페이지를 작성한 유저인지 확인 */
+    /** 메시지를 작성한 유저인지 확인 */
     public void checkWriter(User user, Message message) {
         boolean isWriter = message.getUser().getId().equals(user.getId());
-        System.out.println(isWriter);
         if (!isWriter) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
         }
     }
 

@@ -37,7 +37,6 @@ class MessageServiceTest {
     private MessageRepository messageRepository;
     @MockBean
     private PaperRepository paperRepository;
-
     @MockBean
     private UserRepository userRepository;
     @Autowired
@@ -117,7 +116,8 @@ class MessageServiceTest {
 
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
-        when(messageRepository.findByPaperIdAndId(paperId, messageId)).thenReturn(message);
+        when(paperRepository.findById(paperId)).thenReturn(Optional.of(paper));
+        when(messageRepository.findById(messageId)).thenReturn(Optional.of(message));
 
         //when
         Message getMessage = messageService.getMessage(paperId, messageId);
@@ -129,7 +129,8 @@ class MessageServiceTest {
         assertEquals(getMessage.getContent(), "Test Content");
 
         // verify
-        verify(messageRepository, times(1)).findByPaperIdAndId(paperId, messageId);
+        verify(messageRepository, times(1)).findById(messageId);
+        verify(paperRepository, times(1)).findById(paperId);
     }
 
     @Test
@@ -169,7 +170,8 @@ class MessageServiceTest {
 
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
-        when(messageRepository.findByPaperIdAndId(paperId, messageId)).thenReturn(message);
+        when(paperRepository.findById(paperId)).thenReturn(Optional.of(paper));
+        when(messageRepository.findById(messageId)).thenReturn(Optional.of(message));
         when(messageRepository.save(any(Message.class))).thenReturn(message);
 
         //when
@@ -181,7 +183,8 @@ class MessageServiceTest {
         assertEquals(updatedMessage.getName(), "Updated Name");
         assertEquals(updatedMessage.getContent(), "Updated Content");
 
-        verify(messageRepository, times(1)).findByPaperIdAndId(paperId, messageId);
+        verify(messageRepository, times(1)).findById(messageId);
+        verify(paperRepository, times(1)).findById(paperId);
         verify(messageRepository, times(1)).save(any());
     }
 
@@ -279,13 +282,15 @@ class MessageServiceTest {
 
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
-        when(messageRepository.findByPaperIdAndId(paperId, messageId)).thenReturn(message);
+        when(paperRepository.findById(paperId)).thenReturn(Optional.of(paper));
+        when(messageRepository.findById(messageId)).thenReturn(Optional.of(message));
 
         //when
         messageService.deleteMessage(paperId, messageId);
 
         //verify
-        verify(messageRepository, times(1)).findByPaperIdAndId(paperId, messageId);
+        verify(messageRepository, times(1)).findById(messageId);
+        verify(paperRepository, times(1)).findById(paperId);
         verify(messageRepository, times(1)).delete(message);
     }
 }

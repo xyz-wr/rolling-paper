@@ -1,5 +1,7 @@
 package com.wrbread.roll.rollingpaper.service;
 
+import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
+import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
@@ -27,15 +29,15 @@ public class UserService {
     @Transactional
     public User join(AuthDto.SignupDto signupDto) {
         if (checkNickname(signupDto.getNickname())) {
-            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
         }
 
         if (checkEmail(signupDto.getEmail())) {
-            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+            throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
         }
 
         if (!signupDto.getPassword().equals(signupDto.getPasswordCheck())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
         User user = signupDto.toEntity(randomUtil.generateRandomString(), passwordEncoder.encode(signupDto.getPassword()));
@@ -62,7 +64,7 @@ public class UserService {
     public User verifiedEmail() {
         String email = SecurityUtil.getCurrentUsername();
         User user = userRepository.findByEmail(email)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         return user;
     }
 }

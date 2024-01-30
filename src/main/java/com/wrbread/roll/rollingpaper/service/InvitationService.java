@@ -1,5 +1,7 @@
 package com.wrbread.roll.rollingpaper.service;
 
+import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
+import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.InvitationDto;
 import com.wrbread.roll.rollingpaper.model.entity.Invitation;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
@@ -47,24 +49,24 @@ public class InvitationService {
         String recEmail = request.getRecEmail();
 
         if (senEmail.equals(recEmail)) {
-            throw new IllegalArgumentException("자기 자신은 초대할 수 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.NO_INVITATION_SELF);
         }
 
         Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
         User sender = userRepository.findByEmail(senEmail)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         User receiver = userRepository.findByEmail(recEmail)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
         // paper의 isPublic이 FRIEND이어야 초대장 발송 가능
         if (paper.getIsPublic().equals(IsPublic.PUBLIC)) {
-            throw new IllegalArgumentException("전체 공개는 초대장을 보낼 수 없습니다.");
-        }
+            throw new BusinessLogicException(ExceptionCode.CANNOT_SEND_INVITATION_TO_PUBLIC);
+         }
 
         // 해당 롤링 페이퍼를 작성한 유저만 초대장 발송 가능
         if (paper.getUser() != sender) {
-            throw new IllegalArgumentException("롤링 페이퍼를 생성한 유저만 초대장 발송이 가능합니다.");
+            throw new BusinessLogicException(ExceptionCode.ONLY_CREATOR_CAN_SEND_INVITATION);
         }
 
         // receiver의 현재 초대장 상태 확인
@@ -72,7 +74,8 @@ public class InvitationService {
 
         // 이미 초대장을 수락한 경우 초대 불가
         if (acceptedInvitation != null && acceptedInvitation.getStatus().equals(InvitationStatus.ACCEPTED)){
-            throw new IllegalArgumentException("이미 초대를 허락했습니다.");
+            throw new BusinessLogicException(ExceptionCode.ALREADY_ACCEPTED_INVITATION);
+
         }
 
         Invitation invitation = request.toEntity(sender, receiver, paper, InvitationStatus.PENDING);
@@ -88,16 +91,16 @@ public class InvitationService {
         String recEmail = SecurityUtil.getCurrentUsername();
 
         User receiver = userRepository.findByEmail(recEmail)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
         // 초대장을 받은 유저인지 확인
         if (!invitation.getReceiver().getEmail().equals(receiver.getEmail())){
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
         }
 
         // 이미 수락 및 거절된 초대 요청은 수락 불가
         if (invitation.getStatus() != InvitationStatus.PENDING) {
-            throw new IllegalArgumentException("이미 수락하거나 거절한 초대장입니다.");
+            throw new BusinessLogicException(ExceptionCode.INVITATION_ALREADY_HANDLED);
         }
 
         invitation.accept();
@@ -114,16 +117,16 @@ public class InvitationService {
         String recEmail = SecurityUtil.getCurrentUsername();
 
         User receiver = userRepository.findByEmail(recEmail)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
         // 초대장을 받은 유저인지 확인
         if(!invitation.getReceiver().getEmail().equals(receiver.getEmail())) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
         }
 
         // 이미 수락 및 거절된 초대 요청은 수락 불가
         if (invitation.getStatus() != InvitationStatus.PENDING) {
-            throw new IllegalArgumentException("이미 수락하거나 거절한 초대입니다.");
+            throw new BusinessLogicException(ExceptionCode.INVITATION_ALREADY_HANDLED);
         }
 
         invitation.reject();
@@ -138,13 +141,13 @@ public class InvitationService {
         User user = userService.verifiedEmail();
 
         Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
         // 초대장을 수락한 사람인지 확인
         Optional<Invitation> acceptedInvitation = invitationRepository.findByPaperAndReceiverAndStatus(paper, user, InvitationStatus.ACCEPTED);
 
         if (!acceptedInvitation.isPresent()) {
-            throw new EntityNotFoundException("해당 권한이 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
         } else {
             Invitation invitation = acceptedInvitation.get();
             invitation.withdraw();
@@ -160,7 +163,7 @@ public class InvitationService {
         String recEmail = SecurityUtil.getCurrentUsername();
 
         User receiver= userRepository.findByEmail(recEmail)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
         return invitationRepository.findByReceiver(receiver);
     }
@@ -171,10 +174,10 @@ public class InvitationService {
         String email = SecurityUtil.getCurrentUsername();
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
         Paper paper = paperRepository.findById(paperId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
         checkOwnerAndAccepted(user, paper);
 
@@ -191,7 +194,7 @@ public class InvitationService {
     /** 초대장 확인 */
     public Invitation findInvitation(Long invitationId) {
         return invitationRepository.findById(invitationId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.INVITATION_NOT_FOUND));
     }
 
     /** 롤링 페이퍼를 작성한 유저 & 초대장을 수락한 유저인지 확인 */
@@ -201,7 +204,7 @@ public class InvitationService {
         boolean isAcceptedUser = invitationRepository.existsByPaperAndReceiverAndStatus(paper, user, InvitationStatus.ACCEPTED);
 
         if (!isOwner && !isAcceptedUser) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
         }
     }
 

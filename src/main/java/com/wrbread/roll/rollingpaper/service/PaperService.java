@@ -1,5 +1,7 @@
 package com.wrbread.roll.rollingpaper.service;
 
+import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
+import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Invitation;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
@@ -8,7 +10,6 @@ import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,7 @@ public class PaperService {
         User user = userService.verifiedEmail();
 
         Paper paper = paperRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
         //친구 공개인 경우 허락된 유저인지 확인
         if (paper.getIsPublic().equals(IsPublic.FRIEND)) {
@@ -58,7 +59,7 @@ public class PaperService {
         User user = userService.verifiedEmail();
 
         Paper paper = paperRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
         checkOwner(user, paper);
 
@@ -69,6 +70,7 @@ public class PaperService {
 
     /** IsPublic이 PUBLIC인 롤링 페이퍼 전체 조회 */
     public List<Paper> getPublicPapers() {
+
         return paperRepository.findByIsPublic(IsPublic.PUBLIC);
     }
 
@@ -96,7 +98,7 @@ public class PaperService {
         User user = userService.verifiedEmail();
 
         Paper paper = paperRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
         checkOwner(user, paper);
 
@@ -109,9 +111,7 @@ public class PaperService {
         boolean isOwner = paper.getUser().getId().equals(user.getId());
 
         if (!isOwner) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
         }
     }
-
-
 }

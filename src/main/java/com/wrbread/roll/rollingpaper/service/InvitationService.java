@@ -49,7 +49,7 @@ public class InvitationService {
         String recEmail = request.getRecEmail();
 
         if (senEmail.equals(recEmail)) {
-            throw new BusinessLogicException(ExceptionCode.NO_INVITATION_SELF);
+            throw new BusinessLogicException(ExceptionCode.CANNOT_SEND_INVITATION_TO_SELF);
         }
 
         Paper paper = paperRepository.findById(paperId)

@@ -18,12 +18,17 @@ public enum ExceptionCode {
     MESSAGE_NOT_FOUND(404, "해당 메시지가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
 
     // invitation
-    NO_INVITATION_SELF(400, "자기 자신은 초대할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_SEND_INVITATION_TO_SELF(400, "자기 자신은 초대할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_SEND_INVITATION_TO_PUBLIC(400, "전체 공개는 초대장을 보낼 수 없습니다.", HttpStatus.BAD_REQUEST),
     ONLY_CREATOR_CAN_SEND_INVITATION(400, "롤링 페이퍼를 생성한 유저만 초대장 발송이 가능합니다.", HttpStatus.BAD_REQUEST),
     ALREADY_ACCEPTED_INVITATION(400, "이미 초대를 허락한 유저입니다.", HttpStatus.BAD_REQUEST),
     INVITATION_ALREADY_HANDLED(400, "이미 수락하거나 거절한 초대장입니다.", HttpStatus.BAD_REQUEST),
-    INVITATION_NOT_FOUND(404, "해당 초대장이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+    INVITATION_NOT_FOUND(404, "해당 초대장이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+
+    // likes
+    LIKE_NOT_FOUND(404, "해당 좋아요가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    CANNOT_LIKE_OWN_MESSAGE(400, "자신의 메시지에는 좋아요를 누를 수 없습니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_LIKED_MESSAGE(400, "이미 좋아요를 눌렀습니다.", HttpStatus.BAD_REQUEST);
 
     @Getter
     private final int status;

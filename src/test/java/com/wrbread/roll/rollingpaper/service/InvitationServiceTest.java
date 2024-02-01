@@ -12,7 +12,6 @@ import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
 import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +54,6 @@ class InvitationServiceTest {
 
     @Autowired
     private InvitationService invitationService;
-
-    @Autowired
-    private UserService userService;
 
     @Test
     @WithMockUser(roles = "USER")

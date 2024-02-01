@@ -66,7 +66,7 @@ class MessageApiControllerTest {
         messageDto.setName("name");
         messageDto.setContent("Lorem Ipsum is dummy text used in the printing and typesetting industry since the 1500s.");
 
-        Message message = new Message(user, paper, 1L, messageDto.getName(), messageDto.getContent());
+        Message message = new Message(user, paper, 1L, messageDto.getName(), messageDto.getContent(), messageDto.getLikeCount());
         given(messageService.saveMessages(any(Long.class), any(MessageDto.class))).willReturn(message);
 
         String content = objectMapper.writeValueAsString(messageDto);
@@ -154,7 +154,7 @@ class MessageApiControllerTest {
         updatedMessageDto.setContent("Lorem Ipsum is dummy text");
 
         given(messageService.updateMessage(any(Long.class), any(Long.class), any(MessageDto.class)))
-                .willReturn(new Message(user, paper, messageId, updatedMessageDto.getName(), updatedMessageDto.getContent()));
+                .willReturn(new Message(user, paper, messageId, updatedMessageDto.getName(), updatedMessageDto.getContent(), updatedMessageDto.getLikeCount()));
 
 
         String content = objectMapper.writeValueAsString(updatedMessageDto);
@@ -195,8 +195,8 @@ class MessageApiControllerTest {
         Paper paper = new Paper(user, paperId, "title", PUBLIC);
 
         List<Message> messages = Arrays.asList(
-                new Message(user, paper, 1L, "name1", "Test Content1"),
-                new Message(user, paper, 2L, "name2", "Test Content2")
+                new Message(user, paper, 1L, "name1", "Test Content1", 0),
+                new Message(user, paper, 2L, "name2", "Test Content2", 0)
         );
 
         given(messageService.getMessages(paperId)).willReturn(messages);

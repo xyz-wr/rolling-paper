@@ -29,6 +29,8 @@ public class MessageDto {
     @Size(min = 1, max = 250, message = "1자 이상 250자 이하로 작성해주세요.")
     private String content;
 
+    private int likeCount;
+
     public Message toEntity(User user, Paper paper) {
         return Message.builder()
                 .id(id)
@@ -46,5 +48,6 @@ public class MessageDto {
         this.messageUserId = message.getUser().getId();
         this.name = message.getName();
         this.content = message.getContent();
+        this.likeCount = message.getLikeCount();
     }
 }

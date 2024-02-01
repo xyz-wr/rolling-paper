@@ -29,18 +29,31 @@ public class Message extends BaseTimeEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(nullable = false)
+    private int likeCount = 0;
 
     @Builder
-    public Message(User user, Paper paper, Long id, String name, String content) {
+    public Message(User user, Paper paper, Long id, String name, String content, int likeCount) {
         this.user = user;
         this.paper = paper;
         this.id = id;
         this.name = name;
         this.content = content;
+        this.likeCount = likeCount;
     }
 
     public void updateMessage(MessageDto messageDto) {
         this.name = messageDto.getName();
         this.content = messageDto.getContent();
+    }
+
+    public void increaseLike() {
+        likeCount++;
+    }
+
+    public void decreaseLike() {
+        if(this.likeCount > 0) {
+            this.likeCount--;
+        }
     }
 }

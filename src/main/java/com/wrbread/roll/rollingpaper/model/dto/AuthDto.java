@@ -29,7 +29,7 @@ public class AuthDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class SignupDto {
+    public static class JoinDto {
         private Long id;
 
         @NotBlank(message = "이메일은 필수 입력 값입니다.")

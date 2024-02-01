@@ -1,4 +1,4 @@
-package com.wrbread.roll.rollingpaper.controller;
+package com.wrbread.roll.rollingpaper.controller.Api;
 
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.entity.User;
@@ -27,8 +27,8 @@ public class AuthApiController {
 
     /** 회원가입 */
     @PostMapping("/join")
-    public ResponseEntity<Void> signup(@RequestBody @Valid AuthDto.SignupDto signupDto) {
-        User user = userService.join(signupDto);
+    public ResponseEntity<Void> join(@RequestBody @Valid AuthDto.JoinDto joinDto) {
+        User user = userService.join(joinDto);
 
         URI location = UriCreator.createUri("/api/auth/join", user.getId());
 

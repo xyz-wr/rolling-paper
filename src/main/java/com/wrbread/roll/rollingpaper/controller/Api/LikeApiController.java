@@ -1,4 +1,4 @@
-package com.wrbread.roll.rollingpaper.controller;
+package com.wrbread.roll.rollingpaper.controller.Api;
 
 import com.wrbread.roll.rollingpaper.service.LikeService;
 import lombok.RequiredArgsConstructor;

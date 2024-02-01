@@ -25,7 +25,7 @@ public class LikeService {
 
     /** 좋아요
      * 메시지를 작성한 유저는 해당 메시지에 좋아요를 누를 수 없음
-     * 이미 좋아요를 누른 유저는 다시 좋아요를 누를 수 없음*/
+     * 이미 좋아요가 눌러진 경우 다시 누르면 좋아요가 취소됨 */
     public void like(Long messageId) {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MESSAGE_NOT_FOUND));

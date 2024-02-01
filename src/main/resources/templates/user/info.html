@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>User Info</title>
+    <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
+    <style>
+        /* style.css */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F2F6F8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .mobile {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #F1EDED;
+            border-radius: 10px;
+            height: 600px;
+            width: 350px;
+        }
+
+        .mobile .content {
+            background-color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 60px;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+
+        header {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background-color: #86D8C9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            width: 100%;
+            color: #FFF;
+        }
+
+        .footer-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .footer-nav ul {
+            background-color: #F8FAFA;
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            height: 60px;
+        }
+
+        .footer-nav li {
+            color: #BEC5D8;
+            cursor: pointer;
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .footer-nav ul li p {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+        .footer-nav ul li:hover,
+        .footer-nav ul li.active {
+            color: #86D8C9;
+        }
+
+        .footer-nav ul li a {
+            text-decoration: none;
+            color: #BEC5D8;
+        }
+
+        .footer-nav ul li:hover a,
+        .footer-nav ul li.active a,
+        .footer-nav ul li a:hover {
+            color: #86D8C9;
+        }
+
+
+        #sidebar {
+            height: 100%;
+            padding-top: 10px;
+            background-color: #FFF;
+            color: #59626D;
+        }
+
+        .logo {
+            margin-top: 15px;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            color: #59626D;
+            font-size: 18px;
+        }
+        .user-info {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .user-info .img {
+            display: block;
+            margin:0 auto;
+            width: 82px;
+            height: 82px;
+            object-fit: cover;
+            border: 1px solid #59626D;
+            border-radius: 50%;
+        }
+
+        .user-info .img i{
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            font-size: 50px;
+            color: #86D8C9;
+        }
+
+        .user-info h3 {
+            margin-top: 20px;
+            margin-bottom: 0px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .user-info p {
+            margin-top: 10px;
+            text-align: center;
+            color: #FB819F;
+            font-size: 12px;
+        }
+
+
+        /* Menu */
+        .menu {
+            padding-left: 10px;
+        }
+        .menu i {
+            width: 25px;
+            text-align: center;
+            color: #86D8C9;
+            margin-right: 10px;
+        }
+        .menu li {
+            list-style-type: none;
+            padding: 15px 6px;
+        }
+        .menu li a {
+            padding-left: 13px;
+            color: #59626D;
+            font-weight: bold;
+            transition: all .5s;
+        }
+        .menu li a:hover {
+            border-left: 3px solid #86D8C9;
+            text-decoration: none;
+            color: #BEC5D8;
+            padding-left: 10px;
+            transition: all .1s;
+        }
+        .menu li a:hover>i {
+            color: #86D8C9;
+            transition: all .5s;
+        }
+        .menu .active a {
+            color: #BEC5D8;
+            border-left: 3px solid #86D8C9;
+            padding-left: 10px;
+        }
+        .menu .active a>i {
+            color: #86D8C9;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile">
+    <div class="content">
+        <input type="hidden" th:value="${user.id}">
+        <div id="sidebar" class="col-4">
+            <a href="#" class="logo">DASHBOARD</a>
+
+            <div class="user-info">
+                <div class="img"><i class="fas fa-user fa-lg"></i></div>
+                <h3 th:text="${user.nickname}"></h3>
+                <p th:text="'ID: ' + ${user.codename}"></p>
+            </div>
+
+            <ul class="menu">
+                <li><a href="#"><i class="fas fa-scroll"></i>My Public Rolling Paper List</a></li>
+                <li><a href="#"><i class="fas fa-scroll"></i>My With Rolling Paper List</a></li>
+                <li><a href="#"><i class="fas fa-sticky-note"></i>My Public Message List</a></li>
+                <li><a href="#"><i class="fas fa-sticky-note"></i>My With Rolling Paper List</a></li>
+                <li><a th:href="@{/auth/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <nav class="footer-nav">
+            <ul>
+                <li class="active">
+                    <i class="fas fa-home"></i>
+                    <p>home</p>
+                </li>
+                <li>
+                    <i class="fas fa-envelope"></i>
+                    <p>invitation</p>
+                </li>
+                <li>
+                    <i class="fas fa-pencil-alt"></i>
+                    <p>write</p>
+                </li>
+                <li>
+                    <i class="fas fa-user"></i>
+                    <p>user</p>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+</body>
+</html>

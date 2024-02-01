@@ -7,7 +7,6 @@ import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import com.wrbread.roll.rollingpaper.util.RandomUtil;
 import com.wrbread.roll.rollingpaper.util.SecurityUtil;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,20 +26,20 @@ public class UserService {
     private final RandomUtil randomUtil;
 
     @Transactional
-    public User join(AuthDto.SignupDto signupDto) {
-        if (checkNickname(signupDto.getNickname())) {
+    public User join(AuthDto.JoinDto joinDto) {
+        if (checkNickname(joinDto.getNickname())) {
             throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
         }
 
-        if (checkEmail(signupDto.getEmail())) {
+        if (checkEmail(joinDto.getEmail())) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
         }
 
-        if (!signupDto.getPassword().equals(signupDto.getPasswordCheck())) {
+        if (!joinDto.getPassword().equals(joinDto.getPasswordCheck())) {
             throw new BusinessLogicException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
-        User user = signupDto.toEntity(randomUtil.generateRandomString(), passwordEncoder.encode(signupDto.getPassword()));
+        User user = joinDto.toEntity(randomUtil.generateRandomString(), passwordEncoder.encode(joinDto.getPassword()));
         return userRepository.save(user);
     }
 

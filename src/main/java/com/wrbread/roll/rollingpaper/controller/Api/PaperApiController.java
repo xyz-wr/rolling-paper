@@ -1,4 +1,4 @@
-package com.wrbread.roll.rollingpaper.controller;
+package com.wrbread.roll.rollingpaper.controller.Api;
 import com.wrbread.roll.rollingpaper.util.UriCreator;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;

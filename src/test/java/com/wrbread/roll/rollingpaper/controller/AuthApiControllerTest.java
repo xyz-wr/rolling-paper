@@ -50,7 +50,7 @@ class AuthApiControllerTest {
     @DisplayName("회원가입 테스트")
     public void testSignup() throws Exception {
         //given
-        AuthDto.SignupDto signupDto = new AuthDto.SignupDto();
+        AuthDto.JoinDto signupDto = new AuthDto.JoinDto();
         signupDto.setNickname("testNickname");
         signupDto.setEmail("test@gmail.com");
         signupDto.setPassword("testPassword");
@@ -59,7 +59,7 @@ class AuthApiControllerTest {
 
         User user = signupDto.toEntity("ABCDEF", "testEncodePassword");
 
-        given(userService.join(any(AuthDto.SignupDto.class))).willReturn(user);
+        given(userService.join(any(AuthDto.JoinDto.class))).willReturn(user);
 
         String content = objectMapper.writeValueAsString(signupDto);
 

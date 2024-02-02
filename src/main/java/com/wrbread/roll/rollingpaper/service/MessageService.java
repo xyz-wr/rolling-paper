@@ -53,22 +53,47 @@ public class MessageService {
         Paper paper = paperRepository.findById(paperId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
-        invitationService.checkOwnerAndAccepted(user, paper);
+        if (paper.getIsPublic().equals(IsPublic.FRIEND)) {
+            invitationService.checkOwnerAndAccepted(user, paper);
+        }
 
         Message message = messageDto.toEntity(user, paper);
 
         return messageRepository.save(message);
     }
 
-    /** 메시지 수정
-     * 메시지 작성자만 수정 가능
-     * */
+
+    /** 메시지 수정 시 조회
+     * 메시지 작성자만 조회 가능*/
+    public MessageDto getEditMessage(Long paperId, Long messageId) {
+        User user = userService.verifiedEmail();
+
+        Message message = findByPaperIdAndMessageId(paperId, messageId);
+
+        if (message.getPaper().getIsPublic().equals(IsPublic.FRIEND)) {
+            invitationService.checkOwnerAndAccepted(user, message.getPaper());
+        }
+
+        checkWriter(user, message);
+
+        MessageDto messageDto = new MessageDto(message);
+
+        return messageDto;
+
+    }
+
+        /** 메시지 수정
+         * 메시지 작성자만 수정 가능
+         * */
     public Message updateMessage(Long paperId, Long messageId, MessageDto messageDto) {
         User user = userService.verifiedEmail();
 
         Message message = findByPaperIdAndMessageId(paperId, messageId);
 
-        invitationService.checkOwnerAndAccepted(user, message.getPaper());
+        if (message.getPaper().getIsPublic().equals(IsPublic.FRIEND)) {
+            invitationService.checkOwnerAndAccepted(user, message.getPaper());
+        }
+
         checkWriter(user, message);
 
         message.updateMessage(messageDto);
@@ -77,20 +102,22 @@ public class MessageService {
     }
 
     /** 메시지 조회
-     * 롤링 페이퍼 작성자와 초대장을 수락한 유저만 해당 페이지 조회 가능
+     * 친구 초대 롤링 페이퍼 작성자와 초대장을 수락한 유저만 해당 페이지 조회 가능
      * */
     public Message getMessage(Long paperId, Long messageId) {
         User user = userService.verifiedEmail();
 
         Message message = findByPaperIdAndMessageId(paperId, messageId);
 
-        invitationService.checkOwnerAndAccepted(user, message.getPaper());
+        if (message.getPaper().getIsPublic().equals(IsPublic.FRIEND)) {
+            invitationService.checkOwnerAndAccepted(user, message.getPaper());
+        }
 
         return message;
     }
 
     /** 특정 롤링페이퍼의 전체 메시지 조회
-     * 롤링 페이퍼 작성자와 초대장을 수락한 유저만 롤링 페이퍼의 전체 페이지 조회 가능
+     * 친구 초대 롤링 페이퍼 작성자와 초대장을 수락한 유저만 롤링 페이퍼의 전체 페이지 조회 가능
      **/
     public List<Message> getMessages(Long paperId) {
         User user = userService.verifiedEmail();

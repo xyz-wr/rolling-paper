@@ -21,6 +21,8 @@ public class MessageDto {
 
     private Long messageUserId;
 
+    private String email;
+
     @NotBlank(message = "이름을 입력해주세요.")
     @Size(min = 1, max = 10, message = "1자 이상 10자 이하로 작성해주세요.")
     private String name;
@@ -49,5 +51,6 @@ public class MessageDto {
         this.name = message.getName();
         this.content = message.getContent();
         this.likeCount = message.getLikeCount();
+        this.email = message.getUser().getEmail();
     }
 }

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>메시지 조회</title>
+    <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
+    <style>
+        /* style.css */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F2F6F8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .mobile {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #F1EDED;
+            border-radius: 10px;
+            height: 600px;
+            width: 350px;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background-color: #86D8C9;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            width: 100%;
+            color: #FFF;
+        }
+
+        .back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back i {
+            color: #fff;
+        }
+
+        .mobile .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            background-color: #fff;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            bottom: 60px;
+            width: 100%;
+            overflow-y: auto;
+            padding-bottom: 40px;
+        }
+
+        .input-group-prepend {
+            margin-top: 40px;
+        }
+
+        .input-group-prepend h3 {
+            color: #86D8C9;
+        }
+
+        .input-group-prepend i {
+            color: #BEC5D8;
+        }
+
+        .message-content {
+            width: 80%;
+            height: 20em;
+            margin: 2em auto;
+            padding: 1em;
+            border-radius: 2px;
+            border: unset;
+            background-color: lightgoldenrodyellow;
+            font-family: 'Space Mono', monospace;
+        }
+
+
+        .footer-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .footer-nav ul {
+            background-color: #F8FAFA;
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            height: 60px;
+        }
+
+        .footer-nav li {
+            color: #BEC5D8;
+            cursor: pointer;
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .footer-nav ul li p {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+        .footer-nav ul li a {
+            text-decoration: none;
+            color: #BEC5D8;
+        }
+
+        .footer-nav ul li:hover a,
+        .footer-nav ul li.active a,
+        .footer-nav ul li a:hover {
+            color: #86D8C9;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile">
+    <header>
+        <a th:href="@{'/papers/' + ${paperId}}">
+            <div class="back">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+        </a>
+        <h4 th:text="${messageDto.name} + '님의 메시지'"></h4>
+    </header>
+
+    <div class="content" th:style="${!#strings.equals(messageDto.getEmail(), email)} ? 'bottom: 0;' : 'bottom: 60px'">
+        <input type="hidden" id="paperId" th:value="${paperId}">
+        <input type="hidden" id="messageId" th:value="${messageDto.id}">
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <h3 class="input-group-text">Rolling Paper</h3>
+                <i class="fas fa-scroll"></i>
+            </div>
+        </div>
+
+        <div class="message-content" th:text="${messageDto.content}">
+
+        </div>
+    </div>
+
+    <div class="footer" th:if="${#strings.equals(messageDto.getEmail(), email)}">
+        <nav class="footer-nav">
+            <ul>
+                <li>
+                    <a th:href="@{'/papers/' + ${paperId} + '/messages/edit/' + ${messageDto.id}}">
+                        <i class="fas fa-edit"></i>
+                        <p>edit</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{'/papers/' + ${paperId} + '/messages/delete/' + ${messageDto.id}}">
+                        <i class="fas fa-trash-alt"></i>
+                        <p>delete</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>

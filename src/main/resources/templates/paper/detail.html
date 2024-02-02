@@ -193,8 +193,10 @@
                     <p>invite</p>
                 </li>
                 <li>
-                    <i class="fas fa-pencil-alt"></i>
-                    <p>write</p>
+                    <a th:href="@{'/papers/' + ${paperDto.id} + '/messages/write'}">
+                        <i class="fas fa-pencil-alt"></i>
+                        <p>write</p>
+                    </a>
                 </li>
                 <li>
                     <i class="fas fa-users"></i>

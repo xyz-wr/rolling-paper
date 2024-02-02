@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>롤링 페이퍼 friend 리스트</title>
+    <script src="js/script.js"></script>
+    <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
+    <style>
+        /* style.css */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F2F6F8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .mobile {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #F1EDED;
+            border-radius: 10px;
+            height: 600px;
+            width: 350px;
+        }
+
+        .mobile .content {
+            display: flex;
+            justify-content: center;
+            background-color: #fff;
+            position: absolute;
+            top: 120px;
+            left: 0;
+            bottom: 60px;
+            width: 100%;
+            overflow-y: auto;
+            padding-bottom: 40px;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background-color: #86D8C9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            width: 100%;
+            color: #FFF;
+        }
+
+        .content-nav ul {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            background-color: #86D8C9;
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            height: 60px;
+            width: 100%;
+        }
+
+        .content-nav li {
+            color: #FDCA40;
+            cursor: pointer;
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .content-nav ul li p {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+
+        .content-nav ul li.active a {
+            text-decoration: none;
+            color: #86D8C9;
+        }
+
+        .content-nav ul li a {
+            text-decoration: none;
+            color: #FFF;
+        }
+
+
+        .content-nav ul li:hover,
+        .content-nav ul li:not(:hover) {
+            background-color: #86D8C9;
+            color: #FFF;
+        }
+
+        .content-nav ul li.active {
+            background-color: #FFF;
+            color: #86D8C9;
+        }
+
+
+        .col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            margin-top: 30px;
+            column-gap: 30px;
+        }
+
+        .paper-img {
+            position: relative;
+            background-color: #FDCA40;
+            width: 130px;
+            height: 165px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 20px;
+            margin-top: 15px;
+            box-shadow: -10px 10px 30px -20px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        .paper-img:hover {
+            transform: scale(1.02);
+        }
+
+        .relax {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-family: "Roboto", sans-serif;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .btn-delete {
+            background-color: #ffffff;
+            position: absolute;
+            width: 27px;
+            height: 27px;
+            right: 7px;
+            bottom: 10px;
+            border-radius: 9px;
+            transition: all 100ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0px 1px 2px rgba(255, 255, 255, 1),
+            0px 2px 1px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-edit {
+            background-color: #ffffff;
+            position: absolute;
+            width: 27px;
+            height: 27px;
+            right: 40px;
+            bottom: 10px;
+            border-radius: 9px;
+            transition: all 100ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0px 1px 2px rgba(255, 255, 255, 1),
+            0px 2px 1px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            border: none;
+        }
+
+
+        .btn-edit:after,
+        .btn-delete:after{
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            z-index: 2;
+        }
+
+        .btn-edit:active,
+        .btn-delete:active{
+            box-shadow: 0 5px 50px rgba(0, 0, 0, 0.02);
+        }
+
+        .btn-edit:active:after,
+        .btn-delete:active:after{
+            box-shadow: inset 0px 2px 3px rgb(255, 255, 255),
+            inset 0px 2px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .delete {
+            width: 13px;
+            position: absolute;
+            top: 3px;
+            left:7px;
+        }
+
+        .delete i {
+            color: #FB819F;
+        }
+
+        .edit {
+            width: 13px;
+            position: absolute;
+            right: 7px;
+            top: 3px;
+        }
+
+        .edit i {
+            color: #C1C1C1;
+        }
+
+        .footer-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .footer-nav ul {
+            background-color: #F8FAFA;
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            height: 60px;
+        }
+
+        .footer-nav li {
+            color: #BEC5D8;
+            cursor: pointer;
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .footer-nav ul li p {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+        .footer-nav ul li:hover,
+        .footer-nav ul li.active {
+            color: #86D8C9;
+        }
+
+        .footer-nav ul li a {
+            text-decoration: none;
+            color: #BEC5D8;
+        }
+
+        .footer-nav ul li:hover a,
+        .footer-nav ul li.active a,
+        .footer-nav ul li a:hover {
+            color: #86D8C9;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile">
+    <header>
+        <h4>Send</h4>
+    </header>
+    <nav class="content-nav">
+        <ul>
+            <li>
+                <a th:href="@{/papers/all-public-papers}">
+                    <i class="fas fa-scroll"></i>
+                    <p>Rolling Paper(Public)</p>
+                </a>
+            </li>
+            <li class="active">
+                <a th:href="@{/papers/all-friend-papers}">
+                    <i class="fas fa-key"></i>
+                    <p>Rolling Paper(Friend)</p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <div class="col">
+            <div class="paper-img" th:each="paperDto : ${paperDtos}">
+                <a th:href="@{'/papers/' + ${paperDto.id}}">
+                    <div class="relax" th:text="${paperDto.title}"></div>
+                    <div th:if="${#strings.equals(paperDto.getEmail(), email)}">
+                        <a th:href="@{'/papers/edit/' + ${paperDto.id}}" class="btn-edit play-pause">
+                            <div class="icon-container">
+                                <div class="icon edit">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                            </div>
+                        </a>
+                        <a th:href="@{'/papers/delete/' + ${paperDto.id}}" class="btn-delete play-pause">
+                            <div class="icon-container">
+                                <div class="icon delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <nav class="footer-nav">
+            <ul>
+                <li class="active">
+                    <a th:href="@{/papers/all-public-papers}">
+                        <i class="fas fa-home"></i>
+                        <p>home</p>
+                    </a>
+                </li>
+                <li>
+                    <i class="fas fa-envelope"></i>
+                    <p>invitation</p>
+                </li>
+                <li>
+                    <a th:href="@{/papers/write}">
+                        <i class="fas fa-pencil-alt"></i>
+                        <p>write</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/auth/info}">
+                        <i class="fas fa-user"></i>
+                        <p>user</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+</body>
+</html>

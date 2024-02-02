@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>User Info</title>
+    <script src="js/script.js"></script>
     <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
     <style>
         /* style.css */
@@ -224,20 +225,26 @@
         <nav class="footer-nav">
             <ul>
                 <li class="active">
-                    <i class="fas fa-home"></i>
-                    <p>home</p>
+                    <a th:href="@{/papers/all-public-papers}">
+                        <i class="fas fa-home"></i>
+                        <p>home</p>
+                    </a>
                 </li>
                 <li>
                     <i class="fas fa-envelope"></i>
                     <p>invitation</p>
                 </li>
                 <li>
-                    <i class="fas fa-pencil-alt"></i>
-                    <p>write</p>
+                    <a th:href="@{/papers/write}">
+                        <i class="fas fa-pencil-alt"></i>
+                        <p>write</p>
+                    </a>
                 </li>
                 <li>
-                    <i class="fas fa-user"></i>
-                    <p>user</p>
+                    <a th:href="@{/auth/info}">
+                        <i class="fas fa-user"></i>
+                        <p>user</p>
+                    </a>
                 </li>
             </ul>
         </nav>

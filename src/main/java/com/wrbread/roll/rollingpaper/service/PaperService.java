@@ -10,6 +10,7 @@ import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,18 @@ public class PaperService {
         Paper paper = paperDto.toEntity(user);
         return paperRepository.save(paper);
     }
+
+    public Paper getEditPaper(Long id) {
+        User user = userService.verifiedEmail();
+
+        Paper paper = paperRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        checkOwner(user, paper);
+
+        return paper;
+    }
+
 
     /** 롤링 페이퍼 조회
      * 전체 공개인 경우 모든 유저 조회 가능
@@ -62,6 +75,11 @@ public class PaperService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
         checkOwner(user, paper);
+
+        //isPublic 값 기존 값으로 유지하기
+        if (paperDto.getIsPublic() == null) {
+            paperDto.setIsPublic(paper.getIsPublic());
+        }
 
         paper.updatePaper(paperDto);
 

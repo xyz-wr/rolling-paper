@@ -31,8 +31,8 @@ public class AuthController {
 
     /** 회원가입 */
     @PostMapping("/join")
-    public String join(@Valid @ModelAttribute AuthDto.JoinDto joinDto, BindingResult bindingResult,
-                       Model model) {
+    public String join(@Valid @ModelAttribute AuthDto.JoinDto joinDto,
+                       BindingResult bindingResult) {
         //nickname 중복 체크
         if (userService.checkNickname(joinDto.getNickname())) {
             bindingResult.addError(new FieldError("joinDto", "nickname", "중복된 닉네임입니다."));
@@ -58,7 +58,7 @@ public class AuthController {
 
     /** 로그인 */
     @GetMapping("/login")
-    public String login(Model model) {
+    public String loginPage(Model model) {
         model.addAttribute("loginDto", new AuthDto.LoginDto());
         return "user/login";
     }

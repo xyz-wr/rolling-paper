@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>롤링 페이퍼 상세</title>
+    <script src="js/script.js"></script>
+    <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
+    <style>
+        /* style.css */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F2F6F8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .mobile {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #F1EDED;
+            border-radius: 10px;
+            height: 600px;
+            width: 350px;
+        }
+
+        .mobile .content {
+            background-color: #fff;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            bottom: 60px;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        .log {
+            font-size: 14px;
+            padding: 20px;
+            border-bottom: 1px solid #2B3547;
+        }
+
+        .log__header {
+            position: relative;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .log__ticket {
+            text-decoration: none;
+            color: #4BCBD8;
+        }
+
+        .log__body {
+            overflow: hidden;
+            padding-top: 10px;
+            line-height: 1.25;
+            color: #000;
+            font-weight: normal;
+            position: relative;
+        }
+
+
+        .log__icon {
+            color: #E77A7A;
+            font-size: 12px;
+            position: absolute;
+            top: 5px;
+            right: 0;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background-color: #86D8C9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            width: 100%;
+            color: #FFF;
+        }
+
+        .back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back i {
+            color: #fff;
+        }
+
+        .footer-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .footer-nav ul {
+            background-color: #F8FAFA;
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            height: 60px;
+        }
+
+        .footer-nav li {
+            color: #BEC5D8;
+            cursor: pointer;
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .footer-nav ul li p {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+        .footer-nav ul li:hover,
+        .footer-nav ul li.active {
+            color: #86D8C9;
+        }
+
+        .footer-nav ul li a{
+            text-decoration: none;
+            color: #BEC5D8;
+        }
+
+        .footer-nav ul li:hover a,
+        .footer-nav ul li.active a,
+        .footer-nav ul li a:hover {
+            color: #86D8C9;
+        }
+
+        form {
+            display: inline;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile">
+    <header>
+        <a th:href="${#strings.equals(paperDto.isPublic, 'FRIEND')  ? '/papers/all-friend-papers' : '/papers/all-public-papers'}">
+            <div class="back">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+        </a>
+        <h4 th:text="${paperDto.title}"></h4>
+    </header>
+    <div class="content">
+        <input type="hidden" id="paperId" th:value="${paperDto.id}">
+        <div class="log" th:each="messageDto : ${messageDtos}">
+            <a th:href="@{'/papers/' + ${paperDto.id} + '/messages/' + ${messageDto.id}}">
+                <div class="log__header">
+                    <p class="log__ticket" th:text="${messageDto.name}"></p>
+                    <i class="fa fa-heart log__icon"></i>
+                </div>
+
+                <h4 class="log__body" th:text="${messageDto.content.length() > 30 ? #strings.substring(messageDto.content, 0, 30) + '...' : messageDto.content}"></h4>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <nav class="footer-nav">
+            <ul>
+                <li class="active">
+                    <a th:href="@{/papers/all-public-papers}">
+                        <i class="fas fa-home"></i>
+                        <p>home</p>
+                    </a>
+                </li>
+                <li>
+                    <i class="fas fa-user-plus"></i>
+                    <p>invite</p>
+                </li>
+                <li>
+                    <i class="fas fa-pencil-alt"></i>
+                    <p>write</p>
+                </li>
+                <li>
+                    <i class="fas fa-users"></i>
+                    <p>users</p>
+                </li>
+                <li>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <p>withdraw</p>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>

@@ -42,6 +42,7 @@ public class Paper extends BaseTimeEntity{
     }
 
     public void updatePaper(PaperDto paperDto) {
+
         this.title = paperDto.getTitle();
     }
 }

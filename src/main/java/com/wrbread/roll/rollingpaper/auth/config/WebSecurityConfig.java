@@ -1,5 +1,6 @@
 package com.wrbread.roll.rollingpaper.auth.config;
 
+import com.wrbread.roll.rollingpaper.model.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,14 +26,14 @@ public class WebSecurityConfig {
         http
 //                .csrf().disable() //csrf 비활성화
                 .authorizeRequests() //인증, 인가 설정
-                .requestMatchers("/auth/info").hasRole("USER")
+                .requestMatchers("/auth/info", "/papers/**").hasRole("USER")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()//폼 기반 로그인 설정
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .loginPage("/auth/login")
-                .defaultSuccessUrl("/main")
+                .defaultSuccessUrl("/papers/all-public-papers")
                 .failureUrl("/auth/login")
                 .and()
                 .logout() //로그아웃 설정

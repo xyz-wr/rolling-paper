@@ -117,20 +117,21 @@ public class AuthApiController {
     }
 
     /** 이메일 전송 */
-    @PostMapping("/email")
-    public ResponseEntity<Void> sendEmail(@RequestBody @Valid AuthDto.EmailDto request) {
-        authService.sendAuthEmail(request);
+    @PostMapping("/send-email")
+    public ResponseEntity<Void> sendEmail(@RequestParam("email") String email) {
+        authService.sendAuthEmail(email);
         return ResponseEntity.ok().build();
     }
 
     /** 이메일 인증번호 확인 */
-    @PostMapping("/checkEmail")
-    public String checkEmail(@RequestBody @Valid AuthDto.EmailCheckDto emailCheckDto) {
-        boolean check = authService.checkAuthEmail(emailCheckDto.getEmail(),emailCheckDto.getAuthKey());
-        if(check) {
-            return "인증되었습니다.";
+    @PostMapping("/check-auth-key")
+    public ResponseEntity<String> checkEmail(@RequestParam("email") String email,
+                             @RequestParam("auth-key") String authKey) {
+        boolean check = authService.checkAuthKey(email, authKey);
+        if (check) {
+            return ResponseEntity.ok("인증되었습니다.");
         } else {
-            return "잘못된 인증번호입니다.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 인증번호입니다.");
         }
     }
 }

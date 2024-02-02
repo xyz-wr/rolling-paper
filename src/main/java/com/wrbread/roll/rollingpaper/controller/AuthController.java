@@ -2,7 +2,6 @@ package com.wrbread.roll.rollingpaper.controller;
 
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.entity.User;
-import com.wrbread.roll.rollingpaper.service.AuthService;
 import com.wrbread.roll.rollingpaper.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -32,7 +32,7 @@ public class AuthDto {
     public static class JoinDto {
         private Long id;
 
-        @NotBlank(message = "이메일은 필수 입력 값입니다.")
+        @NotBlank(message = "닉네임은 필수 입력 값입니다.")
         private String nickname;
 
         @NotBlank(message = "이메일은 필수 입력 값입니다.")

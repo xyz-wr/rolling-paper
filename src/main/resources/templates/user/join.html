@@ -203,7 +203,11 @@
                     console.log("URL: " + url);
                     console.log("Status: " + status);
                     console.log("Error: " + error);
-                    alert("인증번호가 전송되지 못하였습니다.")
+                    if (jqXHR.status === 400) {
+                        alert("이미 존재하는 이메일입니다.");
+                    } else {
+                        alert("인증번호가 전송되지 못하였습니다.");
+                    }
                 }
             });
         }

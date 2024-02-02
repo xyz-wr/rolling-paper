@@ -1,7 +1,10 @@
 package com.wrbread.roll.rollingpaper.service;
 
 import com.wrbread.roll.rollingpaper.auth.JwtTokenProvider;
+import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
+import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
+import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.util.RandomUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -33,6 +36,8 @@ public class AuthService {
     private final RedisService redisService;
     private final JavaMailSender javaMailSender;
     private final RandomUtil randomUtil;
+
+    private final UserService userService;
 
     @Value("${spring.mail.username}")
     private String configEmail;
@@ -151,6 +156,10 @@ public class AuthService {
     /** 이메일 인증 */
     @Transactional
     public void sendAuthEmail(String email) {
+        if (userService.existsEmail(email)) {
+            throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
+        }
+
         String authKey = randomUtil.generateRandomString();
 
         String subject = "Rolling Paper 회원가입 인증 번호입니다.";

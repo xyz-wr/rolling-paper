@@ -33,8 +33,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -137,7 +136,7 @@ class InvitationApiControllerTest {
 
         // when
         ResultActions actions = mockMvc.perform(
-                MockMvcRequestBuilders.post(uri));
+                post(uri));
 
         // then
         actions
@@ -161,7 +160,7 @@ class InvitationApiControllerTest {
 
         // when
         ResultActions actions = mockMvc.perform(
-                MockMvcRequestBuilders.delete(uri));
+                delete(uri));
 
         // then
         actions

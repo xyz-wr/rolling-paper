@@ -151,7 +151,6 @@ public class AuthService {
     /** 이메일 인증 */
     @Transactional
     public void sendAuthEmail(String email) {
-//        String email = emailDto.getEmail();
         String authKey = randomUtil.generateRandomString();
 
         String subject = "Rolling Paper 회원가입 인증 번호입니다.";

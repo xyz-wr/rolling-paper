@@ -158,15 +158,13 @@ class AuthApiControllerTest {
     @DisplayName("이메일 전송 테스트")
     public void testSendEmail() throws Exception {
         //given
-        AuthDto.EmailDto email = new AuthDto.EmailDto();
-        email.setEmail("test@gmail.com");
+        String email = "test@example.com";
 
-        String content = new ObjectMapper().writeValueAsString(email);
+        doNothing().when(authService).sendAuthEmail(email);
 
         //when
-        ResultActions actions = mockMvc.perform(post("/api/auth/email")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content));
+        ResultActions actions = mockMvc.perform(post("/api/auth/send-email")
+                        .param("email", email));
 
         //then
         actions
@@ -176,23 +174,19 @@ class AuthApiControllerTest {
     @Test
     @DisplayName("인증번호 확인 테스트")
     public void testCheckEmail() throws Exception {
-        // Mock 데이터 설정
-        AuthDto.EmailCheckDto emailCheck = new AuthDto.EmailCheckDto();
-        emailCheck.setEmail("test@example.com");
-        emailCheck.setAuthKey("valid_auth_key");
+        // given
+        String email = "test@gmail.com";
+        String authKey = "ABCDEF";
 
-        given(authService.checkAuthEmail(any(String.class), any(String.class))).willReturn(Boolean.TRUE);
-
-        String content = new ObjectMapper().writeValueAsString(emailCheck);
+        given(authService.checkAuthKey(email, authKey)).willReturn(Boolean.TRUE);
 
         //when
-        ResultActions actions = mockMvc.perform(post("/api/auth/checkEmail")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content));
+        ResultActions actions = mockMvc.perform(post("/api/auth/check-auth-key")
+                .param("email", email)
+                .param("auth-key", authKey));
 
         //then
         actions
-                .andExpect(status().isOk())
-                .andExpect(content().string("인증되었습니다."));
+                .andExpect(status().isOk());
     }
 }

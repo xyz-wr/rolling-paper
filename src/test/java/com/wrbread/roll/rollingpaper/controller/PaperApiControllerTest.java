@@ -1,11 +1,13 @@
 package com.wrbread.roll.rollingpaper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.service.PaperService;
+import com.wrbread.roll.rollingpaper.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,9 @@ class PaperApiControllerTest {
 
     @MockBean
     private PaperService paperService;
+
+    @MockBean
+    private UserService userService;
 
     @Test
     @WithMockUser(roles = "USER")
@@ -271,5 +276,45 @@ class PaperApiControllerTest {
         // Then
         actions
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("롤링 페이퍼에 초대할 유저 검색 테스트")
+    void testSearchCodename() throws Exception {
+        // Given
+        AuthDto.UserDto userDto = new AuthDto.UserDto();
+        userDto.setNickname("testNickname");
+        userDto.setCodename("ABCDEF");
+
+        User user = User.builder()
+                .nickname(userDto.getNickname())
+                .codename(userDto.getCodename())
+                .build();
+
+        given(userService.findCodename(any(AuthDto.UserDto.class)))
+                .willReturn(user);
+
+        URI uri = UriComponentsBuilder
+                .newInstance()
+                .path("/api/papers/search/codename")
+                .build()
+                .toUri();
+
+        String content= objectMapper.writeValueAsString(userDto);
+
+
+        // When
+        ResultActions actions = mockMvc.perform(post(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+        );
+
+        // Then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.codename").value(userDto.getCodename()))
+                .andExpect(jsonPath("$.nickname").value(userDto.getNickname()));
     }
 }

@@ -1,4 +1,7 @@
 package com.wrbread.roll.rollingpaper.controller.Api;
+import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
+import com.wrbread.roll.rollingpaper.model.entity.User;
+import com.wrbread.roll.rollingpaper.service.UserService;
 import com.wrbread.roll.rollingpaper.util.UriCreator;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PaperApiController {
     private final PaperService paperService;
+
+    private final UserService userService;
 
     /** 롤링 페이퍼 등록 */
     @PostMapping
@@ -73,5 +78,13 @@ public class PaperApiController {
         paperService.deletePaper(paperId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    /** 롤링 페이퍼에 초대할 유저 검색 */
+    @PostMapping("/search/codename")
+    public ResponseEntity<AuthDto.UserDto> searchCodename(@RequestBody AuthDto.UserDto userDto){
+        User user = userService.findCodename(userDto);
+
+        return ResponseEntity.ok().body(new AuthDto.UserDto(user));
     }
 }

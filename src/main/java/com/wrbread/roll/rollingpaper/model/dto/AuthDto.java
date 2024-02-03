@@ -79,8 +79,8 @@ public class AuthDto {
         private String nickname;
 
         public UserDto(User user) {
-            this.codename = user.getCodename();
             this.nickname = user.getNickname();
+            this.codename = user.getCodename();
         }
     }
 }

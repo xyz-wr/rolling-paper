@@ -10,6 +10,8 @@ public enum ExceptionCode {
     PASSWORD_NOT_MATCH(400, "비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(404, "회원 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     NO_PERMISSION_ACCESS(403, "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
+    CODENAME_NOT_FOUND(404, "코드 네임을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
 
     // paper
     PAPER_NOT_FOUND(404, "해당 롤링 페이퍼가 존재하지 않습니다.", HttpStatus.NOT_FOUND),

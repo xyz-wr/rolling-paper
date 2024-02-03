@@ -65,4 +65,24 @@ class UserRepositoryTest {
         // then
         assertTrue(existEmail);
     }
+
+    @Test
+    @DisplayName("findByCodename 테스트")
+    public void testFindByCodename() {
+        // given
+        User user = User.builder()
+                .nickname("testNickname")
+                .email("test@gmail.com")
+                .codename("ABCDEF")
+                .build();
+        userRepository.save(user);
+
+        // when
+        Optional<User> findCodename = userRepository.findByCodename("ABCDEF");
+
+        // then
+        assertTrue(findCodename.isPresent());
+        assertEquals("ABCDEF", findCodename.get().getCodename());
+    }
+
 }

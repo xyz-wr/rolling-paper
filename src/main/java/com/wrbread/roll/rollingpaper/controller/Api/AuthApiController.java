@@ -117,14 +117,14 @@ public class AuthApiController {
     }
 
     /** 이메일 전송 */
-    @PostMapping("/send-email")
+    @PostMapping("/send/auth-key")
     public ResponseEntity<Void> sendEmail(@RequestParam("email") String email) {
         authService.sendAuthEmail(email);
         return ResponseEntity.ok().build();
     }
 
     /** 이메일 인증번호 확인 */
-    @PostMapping("/check-auth-key")
+    @PostMapping("/check/auth-key")
     public ResponseEntity<String> checkEmail(@RequestParam("email") String email,
                              @RequestParam("auth-key") String authKey) {
         boolean check = authService.checkAuthKey(email, authKey);

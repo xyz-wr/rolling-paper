@@ -292,13 +292,15 @@ class PaperApiControllerTest {
                 .codename(userDto.getCodename())
                 .build();
 
+        Long paperId = 1L;
+
         given(userService.findCodename(any(AuthDto.UserDto.class)))
                 .willReturn(user);
 
         URI uri = UriComponentsBuilder
                 .newInstance()
-                .path("/api/papers/search/codename")
-                .build()
+                .path("/api/papers/{paper-id}/search/codename")
+                .buildAndExpand(paperId)
                 .toUri();
 
         String content= objectMapper.writeValueAsString(userDto);

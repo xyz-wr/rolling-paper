@@ -267,8 +267,7 @@ class InvitationApiControllerTest {
                 .toUri();
 
         // when
-        ResultActions actions = mockMvc.perform(
-                get(uri)
+        ResultActions actions = mockMvc.perform(get(uri)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 

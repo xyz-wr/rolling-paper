@@ -197,14 +197,16 @@ public class InvitationService {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.INVITATION_NOT_FOUND));
     }
 
-    /** 롤링 페이퍼를 작성한 유저 & 초대장을 수락한 유저인지 확인 */
+    /** 친구 초대 롤링 페이퍼인 경우 롤링 페이퍼를 작성한 유저 & 초대장을 수락한 유저인지 확인 */
     public void checkOwnerAndAccepted(User user, Paper paper) {
-        boolean isOwner = paper.getUser().getId().equals(user.getId());
+        if (paper.getIsPublic().equals(IsPublic.FRIEND)) {
+            boolean isOwner = paper.getUser().getId().equals(user.getId());
 
-        boolean isAcceptedUser = invitationRepository.existsByPaperAndReceiverAndStatus(paper, user, InvitationStatus.ACCEPTED);
+            boolean isAcceptedUser = invitationRepository.existsByPaperAndReceiverAndStatus(paper, user, InvitationStatus.ACCEPTED);
 
-        if (!isOwner && !isAcceptedUser) {
-            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
+            if (!isOwner && !isAcceptedUser) {
+                throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
+            }
         }
     }
 

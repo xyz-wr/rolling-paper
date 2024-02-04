@@ -37,6 +37,7 @@ public class MessageService {
         }
 
         Optional<Message> message = messageRepository.findById(messageId);
+
         if (message.isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.MESSAGE_NOT_FOUND);
         }
@@ -53,9 +54,7 @@ public class MessageService {
         Paper paper = paperRepository.findById(paperId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
-        if (paper.getIsPublic().equals(IsPublic.FRIEND)) {
-            invitationService.checkOwnerAndAccepted(user, paper);
-        }
+        invitationService.checkOwnerAndAccepted(user, paper);
 
         Message message = messageDto.toEntity(user, paper);
 
@@ -70,9 +69,7 @@ public class MessageService {
 
         Message message = findByPaperIdAndMessageId(paperId, messageId);
 
-        if (message.getPaper().getIsPublic().equals(IsPublic.FRIEND)) {
-            invitationService.checkOwnerAndAccepted(user, message.getPaper());
-        }
+        invitationService.checkOwnerAndAccepted(user, message.getPaper());
 
         checkWriter(user, message);
 
@@ -90,9 +87,7 @@ public class MessageService {
 
         Message message = findByPaperIdAndMessageId(paperId, messageId);
 
-        if (message.getPaper().getIsPublic().equals(IsPublic.FRIEND)) {
-            invitationService.checkOwnerAndAccepted(user, message.getPaper());
-        }
+        invitationService.checkOwnerAndAccepted(user, message.getPaper());
 
         checkWriter(user, message);
 
@@ -109,9 +104,7 @@ public class MessageService {
 
         Message message = findByPaperIdAndMessageId(paperId, messageId);
 
-        if (message.getPaper().getIsPublic().equals(IsPublic.FRIEND)) {
-            invitationService.checkOwnerAndAccepted(user, message.getPaper());
-        }
+        invitationService.checkOwnerAndAccepted(user, message.getPaper());
 
         return message;
     }
@@ -125,9 +118,7 @@ public class MessageService {
         Paper paper = paperRepository.findById(paperId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.PAPER_NOT_FOUND));
 
-        if (paper.getIsPublic().equals(IsPublic.FRIEND)) {
-            invitationService.checkOwnerAndAccepted(user, paper);
-        }
+        invitationService.checkOwnerAndAccepted(user, paper);
 
         return messageRepository.findByPaper(paper);
     }
@@ -139,6 +130,9 @@ public class MessageService {
         User user = userService.verifiedEmail();
 
         Message message = findByPaperIdAndMessageId(paperId, messageId);
+
+        invitationService.checkOwnerAndAccepted(user, message.getPaper());
+
 
         checkWriter(user, message);
 

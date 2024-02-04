@@ -257,6 +257,89 @@ class PaperApiControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
+    @DisplayName("내가 작성한 public롤링 페이퍼 전체 조회")
+    void testGetMyPublicPapers() throws Exception {
+        // Given
+        User user = User.builder()
+                .email("test@gmail.com")
+                .build();
+
+        List<Paper> publicPapers = Arrays.asList(
+                new Paper(user, 1L, "Public Paper 1", IsPublic.PUBLIC),
+                new Paper(user, 2L, "Public Paper 2", IsPublic.PUBLIC)
+        );
+
+        given(paperService.getMyPublicPapers()).willReturn(publicPapers);
+
+        URI uri = UriComponentsBuilder
+                .newInstance()
+                .path("/api/papers/my-public-paper-list")
+                .build()
+                .toUri();
+
+        // When
+        ResultActions actions = mockMvc.perform(get(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // Then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(publicPapers.get(0).getId()))
+                .andExpect(jsonPath("$[0].title").value(publicPapers.get(0).getTitle()))
+                .andExpect(jsonPath("$[0].isPublic").value(publicPapers.get(0).getIsPublic().toString()))
+                .andExpect(jsonPath("$[1].id").value(publicPapers.get(1).getId()))
+                .andExpect(jsonPath("$[1].title").value(publicPapers.get(1).getTitle()))
+                .andExpect(jsonPath("$[1].isPublic").value(publicPapers.get(1).getIsPublic().toString()));
+    }
+
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("내가 작성한 friend 롤링 페이퍼 전체 조회")
+    void testGetMyFriendPapers() throws Exception {
+        // Given
+        User user = User.builder()
+                .email("test@gmail.com")
+                .build();
+
+        List<Paper> friendPapers = Arrays.asList(
+                new Paper(user, 1L, "Friend Paper 1", IsPublic.FRIEND),
+                new Paper(user, 2L, "Friend Paper 2", IsPublic.FRIEND)
+        );
+
+        given(paperService.getMyFriendPapers()).willReturn(friendPapers);
+
+        URI uri = UriComponentsBuilder
+                .newInstance()
+                .path("/api/papers/my-friend-paper-list")
+                .build()
+                .toUri();
+
+        // When
+        ResultActions actions = mockMvc.perform(get(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // Then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(friendPapers.get(0).getId()))
+                .andExpect(jsonPath("$[0].title").value(friendPapers.get(0).getTitle()))
+                .andExpect(jsonPath("$[0].isPublic").value(friendPapers.get(0).getIsPublic().toString()))
+                .andExpect(jsonPath("$[1].id").value(friendPapers.get(1).getId()))
+                .andExpect(jsonPath("$[1].title").value(friendPapers.get(1).getTitle()))
+                .andExpect(jsonPath("$[1].isPublic").value(friendPapers.get(1).getIsPublic().toString()));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
     @DisplayName("롤링 페이퍼 삭제")
     void testDeletePaper() throws Exception {
         // Given

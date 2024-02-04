@@ -72,6 +72,29 @@ public class PaperApiController {
         return ResponseEntity.ok(responseDtos);
     }
 
+
+    /** 내가 작성한 public 롤링 페이퍼 전체 조회 */
+    @GetMapping("/my-public-paper-list")
+    public ResponseEntity<List<PaperDto>> getMyPublicPapers() {
+        List<PaperDto> responseDtos = paperService.getMyPublicPapers()
+                .stream()
+                .map(PaperDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responseDtos);
+    }
+
+    /** 내가 작성한 friend 롤링 페이퍼 전체 조회 */
+    @GetMapping("/my-friend-paper-list")
+    public ResponseEntity<List<PaperDto>> getMyFriendPapers() {
+        List<PaperDto> responseDtos = paperService.getMyFriendPapers()
+                .stream()
+                .map(PaperDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responseDtos);
+    }
+
     /** 롤링 페이퍼 삭제 */
     @DeleteMapping("/{paper-id}")
     public ResponseEntity<Void> deletePaper(@PathVariable("paper-id") Long paperId) {

@@ -108,6 +108,25 @@ public class PaperService {
         return papers;
     }
 
+    /** 내가 작성한 public 롤링 페이퍼 전체 조회 */
+    public List<Paper> getMyPublicPapers() {
+        User user = userService.verifiedEmail();
+
+        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC);
+
+        return papers;
+    }
+
+
+    /** 내가 작성한 friend 롤링 페이퍼 전체 조회 */
+    public List<Paper> getMyFriendPapers() {
+        User user = userService.verifiedEmail();
+
+        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND);
+
+        return papers;
+    }
+
 
     /** 롤링 페이퍼 삭제
      * 롤링 페이퍼 작성자만 수정 가능

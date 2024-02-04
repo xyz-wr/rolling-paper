@@ -240,6 +240,98 @@ class PaperServiceTest {
 
     @Test
     @WithMockUser(roles = "USER")
+    @DisplayName("내가 작성한 public 롤링 페이퍼 전체 조회")
+    void testGetMyPublicPapers() {
+        //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
+        PaperDto paperDto = new PaperDto();
+        paperDto.setTitle("Test Paper");
+        paperDto.setIsPublic(IsPublic.PUBLIC);
+
+        Paper paper1 = Paper.builder()
+                .id(1L)
+                .title(paperDto.getTitle())
+                .isPublic(paperDto.getIsPublic())
+                .build();
+
+        Paper paper2 = Paper.builder()
+                .id(2L)
+                .title(paperDto.getTitle())
+                .isPublic(paperDto.getIsPublic())
+                .build();
+
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
+        when(paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC)).thenReturn(Arrays.asList(paper1, paper2));
+
+        //when
+        List<Paper> publicPapers = paperService.getMyPublicPapers();
+
+        // then
+        assertEquals(publicPapers.size(), 2);
+        assertTrue(publicPapers.contains(paper1));
+        assertTrue(publicPapers.contains(paper2));
+
+        // verify
+        verify(userRepository, times(1)).findByEmail(email);
+        verify(paperRepository, times(1)).findAllByUserAndIsPublic(user, IsPublic.PUBLIC);
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("내가 작성한 friend 롤링 페이퍼 전체 조회")
+    void testGetMyFriendPapers() {
+        //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
+        PaperDto paperDto = new PaperDto();
+        paperDto.setTitle("Test Paper");
+        paperDto.setIsPublic(IsPublic.FRIEND);
+
+        Paper paper1 = Paper.builder()
+                .id(1L)
+                .title(paperDto.getTitle())
+                .isPublic(paperDto.getIsPublic())
+                .build();
+
+        Paper paper2 = Paper.builder()
+                .id(2L)
+                .title(paperDto.getTitle())
+                .isPublic(paperDto.getIsPublic())
+                .build();
+
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
+        when(paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND)).thenReturn(Arrays.asList(paper1, paper2));
+
+        //when
+        List<Paper> friendPapers = paperService.getMyFriendPapers();
+
+        // then
+        assertEquals(friendPapers.size(), 2);
+        assertTrue(friendPapers.contains(paper1));
+        assertTrue(friendPapers.contains(paper2));
+
+        // verify
+        verify(userRepository, times(1)).findByEmail(email);
+        verify(paperRepository, times(1)).findAllByUserAndIsPublic(user, IsPublic.FRIEND);
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
     @DisplayName("롤링 페이퍼 삭제")
     void testDeletePaper() {
         //given
@@ -276,4 +368,6 @@ class PaperServiceTest {
         verify(paperRepository, times(1)).findById(paperId);
         verify(paperRepository, times(1)).delete(paper);
     }
+
+
 }

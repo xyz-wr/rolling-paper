@@ -242,7 +242,120 @@ class MessageServiceTest {
 
         verify(paperRepository, times(1)).findById(paperId);
         verify(messageRepository, times(1)).findByPaper(paper);
+    }
 
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("내가 작성한 public 메시지 전체 조회")
+    void testMyPublicMessages() {
+        //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
+        Long paperId = 1L;
+        PaperDto paperDto = new PaperDto();
+        paperDto.setId(paperId);
+        paperDto.setTitle("Test Paper");
+        paperDto.setIsPublic(IsPublic.PUBLIC);
+
+        Paper paper = paperDto.toEntity(user);
+
+        Long messageId = 1L;
+        MessageDto messageDto = new MessageDto();
+        messageDto.setId(messageId);
+        messageDto.setName("Test Name");
+        messageDto.setContent("Test Content");
+
+        Message message1 = Message.builder()
+                .id(1L)
+                .paper(paper)
+                .name(messageDto.getName())
+                .content(messageDto.getContent())
+                .build();
+
+        Message message2 = Message.builder()
+                .id(1L)
+                .paper(paper)
+                .name(messageDto.getName())
+                .content(messageDto.getContent())
+                .build();
+
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
+        when(paperRepository.findById(paperId)).thenReturn(Optional.of(paper));
+        when(paperRepository.findByIsPublic(IsPublic.PUBLIC)).thenReturn(Arrays.asList(paper));
+        when(messageRepository.findByPaperAndUser(paper, user)).thenReturn(Arrays.asList(message1, message2));
+
+        // When
+        List<Message> messages = messageService.getMyPublicMessages();
+
+        // Then
+        assertEquals(messages.size(), 2);
+
+        verify(paperRepository, times(1)).findByIsPublic(IsPublic.PUBLIC);
+        verify(messageRepository, times(1)).findByPaperAndUser(paper, user);
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("내가 작성한 friend 메시지 전체 조회")
+    void testMyFriendMessages() {
+        //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
+        Long paperId = 1L;
+        PaperDto paperDto = new PaperDto();
+        paperDto.setId(paperId);
+        paperDto.setTitle("Test Paper");
+        paperDto.setIsPublic(IsPublic.FRIEND);
+
+        Paper paper = paperDto.toEntity(user);
+
+        Long messageId = 1L;
+        MessageDto messageDto = new MessageDto();
+        messageDto.setId(messageId);
+        messageDto.setName("Test Name");
+        messageDto.setContent("Test Content");
+
+        Message message1 = Message.builder()
+                .id(1L)
+                .paper(paper)
+                .name(messageDto.getName())
+                .content(messageDto.getContent())
+                .build();
+
+        Message message2 = Message.builder()
+                .id(1L)
+                .paper(paper)
+                .name(messageDto.getName())
+                .content(messageDto.getContent())
+                .build();
+
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
+        when(paperRepository.findById(paperId)).thenReturn(Optional.of(paper));
+        when(paperRepository.findByIsPublic(IsPublic.FRIEND)).thenReturn(Arrays.asList(paper));
+        when(messageRepository.findByPaperAndUser(paper, user)).thenReturn(Arrays.asList(message1, message2));
+
+        // When
+        List<Message> messages = messageService.getMyFriendMessages();
+
+        // Then
+        assertEquals(messages.size(), 2);
+
+        verify(paperRepository, times(1)).findByIsPublic(IsPublic.FRIEND);
+        verify(messageRepository, times(1)).findByPaperAndUser(paper, user);
     }
 
     @Test
@@ -267,17 +380,17 @@ class MessageServiceTest {
         Paper paper = paperDto.toEntity(user);
 
         Long messageId = 1L;
-        MessageDto updatedMessageDto = new MessageDto();
-        updatedMessageDto.setId(messageId);
-        updatedMessageDto.setName("Updated Name");
-        updatedMessageDto.setContent("Updated Content");
+        MessageDto messageDto = new MessageDto();
+        messageDto.setId(messageId);
+        messageDto.setName("Updated Name");
+        messageDto.setContent("Updated Content");
 
         Message message = Message.builder()
                 .id(1L)
                 .user(user)
                 .paper(paper)
-                .name(updatedMessageDto.getName())
-                .content(updatedMessageDto.getContent())
+                .name(messageDto.getName())
+                .content(messageDto.getContent())
                 .build();
 
         when(userRepository.save(any(User.class))).thenReturn(user);

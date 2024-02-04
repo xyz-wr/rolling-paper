@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -121,6 +122,33 @@ public class MessageService {
         invitationService.checkOwnerAndAccepted(user, paper);
 
         return messageRepository.findByPaper(paper);
+    }
+
+    /** 내가 작성한 public 메시지 전체 조회 */
+    public List<Message> getMyPublicMessages() {
+        User user = userService.verifiedEmail();
+
+        List<Paper> papers = paperRepository.findByIsPublic(IsPublic.PUBLIC);
+
+        List<Message> messages = papers.stream()
+                .flatMap(paper -> messageRepository.findByPaperAndUser(paper, user).stream())
+                .collect(Collectors.toList());
+
+        return messages;
+    }
+
+
+    /** 내가 작성한 friend 메시지 전체 조회 */
+    public List<Message> getMyFriendMessages() {
+        User user = userService.verifiedEmail();
+
+        List<Paper> papers = paperRepository.findByIsPublic(IsPublic.FRIEND);
+
+        List<Message> messages = papers.stream()
+                .flatMap(paper -> messageRepository.findByPaperAndUser(paper, user).stream())
+                .collect(Collectors.toList());
+
+        return messages;
     }
 
     /** 메시지 삭제

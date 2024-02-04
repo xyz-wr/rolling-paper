@@ -58,6 +58,29 @@ public class MessageApiController {
         return ResponseEntity.ok().body(responseDtos);
     }
 
+    /** 내가 작성한 public 메시지 전체 조회 */
+    @GetMapping("/my-public-message-list")
+    public ResponseEntity<List<MessageDto>> myPublicMessageList(@PathVariable("paper-id") Long paperId) {
+        List<MessageDto> responseDtos = messageService.getMyPublicMessages()
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(responseDtos);
+    }
+
+    /** 내가 작성한 friend 메시지 전체 조회 */
+    @GetMapping("/my-friend-message-list")
+    public ResponseEntity<List<MessageDto>> myFriendList(@PathVariable("paper-id") Long paperId) {
+        List<MessageDto> responseDtos = messageService.getMyFriendMessages()
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(responseDtos);
+    }
+
+
     /** 메시지 삭제 */
     @DeleteMapping("/{message-id}")
     public ResponseEntity<MessageDto> deleteMessage(@PathVariable("paper-id") Long paperId,

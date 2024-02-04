@@ -25,6 +25,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.wrbread.roll.rollingpaper.model.enums.IsPublic.FRIEND;
 import static com.wrbread.roll.rollingpaper.model.enums.IsPublic.PUBLIC;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
@@ -225,7 +226,98 @@ class MessageApiControllerTest {
                 .andExpect(jsonPath("$[1].paperId").value(messages.get(1).getPaper().getId()))
                 .andExpect(jsonPath("$[1].name").value(messages.get(1).getName().toString()))
                 .andExpect(jsonPath("$[1].content").value(messages.get(1).getContent().toString()));
+    }
 
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("내가 작성한 public 메시지 전체 조회")
+    void testMyPublicMessages() throws Exception {
+        // Given
+        User user = User.builder()
+                .id(1L)
+                .email("test@gmail.com")
+                .build();
+
+        Long paperId = 1L;
+        Paper paper = new Paper(user, paperId, "title", PUBLIC);
+
+        List<Message> messages = Arrays.asList(
+                new Message(user, paper, 1L, "name1", "Test Content1", 0),
+                new Message(user, paper, 2L, "name2", "Test Content2", 0)
+        );
+
+        given(messageService.getMyPublicMessages()).willReturn(messages);
+
+        URI uri = UriComponentsBuilder
+                .newInstance()
+                .path("/api/papers/{paper-id}/messages/my-public-message-list")
+                .buildAndExpand(paperId)
+                .toUri();
+
+        // When
+        ResultActions actions = mockMvc.perform(get(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // Then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(messages.get(0).getId()))
+                .andExpect(jsonPath("$[0].paperId").value(messages.get(0).getPaper().getId()))
+                .andExpect(jsonPath("$[0].name").value(messages.get(0).getName().toString()))
+                .andExpect(jsonPath("$[0].content").value(messages.get(0).getContent().toString()))
+                .andExpect(jsonPath("$[1].id").value(messages.get(1).getId()))
+                .andExpect(jsonPath("$[1].paperId").value(messages.get(1).getPaper().getId()))
+                .andExpect(jsonPath("$[1].name").value(messages.get(1).getName().toString()))
+                .andExpect(jsonPath("$[1].content").value(messages.get(1).getContent().toString()));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("내가 작성한 friend 메시지 전체 조회")
+    void testMyFriendMessages() throws Exception {
+        // Given
+        User user = User.builder()
+                .id(1L)
+                .email("test@gmail.com")
+                .build();
+
+        Long paperId = 1L;
+        Paper paper = new Paper(user, paperId, "title", FRIEND);
+
+        List<Message> messages = Arrays.asList(
+                new Message(user, paper, 1L, "name1", "Test Content1", 0),
+                new Message(user, paper, 2L, "name2", "Test Content2", 0)
+        );
+
+        given(messageService.getMyFriendMessages()).willReturn(messages);
+
+        URI uri = UriComponentsBuilder
+                .newInstance()
+                .path("/api/papers/{paper-id}/messages/my-friend-message-list")
+                .buildAndExpand(paperId)
+                .toUri();
+
+        // When
+        ResultActions actions = mockMvc.perform(get(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // Then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(messages.get(0).getId()))
+                .andExpect(jsonPath("$[0].paperId").value(messages.get(0).getPaper().getId()))
+                .andExpect(jsonPath("$[0].name").value(messages.get(0).getName().toString()))
+                .andExpect(jsonPath("$[0].content").value(messages.get(0).getContent().toString()))
+                .andExpect(jsonPath("$[1].id").value(messages.get(1).getId()))
+                .andExpect(jsonPath("$[1].paperId").value(messages.get(1).getPaper().getId()))
+                .andExpect(jsonPath("$[1].name").value(messages.get(1).getName().toString()))
+                .andExpect(jsonPath("$[1].content").value(messages.get(1).getContent().toString()));
     }
 
     @Test

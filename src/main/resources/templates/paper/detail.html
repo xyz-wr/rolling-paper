@@ -153,6 +153,15 @@
             padding: 0;
             border: none;
         }
+
+
+        .withdraw {
+            background-color: transparent;
+            color: #BEC5D8;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -188,9 +197,11 @@
                         <p>home</p>
                     </a>
                 </li>
-                <li>
-                    <i class="fas fa-user-plus"></i>
-                    <p>invite</p>
+                <li th:if="${#strings.equals(paperDto.isPublic, 'FRIEND') && #strings.equals(paperDto.getEmail(), email)}">
+                    <a th:href="@{'/papers/' + ${paperId} + '/search/codename'}">
+                        <i class="fas fa-user-plus"></i>
+                        <p>invite</p>
+                    </a>
                 </li>
                 <li>
                     <a th:href="@{'/papers/' + ${paperDto.id} + '/messages/write'}">
@@ -198,13 +209,19 @@
                         <p>write</p>
                     </a>
                 </li>
-                <li>
-                    <i class="fas fa-users"></i>
-                    <p>users</p>
+                <li th:if="${#strings.equals(paperDto.isPublic, 'FRIEND')}">
+                    <a th:href="@{'/papers/' + ${paperId} + '/invitations/accepted'}">
+                        <i class="fas fa-users"></i>
+                        <p>users</p>
+                    </a>
                 </li>
-                <li>
-                    <i class="fas fa-sign-out-alt"></i>
-                    <p>withdraw</p>
+                <li th:if="${#strings.equals(paperDto.isPublic, 'FRIEND') && !#strings.equals(paperDto.getEmail(), email)}">
+                    <form th:action="@{/papers/{paper-id}/invitations/withdraw(paper-id=${paperId})}" method="post">
+                        <button type="submit" class="withdraw">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <p>withdraw</p>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </nav>

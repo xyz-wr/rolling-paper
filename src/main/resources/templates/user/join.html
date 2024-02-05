@@ -184,7 +184,7 @@
             let header = $("meta[name='_csrf_header']").attr("content");
 
             let email = document.getElementById("email").value;
-            let url = "/api/auth/send-email?email=" + email;
+            let url = "/api/auth/send/auth-key?email=" + email;
 
             $.ajax({
                 url: url,
@@ -218,7 +218,7 @@
             let email = document.getElementById("email").value;
             let authKey = document.getElementById("auth-key").value;
 
-            let url = "/api/auth/check-auth-key?email=" + email + "&auth-key=" + authKey;
+            let url = "/api/auth/check/auth-key?email=" + email + "&auth-key=" + authKey;
 
             $.ajax({
                 url: url,

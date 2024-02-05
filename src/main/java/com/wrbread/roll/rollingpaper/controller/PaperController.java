@@ -1,11 +1,14 @@
 package com.wrbread.roll.rollingpaper.controller;
 
+import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
+import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.service.MessageService;
 import com.wrbread.roll.rollingpaper.service.PaperService;
+import com.wrbread.roll.rollingpaper.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -26,6 +29,8 @@ public class PaperController {
     private final PaperService paperService;
 
     private final MessageService messageService;
+
+    private final UserService userService;
 
 
     /** public 롤링 페이퍼 전체 조회 */
@@ -177,5 +182,18 @@ public class PaperController {
         paperService.deletePaper(id);
 
         return "redirect:/papers/all-public-papers";
+    }
+
+    /** 롤링 페이퍼에 초대할 유저 검색 */
+    @GetMapping("/{paper-id}/search/codename")
+    public String search(@PathVariable("paper-id") Long paperId,
+                         String codename, Model model, Authentication auth) {
+        String sender = auth.getName();
+        User user = userService.findCodename(codename);
+
+        model.addAttribute("sender", sender);
+        model.addAttribute("user", user);
+        model.addAttribute("paperId", paperId);
+        return "paper/search";
     }
 }

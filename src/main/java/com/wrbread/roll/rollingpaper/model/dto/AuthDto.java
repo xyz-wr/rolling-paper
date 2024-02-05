@@ -74,12 +74,13 @@ public class AuthDto {
     @Setter
     @NoArgsConstructor
     public static class UserDto {
-        private String codename;
-
         private String nickname;
+        private String codename;
+        private String email;
 
         public UserDto(User user) {
             this.nickname = user.getNickname();
+            this.email = user.getEmail();
             this.codename = user.getCodename();
         }
     }

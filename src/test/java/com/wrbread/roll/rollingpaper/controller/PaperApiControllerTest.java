@@ -367,17 +367,17 @@ class PaperApiControllerTest {
     void testSearchCodename() throws Exception {
         // Given
         AuthDto.UserDto userDto = new AuthDto.UserDto();
-        userDto.setNickname("testNickname");
+        userDto.setEmail("test@gmail.com");
         userDto.setCodename("ABCDEF");
 
         User user = User.builder()
-                .nickname(userDto.getNickname())
+                .email(userDto.getEmail())
                 .codename(userDto.getCodename())
                 .build();
 
         Long paperId = 1L;
 
-        given(userService.findCodename(any(AuthDto.UserDto.class)))
+        given(userService.findCodename(any(String.class)))
                 .willReturn(user);
 
         URI uri = UriComponentsBuilder
@@ -400,6 +400,6 @@ class PaperApiControllerTest {
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.codename").value(userDto.getCodename()))
-                .andExpect(jsonPath("$.nickname").value(userDto.getNickname()));
+                .andExpect(jsonPath("$.nickname").value(userDto.getEmail()));
     }
 }

@@ -106,8 +106,8 @@ public class PaperApiController {
     /** 롤링 페이퍼에 초대할 유저 검색 */
     @PostMapping("/{paper-id}/search/codename")
     public ResponseEntity<AuthDto.UserDto> searchCodename(@PathVariable("paper-id") Long paperId,
-                                                          @RequestBody AuthDto.UserDto userDto){
-        User user = userService.findCodename(userDto);
+                                                          @RequestParam("codename") String codename){
+        User user = userService.findCodename(codename);
 
         return ResponseEntity.ok().body(new AuthDto.UserDto(user));
     }

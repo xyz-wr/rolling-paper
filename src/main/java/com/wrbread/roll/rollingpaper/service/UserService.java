@@ -78,10 +78,7 @@ public class UserService {
     /** 유저 검색
      * 코드네임으로 검색
      * */
-    public User findCodename(AuthDto.UserDto userDto) {
-        String codename = userDto.getCodename();
-        User user = userRepository.findByCodename(codename)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.CODENAME_NOT_FOUND));
-        return user;
+    public User findCodename(String codename) {
+        return userRepository.findByCodename(codename);
     }
 }

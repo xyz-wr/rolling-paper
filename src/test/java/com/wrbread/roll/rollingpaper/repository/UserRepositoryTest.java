@@ -78,11 +78,10 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         // when
-        Optional<User> findCodename = userRepository.findByCodename("ABCDEF");
+        User findCodename = userRepository.findByCodename("ABCDEF");
 
         // then
-        assertTrue(findCodename.isPresent());
-        assertEquals("ABCDEF", findCodename.get().getCodename());
+        assertEquals("ABCDEF", findCodename.getCodename());
     }
 
 }

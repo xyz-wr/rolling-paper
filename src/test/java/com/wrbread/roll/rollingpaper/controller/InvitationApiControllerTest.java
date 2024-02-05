@@ -242,16 +242,16 @@ class InvitationApiControllerTest {
         Long paperId = 1L;
 
         AuthDto.UserDto userDto = new AuthDto.UserDto();
-        userDto.setNickname("testNickname");
+        userDto.setEmail("testNickname");
         userDto.setCodename("TESTAB");
 
         User receiver1 = User.builder()
-                .nickname(userDto.getNickname())
+                .nickname(userDto.getEmail())
                 .codename(userDto.getCodename())
                 .build();
 
         User receiver2 = User.builder()
-                .nickname(userDto.getNickname())
+                .nickname(userDto.getEmail())
                 .codename(userDto.getCodename())
                 .build();
 

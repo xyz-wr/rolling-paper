@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>롤링 페이퍼 초대 요청 리스트</title>
+    <script src="js/script.js"></script>
+    <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F2F6F8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .mobile {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #F1EDED;
+            border-radius: 10px;
+            height: 600px;
+            width: 350px;
+        }
+
+        .mobile .content {
+            background-color: #fff;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            bottom: 60px;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background-color: #86D8C9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            width: 100%;
+            color: #FFF;
+        }
+
+        .footer-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .footer-nav ul {
+            background-color: #F8FAFA;
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            height: 60px;
+        }
+
+        .footer-nav li {
+            color: #BEC5D8;
+            cursor: pointer;
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .footer-nav ul li p {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+
+        .footer-nav ul li:hover,
+        .footer-nav ul li.active {
+            color: #86D8C9;
+        }
+
+        .footer-nav ul li a{
+            text-decoration: none;
+            color: #BEC5D8;
+        }
+
+        .footer-nav ul li:hover a,
+        .footer-nav ul li.active a,
+        .footer-nav ul li a:hover{
+            color: #86D8C9;
+        }
+
+
+        .requests__list {
+            height: 200px;
+            width: 100%;
+        }
+
+        .requests__request {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 14px 8px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .requests__request-image {
+            height: 37px;
+            width: 37px;
+            background: #d1d1d1;
+            border-radius: 100%;
+        }
+
+        .requests__user-details {
+            margin-left: 8px;
+        }
+
+        .requests__name {
+            font-size: 10.9px;
+            font-weight: 500;
+            line-height: 0.9;
+        }
+
+        .requests__id {
+            opacity: 0.5;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .requests__accept-btn {
+            position: absolute;
+            border: none;
+            bottom: 20px;
+            right: 75px;
+            background: #B5E9E3;
+            border-radius: 9999px;
+            color: #fff;
+            padding: 7px 14px;
+            font-size: 9px;
+        }
+
+        .requests__reject-btn {
+            position: absolute;
+            border: none;
+            bottom: 20px;
+            right: 5px;
+            background: #F93B69;
+            border-radius: 9999px;
+            color: #fff;
+            margin-left: 60px;
+            padding: 7px 14px;
+            font-size: 9px;
+        }
+
+        .requests__checked-btn {
+            background: #EEE;
+            border-radius: 9999px;
+            color: #fff;
+            margin-left: auto;
+            padding: 7px 14px;
+            font-size: 9px;
+        }
+
+        form {
+            display: inline;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile">
+    <header>
+        <h4>Invitation</h4>
+    </header>
+
+    <div class="content">
+        <div class="requests__list">
+            <div class="requests__request" th:each="invitationDto : ${invitationDtos}">
+                <div class="requests__request-image"></div>
+                <div class="requests__user-details">
+                    <div class="requests__name" th:text="${invitationDto.title}"></div>
+                    <div class="requests__id" th:text="${invitationDto.senNickname}"></div>
+                </div>
+                <form th:action="@{/invitations/{invitation-id}/accept(invitation-id=${invitationDto.id})}" method="post">
+                    <button type="submit" class="requests__accept-btn" th:if="${#strings.equals(invitationDto.status, 'PENDING')}">
+                        ACCEPT
+                    </button>
+                </form>
+                <form th:action="@{/invitations/{invitation-id}/reject(invitation-id=${invitationDto.id})}" method="post">
+                    <button type="submit" class="requests__reject-btn" th:if="${#strings.equals(invitationDto.status, 'PENDING')}">
+                        REJECT
+                    </button>
+                </form>
+
+                <div class="requests__checked-btn" th:if="${#strings.equals(invitationDto.status, 'ACCEPTED')}">
+                    ACCEPTED
+                </div>
+                <div class="requests__checked-btn" th:if="${#strings.equals(invitationDto.status, 'REJECTED')}">
+                    REJECTED
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <nav class="footer-nav">
+            <ul>
+                <li class="active">
+                    <a th:href="@{/papers/all-public-papers}">
+                        <i class="fas fa-home"></i>
+                        <p>home</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/invitations/received}">
+                        <i class="fas fa-envelope"></i>
+                        <p>invitation</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/papers/write}">
+                        <i class="fas fa-pencil-alt"></i>
+                        <p>write</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/auth/info}">
+                        <i class="fas fa-user"></i>
+                        <p>user</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+</body>
+</html>

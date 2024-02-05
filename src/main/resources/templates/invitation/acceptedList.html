@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>초대장을 수락한 유저 리스트</title>
+    <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F2F6F8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .mobile {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #F1EDED;
+            border-radius: 10px;
+            height: 600px;
+            width: 350px;
+        }
+
+        .mobile .content {
+            background-color: #fff;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background-color: #86D8C9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            width: 100%;
+            color: #FFF;
+        }
+
+        .back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back i {
+            color: #fff;
+        }
+
+        .requests__list {
+            height: 200px;
+            width: 100%;
+            /*margin-top: 36px;*/
+        }
+
+        .requests__request {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 14px 8px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .requests__request-image {
+            height: 37px;
+            width: 37px;
+            background: #d1d1d1;
+            border-radius: 100%;
+        }
+
+        .requests__user-details {
+            margin-left: 8px;
+        }
+
+        .requests__name {
+            font-size: 10.9px;
+            font-weight: 500;
+            line-height: 0.9;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile">
+    <header>
+        <a th:href="@{'/papers/' + ${paperId}}">
+            <div class="back">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+        </a>
+        <h4>With</h4>
+    </header>
+
+    <div class="content">
+        <div class="requests__list">
+            <div class="requests__request" th:each="acceptedDto : ${acceptedDtos}">
+                <div class="requests__request-image"></div>
+                <div class="requests__user-details">
+                    <div class="requests__name" th:text="${acceptedDto.nickname}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

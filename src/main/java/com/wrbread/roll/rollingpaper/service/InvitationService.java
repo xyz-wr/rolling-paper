@@ -38,7 +38,7 @@ public class InvitationService {
     private final UserService userService;
 
 
-    /** 다이어리 초대 요청
+    /** 롤링 페이퍼 초대 요청
      * 자기 자신은 초대 불가
      * 전체 공개는 초대장 발송 불가
      * 해당 롤링 페이퍼를 작성한 유저만 초대장 발송 가능

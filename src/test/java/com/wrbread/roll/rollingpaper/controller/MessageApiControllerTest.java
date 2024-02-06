@@ -56,7 +56,7 @@ class MessageApiControllerTest {
     @DisplayName("메시지 저장 테스트")
     void testSaveMessage() throws Exception {
         //given
-        User user = User.builder()
+        User user = User.userDetail()
                 .email("test@gmail.com")
                 .build();
 
@@ -97,7 +97,7 @@ class MessageApiControllerTest {
     @DisplayName("메시지 조회 테스트")
     void testGetMessage() throws Exception {
         //given
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email("test@gmail.com")
                 .build();
@@ -139,7 +139,7 @@ class MessageApiControllerTest {
     @DisplayName("메시지 수정 테스트")
     void testUpdateMessage() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email("test@gmail.com")
                 .build();
@@ -187,7 +187,7 @@ class MessageApiControllerTest {
     @DisplayName("특정 롤링페이퍼의 전체 메시지 조회 테스트")
     void testGetMessages() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email("test@gmail.com")
                 .build();
@@ -233,7 +233,7 @@ class MessageApiControllerTest {
     @DisplayName("내가 작성한 public 메시지 전체 조회")
     void testMyPublicMessages() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email("test@gmail.com")
                 .build();
@@ -279,7 +279,7 @@ class MessageApiControllerTest {
     @DisplayName("내가 작성한 friend 메시지 전체 조회")
     void testMyFriendMessages() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email("test@gmail.com")
                 .build();

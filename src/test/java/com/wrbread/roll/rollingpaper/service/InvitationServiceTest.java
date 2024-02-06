@@ -64,7 +64,7 @@ class InvitationServiceTest {
                 .getAuthentication();
         String senEmail = authentication.getName();
 
-        User sender = User.builder()
+        User sender = User.userDetail()
                 .email(senEmail)
                 .build();
 
@@ -72,7 +72,7 @@ class InvitationServiceTest {
         request.setRecEmail("receiver@gmail.com");
 
         String recEmail = request.getRecEmail();
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .email(recEmail)
                 .build();
 
@@ -107,7 +107,7 @@ class InvitationServiceTest {
                 .getAuthentication();
         String recEmail = authentication.getName();
 
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .email(recEmail)
                 .build();
 
@@ -138,7 +138,7 @@ class InvitationServiceTest {
                 .getAuthentication();
         String recEmail = authentication.getName();
 
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .email(recEmail)
                 .build();
 
@@ -169,7 +169,7 @@ class InvitationServiceTest {
                 .getAuthentication();
         String recEmail = authentication.getName();
 
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .email(recEmail)
                 .build();
 
@@ -226,7 +226,7 @@ class InvitationServiceTest {
                 .getAuthentication();
         String recEmail = authentication.getName();
 
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .email(recEmail)
                 .build();
 
@@ -253,7 +253,7 @@ class InvitationServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();

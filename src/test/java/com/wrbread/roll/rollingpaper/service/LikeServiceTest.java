@@ -49,11 +49,11 @@ class LikeServiceTest {
                 .getAuthentication();
         String email = authentication.getName();
 
-        User user1 = User.builder()
+        User user1 = User.userDetail()
                 .email(email)
                 .build();
 
-        User user2 = User.builder()
+        User user2 = User.userDetail()
                 .email("testEmail@gmail.com")
                 .build();
 

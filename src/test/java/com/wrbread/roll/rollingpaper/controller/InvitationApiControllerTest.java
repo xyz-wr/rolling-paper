@@ -63,11 +63,11 @@ class InvitationApiControllerTest {
         InvitationDto.Request request = new InvitationDto.Request();
         request.setRecEmail(receiverEmail);
 
-        User sender = User.builder()
+        User sender = User.userDetail()
                 .email(senEmail)
                 .build();
 
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .email(receiverEmail)
                 .build();
 
@@ -178,16 +178,16 @@ class InvitationApiControllerTest {
         String receiverEmail1 = "receiver1@gmail.com";
         String receiverEmail2 = "receiver2@gmail.com";
 
-        User sender = User.builder()
+        User sender = User.userDetail()
                 .email(senderEmail)
                 .nickname("Test Nickname")
                 .build();
 
-        User receiver1 = User.builder()
+        User receiver1 = User.userDetail()
                 .email(receiverEmail1)
                 .build();
 
-        User receiver2 = User.builder()
+        User receiver2 = User.userDetail()
                 .email(receiverEmail2)
                 .build();
 
@@ -245,12 +245,12 @@ class InvitationApiControllerTest {
         userDto.setEmail("testNickname");
         userDto.setCodename("TESTAB");
 
-        User receiver1 = User.builder()
+        User receiver1 = User.userDetail()
                 .nickname(userDto.getEmail())
                 .codename(userDto.getCodename())
                 .build();
 
-        User receiver2 = User.builder()
+        User receiver2 = User.userDetail()
                 .nickname(userDto.getEmail())
                 .codename(userDto.getCodename())
                 .build();

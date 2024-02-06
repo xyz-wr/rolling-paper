@@ -50,7 +50,7 @@ class PaperServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .email(email)
                 .build();
 
@@ -82,7 +82,7 @@ class PaperServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -120,7 +120,7 @@ class PaperServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -200,7 +200,7 @@ class PaperServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -246,7 +246,7 @@ class PaperServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -292,7 +292,7 @@ class PaperServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -338,7 +338,7 @@ class PaperServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -368,6 +368,4 @@ class PaperServiceTest {
         verify(paperRepository, times(1)).findById(paperId);
         verify(paperRepository, times(1)).delete(paper);
     }
-
-
 }

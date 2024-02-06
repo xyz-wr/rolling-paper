@@ -60,7 +60,7 @@ class PaperApiControllerTest {
     @DisplayName("롤링 페이퍼 저장")
     void testSavePaper() throws Exception {
         //given
-        User user = User.builder()
+        User user = User.userDetail()
                 .email("test@gmail.com")
                 .build();
 
@@ -94,7 +94,7 @@ class PaperApiControllerTest {
     @DisplayName("롤링 페이퍼 조회")
     void testGetPaper() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .email("test@gmail.com")
                 .build();
 
@@ -130,7 +130,7 @@ class PaperApiControllerTest {
     @DisplayName("롤링 페이퍼 수정")
     void testUpdatePaper() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .email("test@gmail.com")
                 .build();
 
@@ -178,7 +178,7 @@ class PaperApiControllerTest {
     @DisplayName("IsPublic이 PUBLIC인 롤링 페이퍼 전체 조회")
     void testGetPublicPapers() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .email("test@gmail.com")
                 .build();
 
@@ -219,7 +219,7 @@ class PaperApiControllerTest {
     @DisplayName("IsPublic이 FRIEND인 롤링 페이퍼 전체 조회")
     void testGetFriendPapers() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .email("test@gmail.com")
                 .build();
 
@@ -260,7 +260,7 @@ class PaperApiControllerTest {
     @DisplayName("내가 작성한 public롤링 페이퍼 전체 조회")
     void testGetMyPublicPapers() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .email("test@gmail.com")
                 .build();
 
@@ -302,7 +302,7 @@ class PaperApiControllerTest {
     @DisplayName("내가 작성한 friend 롤링 페이퍼 전체 조회")
     void testGetMyFriendPapers() throws Exception {
         // Given
-        User user = User.builder()
+        User user = User.userDetail()
                 .email("test@gmail.com")
                 .build();
 
@@ -369,10 +369,12 @@ class PaperApiControllerTest {
         AuthDto.UserDto userDto = new AuthDto.UserDto();
         userDto.setEmail("test@gmail.com");
         userDto.setCodename("ABCDEF");
+        userDto.setNickname("test Nickname");
 
-        User user = User.builder()
+        User user = User.userDetail()
                 .email(userDto.getEmail())
                 .codename(userDto.getCodename())
+                .nickname(userDto.getNickname())
                 .build();
 
         Long paperId = 1L;
@@ -391,6 +393,7 @@ class PaperApiControllerTest {
 
         // When
         ResultActions actions = mockMvc.perform(post(uri)
+                .param("codename", userDto.getCodename())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content)
@@ -399,7 +402,8 @@ class PaperApiControllerTest {
         // Then
         actions
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nickname").value(userDto.getNickname()))
                 .andExpect(jsonPath("$.codename").value(userDto.getCodename()))
-                .andExpect(jsonPath("$.nickname").value(userDto.getEmail()));
+                .andExpect(jsonPath("$.email").value(userDto.getEmail()));
     }
 }

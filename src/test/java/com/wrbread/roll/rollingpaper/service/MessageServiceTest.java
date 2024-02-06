@@ -50,7 +50,7 @@ class MessageServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -93,7 +93,7 @@ class MessageServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -141,7 +141,7 @@ class MessageServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -196,7 +196,7 @@ class MessageServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -252,7 +252,7 @@ class MessageServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -309,7 +309,7 @@ class MessageServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();
@@ -366,7 +366,7 @@ class MessageServiceTest {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         String email = authentication.getName();
-        User user = User.builder()
+        User user = User.userDetail()
                 .id(1L)
                 .email(email)
                 .build();

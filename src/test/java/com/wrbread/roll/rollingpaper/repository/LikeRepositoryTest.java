@@ -32,7 +32,7 @@ class LikeRepositoryTest {
     @DisplayName("findByMessageAndUser 테스트")
     public void testFindByMessageAndUser() {
         // given
-        User user = User.builder()
+        User user = User.userDetail()
                 .nickname("testNickname")
                 .email("test@gmail.com")
                 .build();

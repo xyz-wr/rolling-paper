@@ -106,7 +106,7 @@ class MessageRepositoryTest {
     @DisplayName("findByPaperAndUser 테스트")
     public void testFindByPaperAndUser() {
         // given
-        User user = User.builder()
+        User user = User.userDetail()
                 .nickname("testNickname")
                 .email("test@gmail.com")
                 .build();

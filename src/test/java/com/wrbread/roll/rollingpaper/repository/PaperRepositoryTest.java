@@ -27,7 +27,7 @@ class PaperRepositoryTest {
     @DisplayName("findByIsPublic 테스트")
     public void testFindByIsPublic() {
         // given
-        User user = User.builder()
+        User user = User.userDetail()
                 .nickname("testNickname")
                 .email("test@gmail.com")
                 .build();
@@ -53,7 +53,7 @@ class PaperRepositoryTest {
     @DisplayName("findAllByUserAndIsPublic 테스트")
     public void testFindAllByUserAndIsPublic() {
         // given
-        User user = User.builder()
+        User user = User.userDetail()
                 .nickname("testNickname")
                 .email("test@gmail.com")
                 .build();

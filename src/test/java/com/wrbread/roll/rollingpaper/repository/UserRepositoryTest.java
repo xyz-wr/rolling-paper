@@ -20,7 +20,7 @@ class UserRepositoryTest {
     @DisplayName("findByEmail 테스트")
     public void testFindByEmail() {
         // given
-        User user = User.builder()
+        User user = User.userDetail()
                 .nickname("testNickname")
                 .email("test@gmail.com")
                 .build();
@@ -37,7 +37,7 @@ class UserRepositoryTest {
     @Test
     public void testExistsByNickname() {
         // given
-        User user = User.builder()
+        User user = User.userDetail()
                 .nickname("testNickname")
                 .email("test@gmail.com")
                 .build();
@@ -53,7 +53,7 @@ class UserRepositoryTest {
     @Test
     public void testExistsByEmail() {
         // given
-        User user = User.builder()
+        User user = User.userDetail()
                 .nickname("testNickname")
                 .email("test@gmail.com")
                 .build();
@@ -70,7 +70,7 @@ class UserRepositoryTest {
     @DisplayName("findByCodename 테스트")
     public void testFindByCodename() {
         // given
-        User user = User.builder()
+        User user = User.userDetail()
                 .nickname("testNickname")
                 .email("test@gmail.com")
                 .codename("ABCDEF")

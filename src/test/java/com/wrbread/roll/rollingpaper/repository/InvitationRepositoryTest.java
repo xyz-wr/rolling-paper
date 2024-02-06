@@ -32,7 +32,7 @@ class InvitationRepositoryTest {
     @DisplayName("findByPaperIdAndId 테스트")
     public void testFindByReceiver() {
         // given
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .nickname("testNickname")
                 .email("receiver@gmail.com")
                 .build();
@@ -64,7 +64,7 @@ class InvitationRepositoryTest {
     @Test
     @DisplayName("findByPaperAndReceiver 테스트")
     public void testFindByPaperAndReceiver() {
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .nickname("testNickname")
                 .email("receiver@gmail.com")
                 .build();
@@ -96,7 +96,7 @@ class InvitationRepositoryTest {
     @Test
     @DisplayName("findByPaperAndReceiverAndStatus 테스트")
     public void testFindByPaperAndReceiverAndStatus() {
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .nickname("testNickname")
                 .email("receiver@gmail.com")
                 .build();
@@ -130,7 +130,7 @@ class InvitationRepositoryTest {
     @DisplayName("existsByPaperAndReceiverAndStatus 테스트")
     public void testExistsByPaperAndReceiverAndStatus() {
         // given
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .nickname("testNickname")
                 .email("receiver@gmail.com")
                 .build();
@@ -194,7 +194,7 @@ class InvitationRepositoryTest {
     @DisplayName("findAllByReceiverAndStatus 테스트")
     public void testFindAllByReceiverAndStatus() {
         // given
-        User receiver = User.builder()
+        User receiver = User.userDetail()
                 .nickname("testNickname")
                 .email("receiver@gmail.com")
                 .build();

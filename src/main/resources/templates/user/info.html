@@ -156,6 +156,9 @@
             font-size: 12px;
         }
 
+        .user-nickname {
+            word-wrap: break-word;
+        }
 
         /* Menu */
         .menu {
@@ -207,7 +210,7 @@
 
             <div class="user-info">
                 <div class="img"><i class="fas fa-user fa-lg"></i></div>
-                <h3 th:text="${user.nickname}"></h3>
+                <h3 th:text="${user.nickname}" class="user-nickname"></h3>
                 <p th:text="'ID: ' + ${user.codename}"></p>
             </div>
 

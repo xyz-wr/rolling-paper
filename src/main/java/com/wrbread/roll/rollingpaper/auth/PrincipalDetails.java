@@ -1,5 +1,6 @@
 package com.wrbread.roll.rollingpaper.auth;
 
+import com.wrbread.roll.rollingpaper.auth.oauth.OAuth2UserInfo;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,21 +14,25 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private final User user;
 
-    private Map<String, Object> attributes;
+    private OAuth2UserInfo oAuth2UserInfo;
 
-    public PrincipalDetails(User user, Map<String, Object> attributes) {
+    public PrincipalDetails(User user) {
         this.user = user;
-        this.attributes = attributes;
+    }
+
+    public PrincipalDetails(User user, OAuth2UserInfo oAuth2UserInfo) {
+        this.user = user;
+        this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
     @Override
     public String getName() {
-        return null;
+        return oAuth2UserInfo.getProviderId();
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return attributes;
+        return oAuth2UserInfo.getAttributes();
     }
 
     @Override

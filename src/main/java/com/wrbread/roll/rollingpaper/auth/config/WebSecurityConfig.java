@@ -1,6 +1,6 @@
 package com.wrbread.roll.rollingpaper.auth.config;
 
-import com.wrbread.roll.rollingpaper.auth.PrincipalOauth2UserService;
+import com.wrbread.roll.rollingpaper.auth.oauth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

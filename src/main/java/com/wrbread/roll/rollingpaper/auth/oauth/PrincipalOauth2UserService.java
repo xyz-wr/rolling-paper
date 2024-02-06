@@ -33,9 +33,10 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         if(provider.equals("google")){
             oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
-        }
-        else if(provider.equals("naver")){
+        } else if(provider.equals("naver")){
             oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
+        } else if(provider.equals("kakao")){
+            oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         }
 
         String providerId = oAuth2UserInfo.getProviderId();

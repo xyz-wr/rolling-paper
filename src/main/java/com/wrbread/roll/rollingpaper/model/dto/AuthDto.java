@@ -46,7 +46,7 @@ public class AuthDto {
         private String passwordCheck;
 
         public User toEntity(String codename, String password) {
-            return User.builder()
+            return User.userDetail()
                     .id(id)
                     .nickname(nickname)
                     .email(email)

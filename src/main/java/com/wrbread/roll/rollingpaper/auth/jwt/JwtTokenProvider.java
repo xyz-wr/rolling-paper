@@ -1,8 +1,8 @@
-package com.wrbread.roll.rollingpaper.auth;
+package com.wrbread.roll.rollingpaper.auth.jwt;
 
+import com.wrbread.roll.rollingpaper.auth.PrincipalDetails;
+import com.wrbread.roll.rollingpaper.auth.PrincipalDetailsService;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
-import com.wrbread.roll.rollingpaper.service.PrincipalDetails;
-import com.wrbread.roll.rollingpaper.service.PrincipalDetailsService;
 import com.wrbread.roll.rollingpaper.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,8 +95,8 @@ public class JwtTokenProvider implements InitializingBean {
 
     public Authentication getAuthentication(String token) {
         String email = getClaims(token).get(EMAIL_KEY).toString();
-        PrincipalDetails principalDetails = principalDetailsService.loadUserByUsername(email);
-        return new UsernamePasswordAuthenticationToken(principalDetails, "", principalDetails.getAuthorities());
+        UserDetails userDetails = principalDetailsService.loadUserByUsername(email);
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public long getTokenExpirationTime(String token) {

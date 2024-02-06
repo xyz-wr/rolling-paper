@@ -1,4 +1,4 @@
-package com.wrbread.roll.rollingpaper.auth;
+package com.wrbread.roll.rollingpaper.auth.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

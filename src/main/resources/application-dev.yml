@@ -24,6 +24,18 @@ spring:
       hibernate:
         format_sql: true
         show-sql: true
+  thymeleaf:
+    cache: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT-ID}
+            client-secret: ${CLIENT-SECRET}
+            scope:
+              - email
+              - profile
 
 jwt:
   secret: ${SECRET}

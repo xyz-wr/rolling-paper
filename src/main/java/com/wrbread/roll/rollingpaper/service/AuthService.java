@@ -1,10 +1,9 @@
 package com.wrbread.roll.rollingpaper.service;
 
-import com.wrbread.roll.rollingpaper.auth.JwtTokenProvider;
+import com.wrbread.roll.rollingpaper.auth.jwt.JwtTokenProvider;
 import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
 import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
-import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.util.RandomUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -36,7 +35,6 @@ public class AuthService {
     private final RedisService redisService;
     private final JavaMailSender javaMailSender;
     private final RandomUtil randomUtil;
-
     private final UserService userService;
 
     @Value("${spring.mail.username}")

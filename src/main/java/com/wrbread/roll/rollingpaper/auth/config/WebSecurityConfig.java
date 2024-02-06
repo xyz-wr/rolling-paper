@@ -1,6 +1,6 @@
 package com.wrbread.roll.rollingpaper.auth.config;
 
-import com.wrbread.roll.rollingpaper.model.enums.Role;
+import com.wrbread.roll.rollingpaper.auth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig {
+    private final PrincipalOauth2UserService principalOauth2UserService;
+
     @Bean
     public BCryptPasswordEncoder encoder() {
         //비밀번호를 DB에 저장하기 전 사용할 암호화
@@ -41,6 +43,12 @@ public class WebSecurityConfig {
 //                .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
+        http
+                .oauth2Login()
+                .loginPage("/auth/login")
+                .defaultSuccessUrl("/papers/all-public-papers")
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
         return http.build();
     }
 

@@ -1,18 +1,33 @@
-package com.wrbread.roll.rollingpaper.service;
+package com.wrbread.roll.rollingpaper.auth;
 
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private final User user;
 
-    public PrincipalDetails(User user) {
+    private Map<String, Object> attributes;
+
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
         this.user = user;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     @Override

@@ -1,5 +1,6 @@
-package com.wrbread.roll.rollingpaper.auth;
+package com.wrbread.roll.rollingpaper.auth.jwt;
 
+import com.wrbread.roll.rollingpaper.auth.jwt.JwtTokenProvider;
 import io.jsonwebtoken.IncorrectClaimException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

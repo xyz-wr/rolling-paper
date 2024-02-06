@@ -38,7 +38,11 @@ public class User extends BaseTimeEntity{
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
 
-    @Builder
+    private String provider;
+
+    private String providerId;
+
+    @Builder(builderClassName = "UserDetail",builderMethodName = "userDetail")
     public User(Long id, String nickname, String email, String password, String codename, Role role) {
         this.id = id;
         this.nickname = nickname;
@@ -46,5 +50,17 @@ public class User extends BaseTimeEntity{
         this.password = password;
         this.role = role;
         this.codename = codename;
+    }
+
+    @Builder(builderClassName = "OAuth2User",builderMethodName = "oAuth2User")
+    public User(Long id, String nickname, String email, String password, String codename, Role role, String provider, String providerId) {
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.codename = codename;
+        this.provider = provider;
+        this.providerId = providerId;
     }
 }

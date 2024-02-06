@@ -157,22 +157,6 @@
                 </button>
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             </form>
-
-<!--            <div class="requests__list">-->
-<!--                <div class="requests__request">-->
-<!--                    <div class="requests__user-details">-->
-<!--                        <div class="requests__name" th:text="${user.codename}"> afbadbadfb</div>-->
-<!--                    </div>-->
-<!--                    <form th:action="@{'/papers/'+ ${paperId} + '/invite'}" method="post">-->
-<!--                        <button type="submit" class="requests__accept-btn" id="send-invitation">-->
-<!--                            Invite-->
-<!--                        </button>-->
-<!--                        <input type="hidden" name="paperId" th:value="${paperId}" />-->
-<!--                        <input type="hidden" id="receiver" name="recEmail" th:value="${user.email}" required />-->
-<!--                        <input type="hidden" id="sender" name="senEmail" th:value="${sender}" required />-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
 
     </div>

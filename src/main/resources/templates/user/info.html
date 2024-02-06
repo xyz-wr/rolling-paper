@@ -212,10 +212,10 @@
             </div>
 
             <ul class="menu">
-                <li><a href="#"><i class="fas fa-scroll"></i>My Public Rolling Paper List</a></li>
-                <li><a href="#"><i class="fas fa-scroll"></i>My With Rolling Paper List</a></li>
-                <li><a href="#"><i class="fas fa-sticky-note"></i>My Public Message List</a></li>
-                <li><a href="#"><i class="fas fa-sticky-note"></i>My With Rolling Paper List</a></li>
+                <li><a th:href="@{/papers/my-public-paper-list}"><i class="fas fa-scroll"></i>My Public Rolling Paper List</a></li>
+                <li><a th:href="@{/papers/my-friend-paper-list}"><i class="fas fa-scroll"></i>My Friend Rolling Paper List</a></li>
+                <li><a th:href="@{/messages/my-public-message-list}"><i class="fas fa-sticky-note"></i>My Public Message List</a></li>
+                <li><a th:href="@{/messages/my-friend-message-list}"><i class="fas fa-sticky-note"></i>My Friend Message List</a></li>
                 <li><a th:href="@{/auth/logout}">Logout</a></li>
             </ul>
         </div>

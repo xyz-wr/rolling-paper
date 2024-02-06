@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequiredArgsConstructor
 public class MessageController {
@@ -151,6 +154,32 @@ public class MessageController {
         messageService.deleteMessage(paperId, messageId);
 
         return "redirect:/papers/{paper-id}";
+    }
+
+    /** 내가 작성한 public 롤링 페이퍼 전체 조회 */
+    @GetMapping("/messages/my-public-message-list")
+    public String myPublicList(Model model) {
+        List<MessageDto> messageDtos = messageService.getMyPublicMessages()
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
+
+        model.addAttribute("messageDtos", messageDtos);
+
+        return "message/my-public-messages";
+    }
+
+    /** 내가 작성한 friend 롤링 페이퍼 전체 조회 */
+    @GetMapping("/messages/my-friend-message-list")
+    public String myFriendList(Model model) {
+        List<MessageDto> messageDtos = messageService.getMyFriendMessages()
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
+
+        model.addAttribute("messageDtos", messageDtos);
+
+        return "message/my-friend-messages";
     }
 
 }

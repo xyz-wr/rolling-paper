@@ -196,4 +196,30 @@ public class PaperController {
         model.addAttribute("paperId", paperId);
         return "paper/search";
     }
+
+    /** 내가 작성한 public 롤링 페이퍼 전체 조회 */
+    @GetMapping("/my-public-paper-list")
+    public String myPublicList(Model model) {
+        List<PaperDto> paperDtos = paperService.getMyPublicPapers()
+                .stream()
+                .map(PaperDto::new)
+                .collect(Collectors.toList());
+
+        model.addAttribute("paperDtos", paperDtos);
+
+        return "paper/my-public-papers";
+    }
+
+    /** 내가 작성한 friend 롤링 페이퍼 전체 조회 */
+    @GetMapping("/my-friend-paper-list")
+    public String myFriendList(Model model) {
+        List<PaperDto> paperDtos = paperService.getMyFriendPapers()
+                .stream()
+                .map(PaperDto::new)
+                .collect(Collectors.toList());
+
+        model.addAttribute("paperDtos", paperDtos);
+
+        return "paper/my-friend-papers";
+    }
 }

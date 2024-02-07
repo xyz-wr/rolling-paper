@@ -222,4 +222,32 @@ public class PaperController {
 
         return "paper/my-friend-papers";
     }
+
+    /** PUBLIC 롤링 페이퍼 검색 */
+    @GetMapping("/search-public-paper")
+    public String searchPublicPaper(String keyword, Model model, Authentication auth) {
+        List<PaperDto> paperDtos = paperService.searchPublicPapers(keyword)
+                .stream()
+                .map(PaperDto::new)
+                .collect(Collectors.toList());
+
+        model.addAttribute("paperDtos", paperDtos);
+        model.addAttribute("email", auth.getName());
+
+        return "paper/search-public-papers";
+    }
+
+    /** PUBLIC 롤링 페이퍼 검색 */
+    @GetMapping("/search-friend-paper")
+    public String searchFriendPaper(String keyword, Model model, Authentication auth) {
+        List<PaperDto> paperDtos = paperService.searchFriendPapers(keyword)
+                .stream()
+                .map(PaperDto::new)
+                .collect(Collectors.toList());
+
+        model.addAttribute("paperDtos", paperDtos);
+        model.addAttribute("email", auth.getName());
+
+        return "paper/search-friend-papers";
+    }
 }

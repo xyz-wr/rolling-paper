@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>롤링 페이퍼 public 검색 리스트</title>
+    <link th:href="@{/css/list.css}" rel="stylesheet">
+    <script src="js/script.js"></script>
+    <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="mobile">
+    <header>
+        <h4>Send</h4>
+    </header>
+    <nav class="content-nav">
+        <ul>
+            <li class="active">
+                <a th:href="@{/papers/all-public-papers}">
+                    <i class="fas fa-scroll"></i>
+                    <p>Rolling Paper(Public)</p>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/papers/all-friend-papers}">
+                    <i class="fas fa-key"></i>
+                    <p>Rolling Paper(Friend)</p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <form id="masthead-search" th:action="@{'/papers/search-public-paper'}" method="get">
+            <input type="search" id="keyword" name="keyword" placeholder="Search" required>
+            <button type="submit"></button>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        </form>
+        <div class="col">
+            <div class="paper-img" th:each="paperDto : ${paperDtos}">
+                <a th:href="@{'/papers/' + ${paperDto.id}}">
+                    <div class="relax" th:text="${paperDto.title}"></div>
+                    <div th:if="${#strings.equals(paperDto.getEmail(), email)}">
+                        <a th:href="@{'/papers/edit/' + ${paperDto.id}}" class="btn-edit play-pause">
+                            <div class="icon-container">
+                                <div class="icon edit">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                            </div>
+                        </a>
+                        <a th:href="@{'/papers/delete/' + ${paperDto.id}}" class="btn-delete play-pause">
+                            <div class="icon-container">
+                                <div class="icon delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <nav class="footer-nav">
+            <ul>
+                <li class="active">
+                    <a th:href="@{/papers/all-public-papers}">
+                        <i class="fas fa-home"></i>
+                        <p>home</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/invitations/received}">
+                        <i class="fas fa-envelope"></i>
+                        <p>invitation</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/papers/write}">
+                        <i class="fas fa-pencil-alt"></i>
+                        <p>write</p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/auth/info}">
+                        <i class="fas fa-user"></i>
+                        <p>user</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+</body>
+</html>

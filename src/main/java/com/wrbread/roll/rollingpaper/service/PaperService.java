@@ -161,7 +161,17 @@ public class PaperService {
 
     /** friend 롤링 페이퍼 검색 */
     public List<Paper> searchFriendPapers (String keyword) {
-        List<Paper> papers = paperRepository.findByTitleContainingAndIsPublic(keyword, IsPublic.FRIEND);
+        User user = userService.verifiedEmail();
+
+        List<Paper> papers = paperRepository.findAllByUserAndTitleContainingAndIsPublic(user, keyword, IsPublic.FRIEND);
+
+        // 초대 수락한 책 추가
+        List<Invitation> invitations = invitationRepository.findAllByReceiverAndStatus(user, InvitationStatus.ACCEPTED);
+        for (Invitation invitation : invitations) {
+            if (invitation.getPaper().getTitle().contains(keyword)) {
+                papers.add(invitation.getPaper());
+            }
+        }
 
         return papers;
     }

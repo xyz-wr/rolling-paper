@@ -2,6 +2,7 @@ package com.wrbread.roll.rollingpaper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
+import com.wrbread.roll.rollingpaper.model.entity.Like;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -90,8 +90,9 @@ public class MessageApiController {
         return ResponseEntity.noContent().build();
     }
 
+    /** 내가 좋아요 누른 메시지 전체 조회 */
     @GetMapping("/like/my-like-message-list")
-    public ResponseEntity<List<MessageDto>> getMyLikeMessages() {
+    public ResponseEntity<List<MessageDto>> getMyLikeMessages(@PathVariable("paper-id") Long paperId) {
         List<MessageDto> messages = messageService.getMyLikes()
                 .stream()
                 .map(MessageDto::new)

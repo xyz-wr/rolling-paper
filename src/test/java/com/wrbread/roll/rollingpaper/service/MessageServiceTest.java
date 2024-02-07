@@ -2,10 +2,12 @@ package com.wrbread.roll.rollingpaper.service;
 
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
+import com.wrbread.roll.rollingpaper.model.entity.Like;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
+import com.wrbread.roll.rollingpaper.repository.LikeRepository;
 import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
@@ -39,6 +41,9 @@ class MessageServiceTest {
     private PaperRepository paperRepository;
     @MockBean
     private UserRepository userRepository;
+
+    @MockBean
+    private LikeRepository likeRepository;
     @Autowired
     private MessageService messageService;
 
@@ -405,5 +410,57 @@ class MessageServiceTest {
         verify(messageRepository, times(1)).findById(messageId);
         verify(paperRepository, times(1)).findById(paperId);
         verify(messageRepository, times(1)).delete(message);
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("내가 좋아요 누른 메시지 목록")
+    void testGetMyLikes() {
+        //given
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        User user = User.userDetail()
+                .id(1L)
+                .email(email)
+                .build();
+
+        Message message1 = Message.builder()
+                .id(1L)
+                .name("Test Name")
+                .content("Test Content")
+                .build();
+
+        Long likeId = 1L;
+        Like like1 = Like.builder()
+                .id(likeId)
+                .user(user)
+                .message(message1)
+                .build();
+
+        Message message2 = Message.builder()
+                .id(1L)
+                .name("Test Name")
+                .content("Test Content")
+                .build();
+
+        Like like2 = Like.builder()
+                .id(2L)
+                .user(user)
+                .message(message2)
+                .build();
+
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
+        when(likeRepository.findAllByUser(user)).thenReturn(Arrays.asList(like1, like2));
+
+
+        // When
+        List<Message> messages = messageService.getMyLikes();
+
+        // Then
+        assertEquals(messages.size(), 2);
+
+        verify(likeRepository, times(1)).findAllByUser(user);
     }
 }

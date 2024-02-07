@@ -55,6 +55,7 @@
             color: #fff;
         }
 
+
         .mobile .content {
             display: flex;
             flex-direction: column;
@@ -134,6 +135,36 @@
         .footer-nav ul li a:hover {
             color: #86D8C9;
         }
+
+        form {
+            border: none;
+        }
+
+        .like {
+            position: absolute;
+            top: 18px;
+            right: 32px;
+        }
+
+        .like-button {
+            border: none;
+            background: transparent;
+        }
+        
+        .log__icon {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+        }
+
+        .like-button.red .log__icon {
+            color: red;
+        }
+
+        h4 {
+            position: absolute;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +176,14 @@
             </div>
         </a>
         <h4 th:text="${messageDto.name} + '님의 메시지'"></h4>
+        <form th:action="@{/papers/{paper-id}/messages/{message-id}/like(paper-id=${paperId},message-id=${messageId})}" method="post">
+            <button type="submit" class="like-button" onclick="handleLikeButtonClick()">
+                <i class="fa fa-heart log__icon"></i>
+            </button>
+            <p class="like" th:text="${likeCount}">1</p>
+            <input type="hidden" id="message-user" th:value="${messageUser}">
+            <input type="hidden" id="user" th:value="${email}">
+        </form>
     </header>
 
     <div class="content" th:style="${!#strings.equals(messageDto.getEmail(), email)} ? 'bottom: 0;' : 'bottom: 60px'">
@@ -181,6 +220,20 @@
             </ul>
         </nav>
     </div>
+
+    <script th:inline="javascript">
+        function handleLikeButtonClick() {
+            let messageUser = document.getElementById('message-user').value;
+            let user = document.getElementById('user').value;
+            if (messageUser === user) {
+                alert("자신의 메시지에는 좋아요를 누를 수 없습니다.");
+                event.preventDefault();
+                window.location.href = "/papers/" + [[${paperId}]] + "/messages/" + [[${messageId}]];
+            }
+        }
+
+
+    </script>
 </div>
 </body>
 </html>

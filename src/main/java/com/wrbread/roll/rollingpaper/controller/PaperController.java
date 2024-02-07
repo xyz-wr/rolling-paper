@@ -9,6 +9,7 @@ import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.service.MessageService;
 import com.wrbread.roll.rollingpaper.service.PaperService;
 import com.wrbread.roll.rollingpaper.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -159,7 +160,8 @@ public class PaperController {
      * 메시지 목록 포함
      * */
     @GetMapping("/{paper-id}")
-    public String detail(@PathVariable("paper-id") Long paperId, Model model, Authentication auth) {
+    public String detail(@PathVariable("paper-id") Long paperId, Model model,
+                         Authentication auth) {
         Paper paper = paperService.getPaper(paperId);
         PaperDto paperDto = new PaperDto(paper);
 
@@ -172,7 +174,6 @@ public class PaperController {
         model.addAttribute("paperId", paperId);
         model.addAttribute("paperDto", paperDto);
         model.addAttribute("messageDtos", messageDtos);
-
         return "paper/detail";
     }
 

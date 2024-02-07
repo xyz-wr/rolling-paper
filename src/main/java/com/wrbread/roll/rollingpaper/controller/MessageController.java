@@ -32,6 +32,9 @@ public class MessageController {
         model.addAttribute("email", auth.getName());
         model.addAttribute("messageDto", messageDto);
         model.addAttribute("paperId", paperId);
+        model.addAttribute("messageId", messageId);
+        model.addAttribute("messageUser", messageDto.getEmail());
+        model.addAttribute("likeCount", messageDto.getLikeCount());
 
         return "message/detail";
     }

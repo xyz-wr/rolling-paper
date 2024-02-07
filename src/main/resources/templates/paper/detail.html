@@ -71,13 +71,6 @@
         }
 
 
-        .log__icon {
-            color: #E77A7A;
-            font-size: 12px;
-            position: absolute;
-            top: 5px;
-            right: 0;
-        }
 
         header {
             display: flex;
@@ -180,7 +173,6 @@
             <a th:href="@{'/papers/' + ${paperDto.id} + '/messages/' + ${messageDto.id}}">
                 <div class="log__header">
                     <p class="log__ticket" th:text="${messageDto.name}"></p>
-                    <i class="fa fa-heart log__icon"></i>
                 </div>
 
                 <h4 class="log__body" th:text="${messageDto.content.length() > 30 ? #strings.substring(messageDto.content, 0, 30) + '...' : messageDto.content}"></h4>

@@ -111,4 +111,16 @@ public class PaperApiController {
 
         return ResponseEntity.ok().body(new AuthDto.UserDto(user));
     }
+
+    /** 롤링 페이퍼 검색 */
+    @GetMapping("/search")
+    public ResponseEntity<List<PaperDto>> searchPapers(@RequestParam("keyword") String keyword) {
+        List<PaperDto> responseDtos = paperService.searchPapers(keyword)
+                .stream()
+                .map(PaperDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responseDtos);
+    }
+
 }

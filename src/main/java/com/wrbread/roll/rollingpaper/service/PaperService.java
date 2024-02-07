@@ -151,4 +151,11 @@ public class PaperService {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
         }
     }
+
+    /** 롤링 페이퍼 검색 */
+    public List<Paper> searchPapers (String keyword) {
+        List<Paper> papers = paperRepository.findByTitleContaining(keyword);
+
+        return papers;
+    }
 }

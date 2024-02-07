@@ -56,6 +56,4 @@ public class LikeService {
             likeRepository.save(like);
         }
     }
-
-
 }

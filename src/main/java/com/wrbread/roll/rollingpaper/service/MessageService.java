@@ -3,10 +3,12 @@ package com.wrbread.roll.rollingpaper.service;
 import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
 import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
+import com.wrbread.roll.rollingpaper.model.entity.Like;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
+import com.wrbread.roll.rollingpaper.repository.LikeRepository;
 import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class MessageService {
     private final UserService userService;
 
     private final InvitationService invitationService;
+
+    private final LikeRepository likeRepository;
 
 
     /** 롤링 페이퍼 아이디 및 메시지 아이디 조회 */
@@ -174,6 +178,18 @@ public class MessageService {
         if (!isWriter) {
             throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
         }
+    }
+
+    /** 내가 좋아요 누른 메시지 목록 */
+    public List<Message> getMyLikes() {
+        User user = userService.verifiedEmail();
+
+        List<Like> likes = likeRepository.findAllByUser(user);
+        List<Message> likedMessages = likes.stream()
+                .map(Like::getMessage)
+                .collect(Collectors.toList());
+
+        return likedMessages;
     }
 
 }

@@ -2,6 +2,7 @@ package com.wrbread.roll.rollingpaper.controller;
 
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
+import com.wrbread.roll.rollingpaper.service.LikeService;
 import com.wrbread.roll.rollingpaper.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
+
+    private final LikeService likeService;
 
     /** 메시지 조회 */
     @GetMapping("/papers/{paper-id}/messages/{message-id}")
@@ -185,4 +188,17 @@ public class MessageController {
         return "message/my-friend-messages";
     }
 
+
+    /** 내가 좋아요 누른 메시지 전체 조회 */
+    @GetMapping("/messages/like/my-like-message-list")
+    public String myLikeList(Model model) {
+        List<MessageDto> messageDtos = messageService.getMyLikes()
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
+
+        model.addAttribute("messageDtos", messageDtos);
+
+        return "message/my-like-message";
+    }
 }

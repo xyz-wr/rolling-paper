@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>내가 작성한 friend 메시지 전체 조회</title>
+    <title>내가 좋아요 누른 메시지 전체 조회</title>
     <link th:href="@{/css/user-info.css}" rel="stylesheet">
     <script src="js/script.js"></script>
     <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
@@ -15,7 +15,7 @@
                 <i class="fas fa-chevron-left"></i>
             </div>
         </a>
-        <h4>My Public Rolling Paper List</h4>
+        <h4>My Like Message List</h4>
     </header>
     <div class="content">
         <div class="log" th:each="messageDto : ${messageDtos}">
@@ -23,6 +23,7 @@
             <a th:href="@{'/papers/' + ${messageDto.paperId} + '/messages/' + ${messageDto.id}}">
                 <div class="log__header">
                     <p class="log__ticket" th:text="${messageDto.content}"></p>
+                    <i class="fa fa-heart log__icon"></i>
                 </div>
             </a>
         </div>

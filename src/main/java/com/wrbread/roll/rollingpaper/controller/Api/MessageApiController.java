@@ -90,5 +90,14 @@ public class MessageApiController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/like/my-like-message-list")
+    public ResponseEntity<List<MessageDto>> getMyLikeMessages() {
+        List<MessageDto> messages = messageService.getMyLikes()
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(messages);
+    }
 
 }

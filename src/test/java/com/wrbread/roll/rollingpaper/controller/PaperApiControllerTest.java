@@ -406,4 +406,91 @@ class PaperApiControllerTest {
                 .andExpect(jsonPath("$.codename").value(userDto.getCodename()))
                 .andExpect(jsonPath("$.email").value(userDto.getEmail()));
     }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("public 롤링 페이퍼 검색")
+    void testSearchPublicPapers() throws Exception {
+        // Given
+        User user = User.userDetail()
+                .email("test@gmail.com")
+                .build();
+
+        List<Paper> publicPapers = Arrays.asList(
+                new Paper(user, 1L, "Public Paper 1", IsPublic.PUBLIC),
+                new Paper(user, 2L, "Public Paper 2", IsPublic.PUBLIC)
+        );
+
+        String keyword = "Public";
+        given(paperService.searchPublicPapers(keyword)).willReturn(publicPapers);
+
+        URI uri = UriComponentsBuilder
+                .newInstance()
+                .path("/api/papers/search-public-paper")
+                .build()
+                .toUri();
+
+        // When
+        ResultActions actions = mockMvc.perform(get(uri)
+                .param("keyword", keyword)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // Then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(publicPapers.get(0).getId()))
+                .andExpect(jsonPath("$[0].title").value(publicPapers.get(0).getTitle()))
+                .andExpect(jsonPath("$[0].isPublic").value(publicPapers.get(0).getIsPublic().toString()))
+                .andExpect(jsonPath("$[1].id").value(publicPapers.get(1).getId()))
+                .andExpect(jsonPath("$[1].title").value(publicPapers.get(1).getTitle()))
+                .andExpect(jsonPath("$[1].isPublic").value(publicPapers.get(1).getIsPublic().toString()));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("friend 롤링 페이퍼 검색")
+    void testSearchFriendPapers() throws Exception {
+        // Given
+        User user = User.userDetail()
+                .email("test@gmail.com")
+                .build();
+
+        List<Paper> friendPapers = Arrays.asList(
+                new Paper(user, 1L, "Friend Paper 1", IsPublic.FRIEND),
+                new Paper(user, 2L, "Friend Paper 2", IsPublic.FRIEND)
+        );
+
+        String keyword = "Friend";
+        given(paperService.searchFriendPapers(keyword)).willReturn(friendPapers);
+
+        URI uri = UriComponentsBuilder
+                .newInstance()
+                .path("/api/papers/search-friend-paper")
+                .build()
+                .toUri();
+
+        // When
+        ResultActions actions = mockMvc.perform(get(uri)
+                .param("keyword", keyword)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // Then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(friendPapers.get(0).getId()))
+                .andExpect(jsonPath("$[0].title").value(friendPapers.get(0).getTitle()))
+                .andExpect(jsonPath("$[0].isPublic").value(friendPapers.get(0).getIsPublic().toString()))
+                .andExpect(jsonPath("$[1].id").value(friendPapers.get(1).getId()))
+                .andExpect(jsonPath("$[1].title").value(friendPapers.get(1).getTitle()))
+                .andExpect(jsonPath("$[1].isPublic").value(friendPapers.get(1).getIsPublic().toString()));
+    }
+
 }

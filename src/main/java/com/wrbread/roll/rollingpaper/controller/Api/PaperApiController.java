@@ -112,10 +112,21 @@ public class PaperApiController {
         return ResponseEntity.ok().body(new AuthDto.UserDto(user));
     }
 
-    /** 롤링 페이퍼 검색 */
-    @GetMapping("/search")
-    public ResponseEntity<List<PaperDto>> searchPapers(@RequestParam("keyword") String keyword) {
-        List<PaperDto> responseDtos = paperService.searchPapers(keyword)
+    /** PUBLIC 롤링 페이퍼 검색 */
+    @GetMapping("/search-public-paper")
+    public ResponseEntity<List<PaperDto>> searchPublicPapers(@RequestParam("keyword") String keyword) {
+        List<PaperDto> responseDtos = paperService.searchPublicPapers(keyword)
+                .stream()
+                .map(PaperDto::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responseDtos);
+    }
+
+    /** FRIEND 롤링 페이퍼 검색 */
+    @GetMapping("/search-friend-paper")
+    public ResponseEntity<List<PaperDto>> searchFriendPapers(@RequestParam("keyword") String keyword) {
+        List<PaperDto> responseDtos = paperService.searchFriendPapers(keyword)
                 .stream()
                 .map(PaperDto::new)
                 .collect(Collectors.toList());

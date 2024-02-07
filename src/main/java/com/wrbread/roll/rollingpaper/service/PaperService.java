@@ -152,9 +152,16 @@ public class PaperService {
         }
     }
 
-    /** 롤링 페이퍼 검색 */
-    public List<Paper> searchPapers (String keyword) {
-        List<Paper> papers = paperRepository.findByTitleContaining(keyword);
+    /** public 롤링 페이퍼 검색 */
+    public List<Paper> searchPublicPapers (String keyword) {
+        List<Paper> papers = paperRepository.findByTitleContainingAndIsPublic(keyword, IsPublic.PUBLIC);
+
+        return papers;
+    }
+
+    /** friend 롤링 페이퍼 검색 */
+    public List<Paper> searchFriendPapers (String keyword) {
+        List<Paper> papers = paperRepository.findByTitleContainingAndIsPublic(keyword, IsPublic.FRIEND);
 
         return papers;
     }

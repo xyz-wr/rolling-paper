@@ -1,3 +1,5 @@
+/* style.css */
+
 * {
     box-sizing: border-box;
 }
@@ -25,38 +27,16 @@ a {
 }
 
 .mobile .content {
+    display: flex;
+    justify-content: center;
     background-color: #fff;
     position: absolute;
-    top: 60px;
+    top: 120px;
     left: 0;
-    bottom: 0;
+    bottom: 60px;
     width: 100%;
     overflow-y: auto;
-}
-
-.log {
-    font-size: 14px;
-    padding: 20px;
-    border-bottom: 1px solid #2B3547;
-}
-
-.log__header {
-    position: relative;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.log__ticket {
-    text-decoration: none;
-    color: #4BCBD8;
-}
-
-.log__icon {
-    color: #E77A7A;
-    font-size: 12px;
-    position: absolute;
-    top: 5px;
-    right: 0;
+    padding-bottom: 40px;
 }
 
 header {
@@ -72,16 +52,202 @@ header {
     color: #FFF;
 }
 
-.back {
+.content-nav ul {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background-color: #86D8C9;
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 60px;
+    width: 100%;
+}
+
+.content-nav li {
+    color: #FDCA40;
+    cursor: pointer;
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+}
+
+.content-nav ul li p {
+    font-size: 12px;
+    margin: 2px 0;
+}
+
+
+.content-nav ul li.active a {
+    text-decoration: none;
+    color: #86D8C9;
+}
+
+.content-nav ul li a {
+    text-decoration: none;
+    color: #FFF;
+}
+
+
+.content-nav ul li:hover,
+.content-nav ul li:not(:hover) {
+    background-color: #86D8C9;
+    color: #FFF;
+}
+
+.content-nav ul li.active {
+    background-color: #FFF;
+    color: #86D8C9;
+}
+
+
+.col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 30px;
+    column-gap: 30px;
+}
+
+.paper-img {
+    position: relative;
+    background-color: #FDCA40;
+    width: 130px;
+    height: 165px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+    margin-top: 50px;
+    box-shadow: -10px 10px 30px -20px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.paper-img:hover {
+    transform: scale(1.02);
+}
+
+.relax {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-family: "Roboto", sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.btn-delete {
+    background-color: #ffffff;
+    position: absolute;
+    width: 27px;
+    height: 27px;
+    right: 7px;
+    bottom: 10px;
+    border-radius: 9px;
+    transition: all 100ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0px 1px 2px rgba(255, 255, 255, 1),
+    0px 2px 1px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    border: none;
+}
+
+.btn-edit {
+    background-color: #ffffff;
+    position: absolute;
+    width: 27px;
+    height: 27px;
+    right: 40px;
+    bottom: 10px;
+    border-radius: 9px;
+    transition: all 100ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0px 1px 2px rgba(255, 255, 255, 1),
+    0px 2px 1px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    border: none;
+}
+
+
+.btn-edit:after,
+.btn-delete:after{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    z-index: 2;
+}
+
+.btn-edit:active,
+.btn-delete:active{
+    box-shadow: 0 5px 50px rgba(0, 0, 0, 0.02);
+}
+
+.btn-edit:active:after,
+.btn-delete:active:after{
+    box-shadow: inset 0px 2px 3px rgb(255, 255, 255),
+    inset 0px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.delete {
+    width: 13px;
+    position: absolute;
+    top: 3px;
+    left:7px;
+}
+
+.delete i {
+    color: #FB819F;
+}
+
+.edit {
+    width: 13px;
+    position: absolute;
+    right: 7px;
+    top: 3px;
+}
+
+.edit i {
+    color: #C1C1C1;
+}
+
+#masthead-search {
     position: absolute;
     top: 20px;
-    left: 20px;
+    width: 100%;
+    max-width: 14em;
 }
 
-.back i {
-    color: #fff;
+#masthead-search input {
+    background: transparent;
+    border: 1px solid #86D8C9;
+    border-radius: 50px;
+    width: 100%;
+    padding: 0.75em 1.125em;
+    transition: border-color 0.3s ease;
 }
 
+#masthead-search button {
+    background: none;
+    border: none;
+    color: #86D8C9;
+    font-size: 1em;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    right: 0.75em;
+    transform: translateY(-50%);
+}
+
+.footer-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
 
 .footer-nav ul {
     background-color: #F8FAFA;
@@ -105,7 +271,8 @@ header {
     margin: 2px 0;
 }
 
-.footer-nav ul li:hover {
+.footer-nav ul li:hover,
+.footer-nav ul li.active {
     color: #86D8C9;
 }
 

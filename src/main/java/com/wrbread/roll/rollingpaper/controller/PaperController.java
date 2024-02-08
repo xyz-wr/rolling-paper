@@ -1,6 +1,6 @@
 package com.wrbread.roll.rollingpaper.controller;
 
-import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
+import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
@@ -77,7 +77,8 @@ public class PaperController {
 
     /** 롤링 페이퍼 등록 */
     @PostMapping("/write")
-    public String write(PaperDto paperDto, BindingResult bindingResult, Model model) {
+    public String write(PaperDto paperDto, BindingResult bindingResult,
+                        Model model) {
 
         if (bindingResult.hasErrors()) {
             return "paper/write";
@@ -98,8 +99,12 @@ public class PaperController {
             return "paper/write";
         }
 
+
         try {
             paperService.savePaper(paperDto);
+        } catch (BusinessLogicException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "paper/write";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "롤링페이퍼 등록 중 에러가 발생하였습니다.");
             return "paper/write";

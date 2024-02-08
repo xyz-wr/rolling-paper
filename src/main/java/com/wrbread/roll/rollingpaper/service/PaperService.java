@@ -10,6 +10,7 @@ import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
+import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,13 +28,23 @@ public class PaperService {
 
     private final InvitationService invitationService;
 
+    private final UserRepository userRepository;
+
     private final InvitationRepository invitationRepository;
 
     /** 롤링 페이퍼 등록 */
     public Paper savePaper(PaperDto paperDto) {
         User user = userService.verifiedEmail();
-        Paper paper = paperDto.toEntity(user);
-        return paperRepository.save(paper);
+
+        if (user.getWriteCount() <= 0) {
+            throw new BusinessLogicException(ExceptionCode.WRITE_COUNT_EXCEEDED);
+        } else {
+            user.decreaseWriteCount();;
+            userRepository.save(user);
+
+            Paper paper = paperDto.toEntity(user);
+            return paperRepository.save(paper);
+        }
     }
 
     public Paper getEditPaper(Long id) {

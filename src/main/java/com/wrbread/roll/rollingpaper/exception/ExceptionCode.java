@@ -11,7 +11,7 @@ public enum ExceptionCode {
     USER_NOT_FOUND(404, "회원 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     NO_PERMISSION_ACCESS(403, "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
     CODENAME_NOT_FOUND(404, "코드 네임을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-
+    WRITE_COUNT_EXCEEDED(400, "글 작성 횟수를 초과하였습니다.", HttpStatus.BAD_REQUEST),
 
     // paper
     PAPER_NOT_FOUND(404, "해당 롤링 페이퍼가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
@@ -31,6 +31,7 @@ public enum ExceptionCode {
     LIKE_NOT_FOUND(404, "해당 좋아요가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     CANNOT_LIKE_OWN_MESSAGE(400, "자신의 메시지에는 좋아요를 누를 수 없습니다.", HttpStatus.BAD_REQUEST),
     ALREADY_LIKED_MESSAGE(400, "이미 좋아요를 눌렀습니다.", HttpStatus.BAD_REQUEST);
+
 
     @Getter
     private final int status;

@@ -42,6 +42,10 @@ public class User extends BaseTimeEntity{
 
     private String providerId;
 
+
+    @Column(nullable = false)
+    private int writeCount = 3;
+
     @Builder(builderClassName = "UserDetail",builderMethodName = "userDetail")
     public User(Long id, String nickname, String email, String password, String codename, Role role) {
         this.id = id;
@@ -62,5 +66,11 @@ public class User extends BaseTimeEntity{
         this.codename = codename;
         this.provider = provider;
         this.providerId = providerId;
+    }
+
+    public void decreaseWriteCount() {
+        if(this.writeCount > 0) {
+            this.writeCount--;
+        }
     }
 }

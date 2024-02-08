@@ -46,6 +46,8 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false)
     private int writeCount = 3;
 
+    private boolean isSubscriber;
+
     @Builder(builderClassName = "UserDetail",builderMethodName = "userDetail")
     public User(Long id, String nickname, String email, String password, String codename, Role role) {
         this.id = id;
@@ -72,5 +74,9 @@ public class User extends BaseTimeEntity{
         if(this.writeCount > 0) {
             this.writeCount--;
         }
+    }
+
+    public void purchaseSubscription() {
+        this.isSubscriber = true;
     }
 }

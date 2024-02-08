@@ -81,4 +81,11 @@ public class UserService {
     public User findCodename(String codename) {
         return userRepository.findByCodename(codename);
     }
+
+    @Transactional
+    public void purchaseSubscription() {
+        User user = verifiedEmail();
+        user.purchaseSubscription();
+        userRepository.save(user);
+    }
 }

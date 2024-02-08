@@ -36,14 +36,18 @@ public class PaperService {
     public Paper savePaper(PaperDto paperDto) {
         User user = userService.verifiedEmail();
 
-        if (user.getWriteCount() <= 0) {
-            throw new BusinessLogicException(ExceptionCode.WRITE_COUNT_EXCEEDED);
-        } else {
-            user.decreaseWriteCount();;
-            userRepository.save(user);
+        if (user.isSubscriber() || user.getWriteCount() > 0) {
+            // 이용권을 구매한 경우 또는 작성 횟수 제한이 남아있는 경우
+            if (!user.isSubscriber()) {
+                // 이용권을 구매하지 않은 경우에만 작성 횟수 감소
+                user.decreaseWriteCount();
+                userRepository.save(user);
+            }
 
             Paper paper = paperDto.toEntity(user);
             return paperRepository.save(paper);
+        } else {
+            throw new BusinessLogicException(ExceptionCode.WRITE_COUNT_EXCEEDED);
         }
     }
 

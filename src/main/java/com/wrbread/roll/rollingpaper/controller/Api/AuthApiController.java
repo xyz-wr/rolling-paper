@@ -134,4 +134,10 @@ public class AuthApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 인증번호입니다.");
         }
     }
+
+    @PostMapping("/purchase/subscription")
+    public ResponseEntity<String> purchaseSubscription() {
+        userService.purchaseSubscription();
+        return ResponseEntity.ok("Subscription purchased successfully.");
+    }
 }

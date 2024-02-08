@@ -1,10 +1,12 @@
 package com.wrbread.roll.rollingpaper.controller;
 
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
+import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,6 +75,21 @@ public class AuthController {
 
         model.addAttribute("user", user);
         return "user/info";
+    }
+
+    @GetMapping("/purchase/subscription")
+    public String purchasePage(Model model) {
+        User user = userService.verifiedEmail();
+        model.addAttribute("isSubscriber", user.isSubscriber());
+
+        return "user/purchase";
+    }
+
+    @PostMapping("/purchase/subscription")
+    public String purchase() {
+        userService.purchaseSubscription();
+
+        return "redirect:/papers/all-public-papers";
     }
 
 }

@@ -135,6 +135,7 @@ public class AuthApiController {
         }
     }
 
+    /** 이용권 구매 */
     @PostMapping("/purchase/subscription")
     public ResponseEntity<String> purchaseSubscription() {
         userService.purchaseSubscription();

@@ -9,7 +9,6 @@ import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.service.MessageService;
 import com.wrbread.roll.rollingpaper.service.PaperService;
 import com.wrbread.roll.rollingpaper.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

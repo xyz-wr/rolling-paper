@@ -82,6 +82,7 @@ public class UserService {
         return userRepository.findByCodename(codename);
     }
 
+    /** 이용권 구매 */
     @Transactional
     public void purchaseSubscription() {
         User user = verifiedEmail();

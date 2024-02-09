@@ -3,7 +3,9 @@ package com.wrbread.roll.rollingpaper.service;
 import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
 import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
+import com.wrbread.roll.rollingpaper.model.entity.ProfileImg;
 import com.wrbread.roll.rollingpaper.model.entity.User;
+import com.wrbread.roll.rollingpaper.repository.ProfileImgRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import com.wrbread.roll.rollingpaper.util.RandomUtil;
 import com.wrbread.roll.rollingpaper.util.SecurityUtil;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -27,6 +30,13 @@ public class UserService {
 
     private final RandomUtil randomUtil;
 
+    private final ProfileImgRepository profileImgRepository;
+
+    private final ProfileImgService profileImgService;
+
+
+    private final String DEFAULT_PROFILE_IMG = "https://rolling-paper.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
+
     @Transactional
     public User join(AuthDto.JoinDto joinDto) {
         if (checkNickname(joinDto.getNickname())) {
@@ -41,7 +51,16 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
-        User user = joinDto.toEntity(randomUtil.generateRandomString(), passwordEncoder.encode(joinDto.getPassword()));
+        User user = joinDto.toEntity(randomUtil.generateRandomString(), passwordEncoder.encode(joinDto.getPassword()), DEFAULT_PROFILE_IMG);
+
+        ProfileImg profileImg = ProfileImg
+                .builder()
+                .user(user)
+                .imgUrl(DEFAULT_PROFILE_IMG)
+                .build();
+
+        profileImgRepository.save(profileImg);
+
         return userRepository.save(user);
     }
 
@@ -88,5 +107,23 @@ public class UserService {
         User user = verifiedEmail();
         user.purchaseSubscription();
         userRepository.save(user);
+    }
+
+    /** 유저 수정
+     * 닉네임, 프로필 사진 변경
+     * */
+    @Transactional
+    public User updateUser(Long id, AuthDto.UserDto userDto,
+                           MultipartFile file) throws Exception{
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+        String imgUrl = user.getProfileImg();
+        profileImgService.deleteProfileImg(imgUrl);
+
+        String url = profileImgService.saveProfileImg(user, file);
+        user.updateUser(userDto.getNickname(), url);
+
+        return userRepository.save(user);
     }
 }

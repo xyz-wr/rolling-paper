@@ -62,7 +62,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/test", "/api/papers/**", "/api/invitations/**",
-                                "/api/messages/**", "/api/auth/purchase/subscription").hasRole("USER")
+                                "/api/messages/**", "/api/auth/purchase/subscription",
+                                "api/auth/user/**").hasRole("USER")
                         .anyRequest().permitAll())
                 .headers()
                 .frameOptions()

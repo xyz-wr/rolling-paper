@@ -103,7 +103,7 @@ public class PaperController {
             paperService.savePaper(paperDto);
         } catch (BusinessLogicException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            return "paper/write";
+            return "user/purchase";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "롤링페이퍼 등록 중 에러가 발생하였습니다.");
             return "paper/write";

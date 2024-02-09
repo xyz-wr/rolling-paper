@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 
@@ -140,5 +141,15 @@ public class AuthApiController {
     public ResponseEntity<String> purchaseSubscription() {
         userService.purchaseSubscription();
         return ResponseEntity.ok("Subscription purchased successfully.");
+    }
+
+    /** 유저 수정 */
+    @PatchMapping("/user/{user-id}")
+    public ResponseEntity<AuthDto.UserDto> patchUser(@PathVariable("user-id") Long userId,
+                                                     @RequestPart AuthDto.UserDto userDto,
+                                                     @RequestPart(value = "profileImg", required = false) MultipartFile file) throws Exception {
+        User user = userService.updateUser(userId, userDto, file);
+
+        return ResponseEntity.ok().body(new AuthDto.UserDto(user));
     }
 }

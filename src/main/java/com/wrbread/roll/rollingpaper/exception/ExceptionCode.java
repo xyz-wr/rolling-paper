@@ -30,8 +30,10 @@ public enum ExceptionCode {
     // likes
     LIKE_NOT_FOUND(404, "해당 좋아요가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     CANNOT_LIKE_OWN_MESSAGE(400, "자신의 메시지에는 좋아요를 누를 수 없습니다.", HttpStatus.BAD_REQUEST),
-    ALREADY_LIKED_MESSAGE(400, "이미 좋아요를 눌렀습니다.", HttpStatus.BAD_REQUEST);
+    ALREADY_LIKED_MESSAGE(400, "이미 좋아요를 눌렀습니다.", HttpStatus.BAD_REQUEST),
 
+    // s3
+    UNSUPPORTED_FILE_EXTENSION(400, "지원하지 않는 확장자입니다.", HttpStatus.BAD_REQUEST);
 
     @Getter
     private final int status;

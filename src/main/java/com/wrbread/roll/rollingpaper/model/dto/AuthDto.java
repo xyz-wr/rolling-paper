@@ -45,13 +45,16 @@ public class AuthDto {
         @NotBlank(message = "비밀번호 확인은 필수 입력 값입니다.")
         private String passwordCheck;
 
-        public User toEntity(String codename, String password) {
+        private String profileImg;
+
+        public User toEntity(String codename, String password, String profileImg) {
             return User.userDetail()
                     .id(id)
                     .nickname(nickname)
                     .email(email)
                     .password(password)
                     .codename(codename)
+                    .profileImg(profileImg)
                     .role(Role.USER)
                     .build();
         }
@@ -77,11 +80,13 @@ public class AuthDto {
         private String nickname;
         private String codename;
         private String email;
+        private String profileImg;
 
         public UserDto(User user) {
             this.nickname = user.getNickname();
             this.email = user.getEmail();
             this.codename = user.getCodename();
+            this.profileImg = user.getProfileImg();
         }
     }
 }

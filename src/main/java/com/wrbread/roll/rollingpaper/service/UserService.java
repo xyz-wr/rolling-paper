@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -51,13 +52,15 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
-        User user = joinDto.toEntity(randomUtil.generateRandomString(), passwordEncoder.encode(joinDto.getPassword()), DEFAULT_PROFILE_IMG);
+        User user = joinDto.toEntity(randomUtil.generateRandomString(), passwordEncoder.encode(joinDto.getPassword()));
 
         ProfileImg profileImg = ProfileImg
                 .builder()
                 .user(user)
                 .imgUrl(DEFAULT_PROFILE_IMG)
                 .build();
+
+        profileImg.addUser(user);
 
         profileImgRepository.save(profileImg);
 
@@ -115,14 +118,22 @@ public class UserService {
     @Transactional
     public User updateUser(Long id, AuthDto.UserDto userDto,
                            MultipartFile file) throws Exception{
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
-        String imgUrl = user.getProfileImg();
+        String nickname = user.getNickname();
+
+        if (userDto.getNickname() == null) {
+            userDto.setNickname(nickname);
+        }
+
+
+        String imgUrl = user.getProfileImg().getImgUrl();
         profileImgService.deleteProfileImg(imgUrl);
 
-        String url = profileImgService.saveProfileImg(user, file);
-        user.updateUser(userDto.getNickname(), url);
+        profileImgService.saveProfileImg(user, file);
+        user.updateUser(userDto.getNickname());
 
         return userRepository.save(user);
     }

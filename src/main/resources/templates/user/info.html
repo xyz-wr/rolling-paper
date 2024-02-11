@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>User Info</title>
+    <title>유저 정보</title>
     <script src="js/script.js"></script>
     <script src="https://kit.fontawesome.com/7f3d5f130c.js" crossorigin="anonymous"></script>
     <style>
@@ -124,7 +124,8 @@
             margin-bottom: 30px;
         }
 
-        .user-info .img {
+        .user-info .img-container {
+            position: relative;
             display: block;
             margin:0 auto;
             width: 82px;
@@ -134,15 +135,17 @@
             border-radius: 50%;
         }
 
-        .user-info .img i{
+        .img-container img {
+            position: absolute;
             display: flex;
             justify-content: center;
-            margin-top: 20px;
-            font-size: 50px;
-            color: #86D8C9;
+            right: 12px;
+            margin-top: 12px;
+            width: 55px;
+            height: 55px;
         }
 
-        .user-info h3 {
+        .user-info h5 {
             margin-top: 20px;
             margin-bottom: 0px;
             text-align: center;
@@ -204,14 +207,16 @@
 <body>
 <div class="mobile">
     <div class="content">
-        <input type="hidden" th:value="${user.id}">
+        <input type="hidden" th:value="${userDto.id}">
         <div id="sidebar" class="col-4">
             <a href="#" class="logo">DASHBOARD</a>
 
             <div class="user-info">
-                <div class="img"><i class="fas fa-user fa-lg"></i></div>
-                <h3 th:text="${user.nickname}" class="user-nickname"></h3>
-                <p th:text="'ID: ' + ${user.codename}"></p>
+                <div class="img-container">
+                    <img th:src='${profileImgDto.imgUrl}' alt="" />
+                </div>
+                <h5 th:text="${userDto.nickname}" class="user-nickname"></h5>
+                <p th:text="'ID: ' + ${userDto.codename}"></p>
             </div>
 
             <ul class="menu">
@@ -220,8 +225,9 @@
                 <li><a th:href="@{/messages/my-public-message-list}"><i class="fas fa-sticky-note"></i>My Public Message List</a></li>
                 <li><a th:href="@{/messages/my-friend-message-list}"><i class="fas fa-sticky-note"></i>My Friend Message List</a></li>
                 <li><a th:href="@{/messages/like/my-like-message-list}"><i class="fas fa-heart"></i>My Liked Message List</a></li>
-                <li><a th:href="@{/auth/logout}">Logout</a></li>
+                <li><a th:href="@{'/auth/edit/user/' + ${userDto.id}}">프로필 수정하기</a></li>
                 <li><a th:href="@{/auth/purchase/subscription}">이용권 구독하기</a></li>
+                <li><a th:href="@{/auth/logout}">Logout</a></li>
             </ul>
         </div>
     </div>

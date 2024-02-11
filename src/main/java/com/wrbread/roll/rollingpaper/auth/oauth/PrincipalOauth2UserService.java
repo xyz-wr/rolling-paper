@@ -1,12 +1,13 @@
 package com.wrbread.roll.rollingpaper.auth.oauth;
 
 import com.wrbread.roll.rollingpaper.auth.PrincipalDetails;
+import com.wrbread.roll.rollingpaper.model.entity.ProfileImg;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.Role;
+import com.wrbread.roll.rollingpaper.repository.ProfileImgRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import com.wrbread.roll.rollingpaper.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 
@@ -15,14 +16,16 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     private final RandomUtil randomUtil;
-//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
+
+    private final String DEFAULT_PROFILE_IMG = "https://rolling-paper.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
+
+    private final ProfileImgRepository profileImgRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -59,6 +62,16 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .build();
 
             userRepository.save(user);
+
+            ProfileImg profileImg = ProfileImg
+                    .builder()
+                    .user(user)
+                    .imgUrl(DEFAULT_PROFILE_IMG)
+                    .build();
+
+            profileImg.addUser(user);
+
+            profileImgRepository.save(profileImg);
         } else {
             user = optionalUser.get();
         }

@@ -1,5 +1,6 @@
 package com.wrbread.roll.rollingpaper.controller;
 
+import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.service.UserService;
@@ -9,10 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -71,7 +71,11 @@ public class AuthController {
             return "redirect:/auth/login";
         }
 
-        model.addAttribute("user", user);
+        AuthDto.UserDto userDto = new AuthDto.UserDto(user);
+
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("profileImgDto", userDto.getProfileImgDto());
+
         return "user/info";
     }
 
@@ -90,6 +94,41 @@ public class AuthController {
         userService.purchaseSubscription();
 
         return "redirect:/papers/all-public-papers";
+    }
+
+    /** 유저 수정 페이지 */
+    @GetMapping("/edit/user/{user-id}")
+    public String update(@PathVariable("user-id") Long userId, Model model) {
+        User user = userService.getUser(userId);
+        AuthDto.UserDto userDto = new AuthDto.UserDto(user);
+
+        model.addAttribute("userDto", userDto);
+        model.addAttribute("profileImgDto", userDto.getProfileImgDto());
+        model.addAttribute("profileImgId", userDto.getProfileImgId());
+        return "user/edit";
+    }
+
+    /** 유저 수정 */
+    @PostMapping("/edit/user/{user-id}")
+    public String edit(@PathVariable("user-id") Long userId, AuthDto.UserDto userDto,
+                       @RequestParam("profileImg") MultipartFile file, Model model) {
+        //nickname 중복 체크
+        if (userService.checkEditNickname(userDto.getNickname(), userId)) {
+            model.addAttribute("errorMessage", "중복된 닉네임입니다.");
+            return "user/edit";
+        }
+
+        try {
+            userService.updateUser(userId, userDto, file);
+        } catch (BusinessLogicException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "user/edit";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "유저 정보 수정 중 에러가 발생하였습니다.");
+            return "user/edit";
+        }
+
+        return "redirect:/auth/info";
     }
 
 }

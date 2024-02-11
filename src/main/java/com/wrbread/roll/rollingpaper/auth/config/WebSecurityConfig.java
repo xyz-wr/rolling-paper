@@ -29,7 +29,8 @@
 ////                .csrf().disable() //csrf 비활성화
 //                .authorizeRequests() //인증, 인가 설정
 //                .requestMatchers("/auth/info", "/papers/**", "/messages/**",
-//                        "auth/purchase/subscription", "/invitations/**").hasRole("USER")
+//                        "auth/purchase/subscription", "/invitations/**",
+//                        "auth/edit/user/**").hasRole("USER")
 //                .anyRequest().permitAll()
 //                .and()
 //                .formLogin()//폼 기반 로그인 설정

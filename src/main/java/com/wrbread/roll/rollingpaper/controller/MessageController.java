@@ -86,7 +86,7 @@ public class MessageController {
         try {
             messageService.saveMessages(paperId, messageDto);
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "롤링페이퍼 등록 중 에러가 발생하였습니다.");
+            model.addAttribute("errorMessage", "메시지 등록 중 에러가 발생하였습니다.");
             return "message/write";
         }
 
@@ -145,7 +145,7 @@ public class MessageController {
         try {
             messageService.updateMessage(paperId, messageId, messageDto);
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "롤링페이퍼 수정 중 에러가 발생하였습니다.");
+            model.addAttribute("errorMessage", "메시지 수정 중 에러가 발생하였습니다.");
             return "message/write";
         }
 

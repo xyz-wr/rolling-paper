@@ -42,7 +42,8 @@ public class User extends BaseTimeEntity{
 
     private String providerId;
 
-    private String profileImg;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private ProfileImg profileImg;
 
     @Column(nullable = false)
     private int writeCount = 3;
@@ -50,18 +51,17 @@ public class User extends BaseTimeEntity{
     private boolean isSubscriber;
 
     @Builder(builderClassName = "UserDetail",builderMethodName = "userDetail")
-    public User(Long id, String nickname, String email, String password, String codename, Role role, String profileImg) {
+    public User(Long id, String nickname, String email, String password, String codename, Role role) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.role = role;
         this.codename = codename;
-        this.profileImg = profileImg;
     }
 
     @Builder(builderClassName = "OAuth2User",builderMethodName = "oAuth2User")
-    public User(Long id, String nickname, String email, String password, String codename, Role role, String provider, String providerId, String profileImg) {
+    public User(Long id, String nickname, String email, String password, String codename, Role role, String provider, String providerId, ProfileImg profileImg) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -71,7 +71,6 @@ public class User extends BaseTimeEntity{
         this.provider = provider;
         this.providerId = providerId;
         this.profileImg = profileImg;
-
     }
 
     public void decreaseWriteCount() {
@@ -84,9 +83,8 @@ public class User extends BaseTimeEntity{
         this.isSubscriber = true;
     }
 
-    public void updateUser(String nickname, String profileImg) {
-
+    public void updateUser(String nickname) {
         this.nickname = nickname;
-        this.profileImg = profileImg;
     }
+
 }

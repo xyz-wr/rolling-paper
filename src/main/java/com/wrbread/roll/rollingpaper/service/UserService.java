@@ -137,4 +137,37 @@ public class UserService {
 
         return userRepository.save(user);
     }
+
+    /** 유저 조회
+     * 해당 유저만 접근 가능*/
+    public User getUser(Long id) {
+
+        User currentUser = verifiedEmail();
+
+        User updateUser = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+        // 인증된 사용자와 수정 대상 유저의 일치 여부 확인
+        if (!currentUser.getId().equals(updateUser.getId())) {
+            throw new BusinessLogicException(ExceptionCode.NO_PERMISSION_ACCESS);
+        }
+
+        return updateUser;
+    }
+
+    /** nickname 중복 체크
+     * 자기 자신 제외
+     * */
+    public boolean checkEditNickname(String nickname, Long userId) {
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            // 자기 자신을 제외한 다른 유저들의 닉네임과 비교
+            if (!user.getId().equals(userId) && user.getNickname().equals(nickname)) {
+                return true; // 닉네임이 이미 사용 중인 경우
+            }
+        }
+
+        return false;
+    }
 }

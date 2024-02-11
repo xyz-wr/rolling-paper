@@ -29,8 +29,8 @@ public class ProfileImg extends BaseTimeEntity{
         this.user = user;
     }
 
-    public void updateProductImg(String oriImgNm, String imgUrl) {
-        this.oriImgNm = oriImgNm;
-        this.imgUrl = imgUrl;
+    public void addUser(User user) {
+        user.getProfileImg();
+        this.user = user;
     }
 }

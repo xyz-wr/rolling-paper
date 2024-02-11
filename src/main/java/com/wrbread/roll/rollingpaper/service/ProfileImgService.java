@@ -1,11 +1,10 @@
 package com.wrbread.roll.rollingpaper.service;
 
+import com.wrbread.roll.rollingpaper.model.dto.ProfileImgDto;
 import com.wrbread.roll.rollingpaper.model.entity.ProfileImg;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.repository.ProfileImgRepository;
-import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import com.wrbread.roll.rollingpaper.s3.S3Service;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,15 +33,20 @@ public class ProfileImgService {
         String oriImgNm = file.getOriginalFilename();
         String imgUrl = "";
 
+        ProfileImgDto profileImgDto = new ProfileImgDto();
         //파일 업로드
         if (!StringUtils.isEmpty(oriImgNm)) {
+            profileImgDto.setOriImgNm(oriImgNm);
             imgUrl = s3Service.uploadS3(oriImgNm, imgFolder, file.getBytes());
         } else {
             imgUrl = DEFAULT_PROFILE_IMG;
         }
 
         //상품 이미지 정보 저장
-        ProfileImg profileImg = new ProfileImg(oriImgNm, imgUrl, user);
+        profileImgDto.setImgUrl(imgUrl);
+
+        ProfileImg profileImg = profileImgDto.toEntity();
+        profileImg.addUser(user);
         profileImgRepository.save(profileImg);
 
         return profileImg.getImgUrl();

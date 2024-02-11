@@ -1,5 +1,6 @@
 package com.wrbread.roll.rollingpaper.model.dto;
 
+import com.wrbread.roll.rollingpaper.model.entity.ProfileImg;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.Role;
 import jakarta.validation.constraints.Email;
@@ -45,16 +46,13 @@ public class AuthDto {
         @NotBlank(message = "비밀번호 확인은 필수 입력 값입니다.")
         private String passwordCheck;
 
-        private String profileImg;
-
-        public User toEntity(String codename, String password, String profileImg) {
+        public User toEntity(String codename, String password) {
             return User.userDetail()
                     .id(id)
                     .nickname(nickname)
                     .email(email)
                     .password(password)
                     .codename(codename)
-                    .profileImg(profileImg)
                     .role(Role.USER)
                     .build();
         }
@@ -77,16 +75,20 @@ public class AuthDto {
     @Setter
     @NoArgsConstructor
     public static class UserDto {
+        private Long id;
         private String nickname;
         private String codename;
         private String email;
-        private String profileImg;
+        private ProfileImgDto profileImgDto;
+        private Long profileImgId;
 
         public UserDto(User user) {
+            this.id = user.getId();
             this.nickname = user.getNickname();
             this.email = user.getEmail();
             this.codename = user.getCodename();
-            this.profileImg = user.getProfileImg();
+            this.profileImgDto = new ProfileImgDto(user.getProfileImg());
+            this.profileImgId = user.getProfileImg().getId();
         }
     }
 }

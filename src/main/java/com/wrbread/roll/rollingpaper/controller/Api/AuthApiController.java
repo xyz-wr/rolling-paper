@@ -23,7 +23,6 @@ public class AuthApiController {
 
     private final AuthService authService;
     private final UserService userService;
-
     private final long COOKIE_EXPIRATION = 7776000; // 90일
 
     /** 회원가입 */

@@ -23,7 +23,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class UserService {
     private final PasswordEncoder passwordEncoder;
 
@@ -105,7 +105,6 @@ public class UserService {
     }
 
     /** 이용권 구매 */
-    @Transactional
     public void purchaseSubscription() {
         User user = verifiedEmail();
         user.purchaseSubscription();
@@ -115,25 +114,29 @@ public class UserService {
     /** 유저 수정
      * 닉네임, 프로필 사진 변경
      * */
-    @Transactional
     public User updateUser(Long id, AuthDto.UserDto userDto,
                            MultipartFile file) throws Exception{
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
+        // 닉네임을 변경하지 않는 경우 기존 닉네임 유지
         String nickname = user.getNickname();
-
         if (userDto.getNickname() == null) {
             userDto.setNickname(nickname);
         }
 
+        // 같은 닉네임이 존재하는 경우 예외 처리
+        if (checkEditNickname(userDto.getNickname(), id)) {
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_EXISTS);
+        }
 
-        String imgUrl = user.getProfileImg().getImgUrl();
-        profileImgService.deleteProfileImg(imgUrl);
+        // 프로필 이미지 변경
+        Long imgId = user.getProfileImg().getId();
+        profileImgService.deleteProfileImg(imgId);
+        ProfileImg profileImg = profileImgService.saveProfileImg(user, file);
 
-        profileImgService.saveProfileImg(user, file);
-        user.updateUser(userDto.getNickname());
+        user.updateUser(userDto.getNickname(), profileImg);
 
         return userRepository.save(user);
     }

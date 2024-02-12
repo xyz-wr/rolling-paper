@@ -112,16 +112,14 @@ public class AuthController {
     @PostMapping("/edit/user/{user-id}")
     public String edit(@PathVariable("user-id") Long userId, AuthDto.UserDto userDto,
                        @RequestParam("profileImg") MultipartFile file, Model model) {
-        //nickname 중복 체크
-        if (userService.checkEditNickname(userDto.getNickname(), userId)) {
-            model.addAttribute("errorMessage", "중복된 닉네임입니다.");
-            return "user/edit";
-        }
-
         try {
             userService.updateUser(userId, userDto, file);
         } catch (BusinessLogicException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
+
+            User user = userService.getUser(userId);
+            model.addAttribute("userDto", new AuthDto.UserDto(user));
+            model.addAttribute("profileImgDto", new AuthDto.UserDto(user).getProfileImgDto());
             return "user/edit";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "유저 정보 수정 중 에러가 발생하였습니다.");
@@ -131,4 +129,28 @@ public class AuthController {
         return "redirect:/auth/info";
     }
 
+    @GetMapping("/delete/user/{user-id}")
+    public String delete(@PathVariable("user-id") Long userId, Model model) throws Exception{
+        User user = userService.getUser(userId);
+        AuthDto.UserDto userDto = new AuthDto.UserDto(user);
+
+        model.addAttribute("userDto", userDto);
+
+        return "user/delete";
+    }
+
+    @PostMapping("/delete/user/{user-id}")
+    public String withdraw(@PathVariable("user-id") Long userId, Model model) {
+        try {
+            userService.deleteUser(userId);
+        } catch (BusinessLogicException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "user/delete";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "탈퇴 중 오류가 발생하였습니다.");
+            return "user/delete";
+        }
+
+        return "redirect:/";
+    }
 }

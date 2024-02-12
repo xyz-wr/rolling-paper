@@ -29,7 +29,7 @@ public class ProfileImgService {
 
 
     /** 이미지 파일 업로드 */
-    public String saveProfileImg(User user, MultipartFile file) throws Exception {
+    public ProfileImg saveProfileImg(User user, MultipartFile file) throws Exception {
         String oriImgNm = file.getOriginalFilename();
         String imgUrl = "";
 
@@ -49,14 +49,16 @@ public class ProfileImgService {
         profileImg.addUser(user);
         profileImgRepository.save(profileImg);
 
-        return profileImg.getImgUrl();
+        return profileImg;
     }
 
 
     /** 이미지 파일 삭제 */
-    public void deleteProfileImg(String imgUrl) throws Exception {
-        ProfileImg profileImg = profileImgRepository.findByImgUrl(imgUrl)
+    public void deleteProfileImg(Long imgId) throws Exception {
+        ProfileImg profileImg = profileImgRepository.findById(imgId)
                 .orElseThrow(() ->new IllegalArgumentException("해당 이미지가 존재하지 않습니다."));
+
+        String imgUrl = profileImg.getImgUrl();
 
         if (!imgUrl.equals(DEFAULT_PROFILE_IMG)) {
             URL url = new URL(imgUrl);

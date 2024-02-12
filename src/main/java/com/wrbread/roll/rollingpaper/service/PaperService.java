@@ -144,7 +144,7 @@ public class PaperService {
 
 
     /** 롤링 페이퍼 삭제
-     * 롤링 페이퍼 작성자만 수정 가능
+     * 롤링 페이퍼 작성자만 삭제 가능
      * */
     public void deletePaper(Long id) {
         User user = userService.verifiedEmail();

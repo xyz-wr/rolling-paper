@@ -3,8 +3,10 @@ package com.wrbread.roll.rollingpaper.service;
 import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
 import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
+import com.wrbread.roll.rollingpaper.model.entity.Invitation;
 import com.wrbread.roll.rollingpaper.model.entity.ProfileImg;
 import com.wrbread.roll.rollingpaper.model.entity.User;
+import com.wrbread.roll.rollingpaper.repository.InvitationRepository;
 import com.wrbread.roll.rollingpaper.repository.ProfileImgRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import com.wrbread.roll.rollingpaper.util.RandomUtil;
@@ -35,6 +37,7 @@ public class UserService {
 
     private final ProfileImgService profileImgService;
 
+    private final InvitationRepository invitationRepository;
 
     private final String DEFAULT_PROFILE_IMG = "https://rolling-paper.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
 
@@ -172,5 +175,27 @@ public class UserService {
         }
 
         return false;
+    }
+
+    /** 유저 삭제
+     * 삭제 시 s3에 있는 파일 제거
+     * 관련 초대장 제거
+     * */
+    public void deleteUser(Long id) throws Exception {
+        User user = getUser(id);
+
+        // 프로필 사진 제거
+        Long imgId = user.getProfileImg().getId();
+        profileImgService.deleteProfileImg(imgId);
+
+        // 발신자로서의 초대장 모두 삭제
+        List<Invitation> sentInvitations = invitationRepository.findBySender(user);
+        invitationRepository.deleteAll(sentInvitations);
+
+        // 수신자로서의 초대장 모두 삭제
+        List<Invitation> receivedInvitations = invitationRepository.findByReceiver(user);
+        invitationRepository.deleteAll(receivedInvitations);
+
+        userRepository.delete(user);
     }
 }

@@ -151,4 +151,20 @@ public class AuthApiController {
 
         return ResponseEntity.ok().body(new AuthDto.UserDto(user));
     }
+
+    /** 유저 삭제 */
+    @DeleteMapping("/user/{user-id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("user-id") Long userId) throws Exception{
+        userService.deleteUser(userId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    /** 유저 조회 */
+    @GetMapping("/user/{user-id}")
+    public ResponseEntity<AuthDto.UserDto> getUser(@PathVariable("user-id") Long userId) throws Exception{
+        User user = userService.getUser(userId);
+
+        return ResponseEntity.ok().body(new AuthDto.UserDto(user));
+    }
 }

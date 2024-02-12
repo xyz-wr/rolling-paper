@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     List<Invitation> findByReceiver(User receiver);
 
+    List<Invitation> findBySender(User sender);
+
     Invitation findByPaperAndReceiver(Paper paper, User receiver);
 
     Optional<Invitation> findByPaperAndReceiverAndStatus(Paper paper, User receiver, InvitationStatus status);
@@ -23,4 +25,5 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     List<Invitation> findAllByReceiverAndStatus(User receiver, InvitationStatus status);
 
     List<Invitation> findByPaper(Paper paper);
+
 }

@@ -1,5 +1,7 @@
 package com.wrbread.roll.rollingpaper.controller;
 
+import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
+import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.service.LikeService;
@@ -56,35 +58,18 @@ public class MessageController {
     /** 메시지 등록 */
     @PostMapping("papers/{paper-id}/messages/write")
     public String write(@PathVariable("paper-id") Long paperId,
-                        MessageDto messageDto, Model model) {
-
-        if (messageDto.getName() == null || messageDto.getName().isEmpty()) {
-            model.addAttribute("errorMessage", "이름을 입력해주세요.");
-            model.addAttribute("paperId", paperId);
-            return "message/write";
-        }
-
-        if (messageDto.getName().length() < 1 || messageDto.getName().length() > 10) {
-            model.addAttribute("errorMessage","이름은 1자 이상 10자 이하로 작성해주세요.");
-            model.addAttribute("paperId", paperId);
-            return "message/write";
-        }
-
-        if (messageDto.getContent().isEmpty() || messageDto.getContent() == null) {
-            model.addAttribute("errorMessage", "내용을 입력해주세요.");
-            model.addAttribute("paperId", paperId);
-            return "message/write";
-        }
-
-
-        if (messageDto.getContent().length() < 1 || messageDto.getContent().length() > 250) {
-            model.addAttribute("errorMessage","내용은 1자 이상 250자 이하로 작성해주세요.");
-            model.addAttribute("paperId", paperId);
+                        MessageDto messageDto, Model model,
+                        BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "message/write";
         }
 
         try {
             messageService.saveMessages(paperId, messageDto);
+        } catch (BusinessLogicException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            model.addAttribute("paperId", paperId);
+            return "message/write";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "메시지 등록 중 에러가 발생하였습니다.");
             return "message/write";
@@ -116,34 +101,12 @@ public class MessageController {
             return "message/write";
         }
 
-
-        if (messageDto.getName() == null || messageDto.getName().isEmpty()) {
-            model.addAttribute("errorMessage", "이름을 입력해주세요.");
-            model.addAttribute("paperId", paperId);
-            return "message/write";
-        }
-
-        if (messageDto.getName().length() < 1 || messageDto.getName().length() > 10) {
-            model.addAttribute("errorMessage","이름은 1자 이상 10자 이하로 작성해주세요.");
-            model.addAttribute("paperId", paperId);
-            return "message/write";
-        }
-
-        if (messageDto.getContent().isEmpty() || messageDto.getContent() == null) {
-            model.addAttribute("errorMessage", "내용을 입력해주세요.");
-            model.addAttribute("paperId", paperId);
-            return "message/write";
-        }
-
-
-        if (messageDto.getContent().length() < 1 || messageDto.getContent().length() > 250) {
-            model.addAttribute("errorMessage","내용은 1자 이상 250자 이하로 작성해주세요.");
-            model.addAttribute("paperId", paperId);
-            return "message/write";
-        }
-
         try {
             messageService.updateMessage(paperId, messageId, messageDto);
+        } catch (BusinessLogicException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            model.addAttribute("paperId", paperId);
+            return "message/write";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "메시지 수정 중 에러가 발생하였습니다.");
             return "message/write";

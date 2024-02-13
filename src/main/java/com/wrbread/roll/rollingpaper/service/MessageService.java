@@ -3,6 +3,7 @@ package com.wrbread.roll.rollingpaper.service;
 import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
 import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
+import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Like;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
@@ -61,6 +62,9 @@ public class MessageService {
 
         invitationService.checkOwnerAndAccepted(user, paper);
 
+        //유효성 검사
+        validateMessageDto(messageDto);
+
         Message message = messageDto.toEntity(user, paper);
 
         return messageRepository.save(message);
@@ -95,6 +99,9 @@ public class MessageService {
         invitationService.checkOwnerAndAccepted(user, message.getPaper());
 
         checkWriter(user, message);
+
+        // 유효성 검사
+        validateMessageDto(messageDto);
 
         message.updateMessage(messageDto);
 
@@ -192,4 +199,22 @@ public class MessageService {
         return likedMessages;
     }
 
+    /** 메시지 유효성 검사 */
+    private void validateMessageDto(MessageDto messageDto) {
+        if (messageDto.getName() == null || messageDto.getName().isEmpty()) {
+            throw new BusinessLogicException(ExceptionCode.MESSAGE_NAME_REQUIRED);
+        }
+
+        if (messageDto.getName().length() < 1 || messageDto.getName().length() > 10) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_NAME_LENGTH);
+        }
+
+        if (messageDto.getContent().isEmpty() || messageDto.getContent() == null) {
+            throw new BusinessLogicException(ExceptionCode.MESSAGE_CONTENT_REQUIRED);
+        }
+
+        if (messageDto.getContent().length() < 1 || messageDto.getContent().length() > 250) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_CONTENT_LENGTH);
+        }
+    }
 }

@@ -15,9 +15,16 @@ public enum ExceptionCode {
 
     // paper
     PAPER_NOT_FOUND(404, "해당 롤링 페이퍼가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    PAPER_TITLE_REQUIRED(400, "제목을 입력해주세요.", HttpStatus.BAD_REQUEST),
+    SELECT_PUBLIC_STATUS(400, "공개 여부를 선택해주세요.", HttpStatus.BAD_REQUEST),
+    INVALID_TITLE_LENGTH(400,"제목은 1글자 이상 10글자 이하로 작성해주세요.", HttpStatus.BAD_REQUEST),
 
     // message
     MESSAGE_NOT_FOUND(404, "해당 메시지가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    MESSAGE_NAME_REQUIRED(400, "이름을 입력해주세요.", HttpStatus.BAD_REQUEST),
+    INVALID_NAME_LENGTH(400,"이름은 1자 이상 10자 이하로 작성해주세요.", HttpStatus.BAD_REQUEST),
+    MESSAGE_CONTENT_REQUIRED(400, "내용을 입력해주세요.", HttpStatus.BAD_REQUEST),
+    INVALID_CONTENT_LENGTH(400,"내용은 1자 이상 250자 이하로 작성해주세요.", HttpStatus.BAD_REQUEST),
 
     // invitation
     CANNOT_SEND_INVITATION_TO_SELF(400, "자기 자신은 초대할 수 없습니다.", HttpStatus.BAD_REQUEST),

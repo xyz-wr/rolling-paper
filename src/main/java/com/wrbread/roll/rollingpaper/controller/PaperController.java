@@ -1,6 +1,7 @@
 package com.wrbread.roll.rollingpaper.controller;
 
 import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
+import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
@@ -83,27 +84,16 @@ public class PaperController {
             return "paper/write";
         }
 
-        if (paperDto.getTitle().isEmpty() || paperDto.getTitle()== null) {
-            model.addAttribute("errorMessage", "제목을 입력해주세요.");
-            return "paper/write";
-        }
-
-        if (paperDto.getIsPublic() == null) {
-            model.addAttribute("errorMessage", "공개 여부를 선택해주세요.");
-            return "paper/write";
-        }
-
-        if (paperDto.getTitle().length() > 10 || paperDto.getTitle().length() < 1) {
-            model.addAttribute("errorMessage", "1글자 이상 10글자 이하로 작성해주세요.");
-            return "paper/write";
-        }
-
-
         try {
             paperService.savePaper(paperDto);
         } catch (BusinessLogicException ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
-            return "user/purchase";
+            if (ex.getExceptionCode() == ExceptionCode.WRITE_COUNT_EXCEEDED) {
+                model.addAttribute("errorMessage", ex.getMessage());
+                return "user/purchase";
+            } else {
+                model.addAttribute("errorMessage", ex.getMessage());
+                return "paper/write";
+            }
         } catch (Exception e) {
             model.addAttribute("errorMessage", "롤링페이퍼 등록 중 에러가 발생하였습니다.");
             return "paper/write";
@@ -136,18 +126,11 @@ public class PaperController {
             return "paper/write";
         }
 
-        if (paperDto.getTitle().isEmpty()) {
-            model.addAttribute("errorMessage", "제목을 입력해주세요.");
-            return "paper/write";
-        }
-
-        if (paperDto.getTitle().length() > 10 || paperDto.getTitle().length() < 1) {
-            model.addAttribute("errorMessage", "1글자 이상 10글자 이하로 작성해주세요.");
-            return "paper/write";
-        }
-
         try {
             paperService.updatePaper(id, paperDto);
+        } catch (BusinessLogicException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "paper/write";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "롤링페이퍼 등록 중 에러가 발생하였습니다.");
             return "paper/write";

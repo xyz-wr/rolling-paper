@@ -44,6 +44,9 @@ public class PaperService {
                 userRepository.save(user);
             }
 
+            //유효성 검사
+            validatePaperDto(paperDto);
+
             Paper paper = paperDto.toEntity(user);
             return paperRepository.save(paper);
         } else {
@@ -95,6 +98,9 @@ public class PaperService {
         if (paperDto.getIsPublic() == null) {
             paperDto.setIsPublic(paper.getIsPublic());
         }
+
+        // 유효성 검사
+        validatePaperDto(paperDto);
 
         paper.updatePaper(paperDto);
 
@@ -189,5 +195,20 @@ public class PaperService {
         }
 
         return papers;
+    }
+
+    /** 롤링 페이퍼 유효성 검사 */
+    private void validatePaperDto(PaperDto paperDto) {
+        if (paperDto.getTitle() == null || paperDto.getTitle().isEmpty()) {
+            throw new BusinessLogicException(ExceptionCode.PAPER_TITLE_REQUIRED);
+        }
+
+        if (paperDto.getIsPublic() == null) {
+            throw new BusinessLogicException(ExceptionCode.SELECT_PUBLIC_STATUS);
+        }
+
+        if (paperDto.getTitle().length() > 10 || paperDto.getTitle().length() < 1) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_TITLE_LENGTH);
+        }
     }
 }

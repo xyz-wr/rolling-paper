@@ -3,6 +3,7 @@ package com.wrbread.roll.rollingpaper.controller;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.dto.InvitationDto;
 import com.wrbread.roll.rollingpaper.service.InvitationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,7 @@ public class InvitationController {
     /** 롤링 페이퍼 초대 요청 */
     @PostMapping("papers/{paper-id}/invite")
     public String sendInvitation(@PathVariable("paper-id") Long paperId,
-                                 InvitationDto.Request request) {
+                                 @Valid InvitationDto.Request request) {
 
         invitationService.invite(paperId, request);
 

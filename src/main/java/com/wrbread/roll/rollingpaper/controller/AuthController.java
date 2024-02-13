@@ -110,7 +110,7 @@ public class AuthController {
 
     /** 유저 수정 */
     @PostMapping("/edit/user/{user-id}")
-    public String edit(@PathVariable("user-id") Long userId, AuthDto.UserDto userDto,
+    public String edit(@PathVariable("user-id") Long userId, @Valid AuthDto.UserDto userDto,
                        @RequestParam("profileImg") MultipartFile file, Model model) {
         try {
             userService.updateUser(userId, userDto, file);

@@ -145,7 +145,7 @@ public class AuthApiController {
     /** 유저 수정 */
     @PatchMapping("/user/{user-id}")
     public ResponseEntity<AuthDto.UserDto> patchUser(@PathVariable("user-id") Long userId,
-                                                     @RequestPart AuthDto.UserDto userDto,
+                                                     @Valid @RequestPart AuthDto.UserDto userDto,
                                                      @RequestPart(value = "profileImg", required = false) MultipartFile file) throws Exception {
         User user = userService.updateUser(userId, userDto, file);
 

@@ -4,6 +4,7 @@ import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.dto.InvitationDto;
 import com.wrbread.roll.rollingpaper.model.entity.Invitation;
 import com.wrbread.roll.rollingpaper.service.InvitationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class InvitationApiController {
     /** 초대장 발송 */
     @PostMapping("papers/{paper-id}/invite")
     public ResponseEntity<InvitationDto.Response> sendInvitation(@PathVariable("paper-id") Long paperId,
-                                                                 @RequestBody InvitationDto.Request request){
+                                                                 @Valid @RequestBody InvitationDto.Request request){
         Invitation invitation = invitationService.invite(paperId, request);
 
         return ResponseEntity.ok().body(new InvitationDto.Response(invitation));

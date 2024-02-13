@@ -6,6 +6,7 @@ import com.wrbread.roll.rollingpaper.util.UriCreator;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.service.PaperService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class PaperApiController {
 
     /** 롤링 페이퍼 등록 */
     @PostMapping
-    public ResponseEntity<PaperDto> postPaper(@RequestBody PaperDto paperDto) {
+    public ResponseEntity<PaperDto> postPaper(@Valid @RequestBody PaperDto paperDto) {
         Paper paper = paperService.savePaper(paperDto);
 
         URI location = UriCreator.createUri("/api/papers", paper.getId());
@@ -44,7 +45,7 @@ public class PaperApiController {
     /** 롤링 페이퍼 수정 */
     @PatchMapping("/{paper-id}")
     public ResponseEntity<PaperDto> patchPaper(@PathVariable("paper-id") Long paperId,
-                                               @RequestBody PaperDto paperDto) {
+                                               @Valid @RequestBody PaperDto paperDto) {
         Paper paper = paperService.updatePaper(paperId, paperDto);
 
         return ResponseEntity.ok().body(new PaperDto(paper));

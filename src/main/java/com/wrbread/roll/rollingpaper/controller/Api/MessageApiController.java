@@ -4,6 +4,7 @@ import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.service.MessageService;
 import com.wrbread.roll.rollingpaper.util.UriCreator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class MessageApiController {
     /** 메시지 등록 */
     @PostMapping
     public ResponseEntity<MessageDto> postMessage(@PathVariable("paper-id") Long paperId,
-                                                  @RequestBody MessageDto messageDto) {
+                                                  @Valid @RequestBody MessageDto messageDto) {
         Message message = messageService.saveMessages(paperId, messageDto);
 
         URI location = UriCreator.createUri("/api/papers/" + paperId + "/messages", message.getId());
@@ -41,7 +42,7 @@ public class MessageApiController {
     @PatchMapping("/{message-id}")
     public ResponseEntity<MessageDto> patchMessage(@PathVariable("paper-id") Long paperId,
                                                    @PathVariable("message-id") Long messageId,
-                                                   @RequestBody MessageDto messageDto) {
+                                                   @Valid @RequestBody MessageDto messageDto) {
         Message message = messageService.updateMessage(paperId, messageId, messageDto);
 
         return ResponseEntity.ok().body(new MessageDto(message));

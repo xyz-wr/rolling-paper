@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+  mariadb-container:
+    image: mariadb
+    restart: always
+    container_name: mariadb-container
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./db:/var/lib/mysql"
+    networks:
+      - rolling-net
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - rolling-net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app/
+    depends_on:
+      - mariadb-container
+      - redis
+    env_file:
+      - .env
+    networks:
+      - rolling-net
+
+networks:
+  rolling-net:
+    driver: bridge
+
+

@@ -6,7 +6,8 @@ services:
     restart: always
     container_name: mariadb-container
     environment:
-      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
     ports:
       - "3306:3306"
     volumes:

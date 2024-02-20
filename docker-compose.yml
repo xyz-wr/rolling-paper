@@ -5,6 +5,8 @@ services:
     image: mariadb
     restart: always
     container_name: mariadb-container
+    environment:
+      - MARIADB_ROOT_PASSWORD=${SPRING_DATASOURCE_USERNAME}
     ports:
       - "3306:3306"
     volumes:
@@ -23,7 +25,7 @@ services:
 
   backend:
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
     restart: always
     ports:

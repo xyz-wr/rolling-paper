@@ -63,6 +63,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ec2-user
           key: ${{ secrets.PRIVATE_KEY }}
+          envs: GITHUB_SHA
           script: |
             sudo docker rm -f $(docker ps -qa)
             sudo docker-compose up

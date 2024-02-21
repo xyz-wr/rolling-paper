@@ -59,13 +59,15 @@ jobs:
     - name: Deploy 
       uses: appleboy/ssh-action@master
       id: deploy
+      env:
+        COMPOSE: "/root/docker-compose.yml"
       with:
           host: ${{ secrets.HOST }}
           key: ${{ secrets.PRIVATE_KEY }}
           username: ${{ secrets.USER }}
           envs: GITHUB_SHA
           script: |
-            sudo docker-compose -f ../docker-compose.yml up
+            sudo docker-compose -f $COMPOSE up
               
       
 

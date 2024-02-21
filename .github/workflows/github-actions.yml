@@ -65,7 +65,6 @@ jobs:
           username: ${{ secrets.USER }}
           envs: GITHUB_SHA
           script: |
-            sudo docker rm -f $(docker ps -qa)
             sudo docker-compose up
               
       

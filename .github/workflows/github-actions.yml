@@ -49,11 +49,11 @@ jobs:
       shell: bash
 
     #Docker build & push
-    - name: Docker build & push 
-      run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/rolling-paper .
-          docker push ${{ secrets.DOCKER_REPO }}/rolling-paper
+    # - name: Docker build & push 
+    #   run: |
+    #       docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+    #       docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/rolling-paper .
+    #       docker push ${{ secrets.DOCKER_REPO }}/rolling-paper
 
     #deploy 
     - name: Deploy 

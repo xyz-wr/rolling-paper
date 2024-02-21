@@ -2,12 +2,11 @@ version: '3.3'
 
 services:
   mariadb-container:
-    image: mariadb
+    image: mariadb:latest
     restart: always
     container_name: mariadb-container
     environment:
       - MARIADB_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
     ports:
       - "3306:3306"
     volumes:
@@ -17,7 +16,7 @@ services:
 
   redis:
     container_name: redis
-    image: redis
+    image: redis:latest
     restart: always
     ports:
       - "6379:6379"
@@ -26,8 +25,9 @@ services:
 
   backend:
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
+    image: pponi13468/rolling-paper
     restart: always
     ports:
       - "8080:8080"
@@ -36,6 +36,8 @@ services:
     depends_on:
       - mariadb-container
       - redis
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
     env_file:
       - .env
     networks:

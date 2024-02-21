@@ -65,8 +65,7 @@ jobs:
           username: ${{ secrets.USER }}
           envs: GITHUB_SHA
           script: |
-            cd rolling-paper
-            sudo docker-compose up
+            sudo docker-compose -f ../docker-compose.yml up
               
       
 

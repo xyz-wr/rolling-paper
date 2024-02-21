@@ -36,6 +36,8 @@ jobs:
           ${{ runner.os }}-gradle-
 
     #test를 제외한 프로젝트 빌드  
+    - name: Set execute permission for gradlew
+      run: chmod +x gradlew 
     - name: Build with Gradle 
       run: ./gradlew build -x test
 

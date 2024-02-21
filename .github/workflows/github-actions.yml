@@ -62,7 +62,7 @@ jobs:
       with:
           host: ${{ secrets.HOST }}
           key: ${{ secrets.PRIVATE_KEY }}
-          username: ec2-user
+          username: ${{ secrets.USER }}
           envs: GITHUB_SHA
           script: |
             sudo docker rm -f $(docker ps -qa)

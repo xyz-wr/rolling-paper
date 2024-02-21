@@ -61,7 +61,6 @@ jobs:
       id: deploy
       with:
           host: ${{ secrets.HOST }}
-          username: ec2-user
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |

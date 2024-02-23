@@ -35,6 +35,7 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: http://ec2-43-200-128-192.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/goole
             scope:
               - email
               - profile

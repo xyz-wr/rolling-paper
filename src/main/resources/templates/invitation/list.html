@@ -191,7 +191,7 @@
                 <div class="requests__request-image"></div>
                 <div class="requests__user-details">
                     <div class="requests__name" th:text="${invitationDto.title}"></div>
-                    <div class="requests__id" th:text="${invitationDto.senNickname}"></div>
+                    <div class="requests__id" th:text="${#strings.length(invitationDto.senNickname) &gt; 15 ? #strings.substring(invitationDto.senNickname, 0, 15) + '...' : invitationDto.senNickname}"></div>
                 </div>
                 <form th:action="@{/invitations/{invitation-id}/accept(invitation-id=${invitationDto.id})}" method="post">
                     <button type="submit" class="requests__accept-btn" th:if="${#strings.equals(invitationDto.status, 'PENDING')}">

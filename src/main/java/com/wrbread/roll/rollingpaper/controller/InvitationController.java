@@ -56,6 +56,13 @@ public class InvitationController {
         return "redirect:/invitations/received";
     }
 
+    /**롤링 페이퍼 초대 수락 철회 페이지 */
+    @GetMapping("/papers/{paper-id}/invitations/withdraw")
+    public String withdrawInvitationPage(@PathVariable("paper-id") Long paperId, Model model) {
+        model.addAttribute("paperId", paperId);
+        return "paper/withdraw";
+    }
+
     /** 롤링 페이퍼 초대 수락 철회 */
     @PostMapping("/papers/{paper-id}/invitations/withdraw")
     public String withdrawInvitation(@PathVariable("paper-id") Long paperId) {

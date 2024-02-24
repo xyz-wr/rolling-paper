@@ -208,12 +208,10 @@
                     </a>
                 </li>
                 <li th:if="${#strings.equals(paperDto.isPublic, 'FRIEND') && !#strings.equals(paperDto.getEmail(), email)}">
-                    <form th:action="@{/papers/{paper-id}/invitations/withdraw(paper-id=${paperId})}" method="post">
-                        <button type="submit" class="withdraw">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <p>withdraw</p>
-                        </button>
-                    </form>
+                    <a th:href="@{'/papers/' + ${paperId} + '/invitations/withdraw'}">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <p>withdraw</p>
+                    </a>
                 </li>
             </ul>
         </nav>

@@ -13,9 +13,11 @@ import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -118,13 +120,16 @@ public class PaperService {
     public List<Paper> getFriendPapers() {
         User user = userService.verifiedEmail();
 
-        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND);
+        Sort sort = Sort.by(Sort.Direction.ASC, "createdDate");
+        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort);
 
         //초대 수락한 책 추가
         List<Invitation> invitations = invitationRepository.findAllByReceiverAndStatus(user, InvitationStatus.ACCEPTED);
         for (Invitation invitation : invitations) {
             papers.add(invitation.getPaper());
         }
+
+        papers.sort(Comparator.comparing(Paper::getCreatedDate));
 
         return papers;
     }
@@ -133,7 +138,9 @@ public class PaperService {
     public List<Paper> getMyPublicPapers() {
         User user = userService.verifiedEmail();
 
-        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC);
+        Sort sort = Sort.by(Sort.Direction.ASC, "createdDate");
+
+        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC, sort);
 
         return papers;
     }
@@ -142,8 +149,8 @@ public class PaperService {
     /** 내가 작성한 friend 롤링 페이퍼 전체 조회 */
     public List<Paper> getMyFriendPapers() {
         User user = userService.verifiedEmail();
-
-        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND);
+        Sort sort = Sort.by(Sort.Direction.ASC, "createdDate");
+        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort);
 
         return papers;
     }

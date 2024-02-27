@@ -56,7 +56,7 @@ public class MessageController {
     }
 
     /** 메시지 등록 */
-    @PostMapping("papers/{paper-id}/messages/write")
+    @PostMapping("/papers/{paper-id}/messages/write")
     public String write(@PathVariable("paper-id") Long paperId,
                         MessageDto messageDto, Model model,
                         BindingResult bindingResult) {
@@ -125,7 +125,7 @@ public class MessageController {
         return "redirect:/papers/{paper-id}";
     }
 
-    /** 내가 작성한 public 롤링 페이퍼 전체 조회 */
+    /** 내가 작성한 public 롤링페이퍼의 메시지 전체 조회 */
     @GetMapping("/messages/my-public-message-list")
     public String myPublicList(Model model) {
         List<MessageDto> messageDtos = messageService.getMyPublicMessages()
@@ -138,7 +138,7 @@ public class MessageController {
         return "message/my-public-messages";
     }
 
-    /** 내가 작성한 friend 롤링 페이퍼 전체 조회 */
+    /** 내가 작성한 friend 롤링 페이퍼의 메시지 전체 조회 */
     @GetMapping("/messages/my-friend-message-list")
     public String myFriendList(Model model) {
         List<MessageDto> messageDtos = messageService.getMyFriendMessages()

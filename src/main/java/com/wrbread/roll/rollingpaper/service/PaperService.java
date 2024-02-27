@@ -116,7 +116,9 @@ public class PaperService {
     }
 
 
-    /** IsPublic이 FRIEND인 롤링 페이퍼 전체 조회 */
+    /** IsPublic이 FRIEND인 롤링 페이퍼 전체 조회
+     * 내가 작성한 friend인 롤링페이퍼와 초대받은 롤링페이퍼 조회
+     * */
     public List<Paper> getFriendPapers() {
         User user = userService.verifiedEmail();
 

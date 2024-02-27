@@ -129,6 +129,7 @@ public class AuthController {
         return "redirect:/auth/info";
     }
 
+    /** 유저 탈퇴 페이지*/
     @GetMapping("/delete/user/{user-id}")
     public String delete(@PathVariable("user-id") Long userId, Model model) throws Exception{
         User user = userService.getUser(userId);
@@ -139,6 +140,7 @@ public class AuthController {
         return "user/delete";
     }
 
+    /** 유저 탈퇴 */
     @PostMapping("/delete/user/{user-id}")
     public String withdraw(@PathVariable("user-id") Long userId, Model model) {
         try {

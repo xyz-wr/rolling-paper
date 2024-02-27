@@ -19,7 +19,7 @@ public class InvitationController {
     private final InvitationService invitationService;
 
     /** 롤링 페이퍼 초대 요청 */
-    @PostMapping("papers/{paper-id}/invite")
+    @PostMapping("/papers/{paper-id}/invite")
     public String sendInvitation(@PathVariable("paper-id") Long paperId,
                                  @Valid InvitationDto.Request request) {
 
@@ -41,7 +41,7 @@ public class InvitationController {
     }
 
     /** 롤링 페이퍼 초대 요청 수락 */
-    @PostMapping("invitations/{invitation-id}/accept")
+    @PostMapping("/invitations/{invitation-id}/accept")
     public String acceptInvitation(@PathVariable("invitation-id") Long invitationId) {
         invitationService.acceptInvitation(invitationId);
 
@@ -49,7 +49,7 @@ public class InvitationController {
     }
 
     /** 롤링 페이퍼 초대 요청 거절 */
-    @PostMapping("invitations/{invitation-id}/reject")
+    @PostMapping("/invitations/{invitation-id}/reject")
     public String rejectInvitation(@PathVariable("invitation-id") Long invitationId) {
         invitationService.rejectInvitation(invitationId);
 

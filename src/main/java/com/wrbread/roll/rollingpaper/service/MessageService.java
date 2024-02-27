@@ -88,9 +88,9 @@ public class MessageService {
 
     }
 
-        /** 메시지 수정
-         * 메시지 작성자만 수정 가능
-         * */
+    /** 메시지 수정
+     * 메시지 작성자만 수정 가능
+     * */
     public Message updateMessage(Long paperId, Long messageId, MessageDto messageDto) {
         User user = userService.verifiedEmail();
 

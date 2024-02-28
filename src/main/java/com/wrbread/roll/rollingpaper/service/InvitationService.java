@@ -14,14 +14,12 @@ import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import com.wrbread.roll.rollingpaper.util.SecurityUtil;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -186,7 +184,7 @@ public class InvitationService {
         // 해당 롤링 페이퍼에 대한 초대를 수락한 유저 반환
         List<User> receivers = acceptedInvitations.stream()
                 .map(Invitation::getReceiver)
-                .collect(Collectors.toList());
+                .toList();
 
         return receivers;
     }

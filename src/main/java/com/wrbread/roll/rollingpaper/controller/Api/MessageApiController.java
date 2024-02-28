@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/papers/{paper-id}/messages")
 @RequiredArgsConstructor
@@ -54,7 +54,7 @@ public class MessageApiController {
         List<MessageDto> responseDtos = messageService.getMessages(paperId)
                 .stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok().body(responseDtos);
     }
@@ -65,7 +65,7 @@ public class MessageApiController {
         List<MessageDto> responseDtos = messageService.getMyPublicMessages()
                 .stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok().body(responseDtos);
     }
@@ -76,7 +76,7 @@ public class MessageApiController {
         List<MessageDto> responseDtos = messageService.getMyFriendMessages()
                 .stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok().body(responseDtos);
     }
@@ -97,7 +97,7 @@ public class MessageApiController {
         List<MessageDto> messages = messageService.getMyLikes()
                 .stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(messages);
     }

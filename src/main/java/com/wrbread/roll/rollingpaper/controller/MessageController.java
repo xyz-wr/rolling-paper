@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -131,7 +130,7 @@ public class MessageController {
         List<MessageDto> messageDtos = messageService.getMyPublicMessages()
                 .stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("messageDtos", messageDtos);
 
@@ -144,7 +143,7 @@ public class MessageController {
         List<MessageDto> messageDtos = messageService.getMyFriendMessages()
                 .stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("messageDtos", messageDtos);
 
@@ -158,7 +157,7 @@ public class MessageController {
         List<MessageDto> messageDtos = messageService.getMyLikes()
                 .stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("messageDtos", messageDtos);
 

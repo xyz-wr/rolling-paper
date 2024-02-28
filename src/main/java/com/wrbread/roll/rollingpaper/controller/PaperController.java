@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,7 +44,7 @@ public class PaperController {
         List<PaperDto> paperDtos = paperService.getPublicPapers()
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("email", auth.getName());
         model.addAttribute("paperDtos", paperDtos);
@@ -59,7 +58,7 @@ public class PaperController {
         List<PaperDto> paperDtos = paperService.getFriendPapers()
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("email", auth.getName());
         model.addAttribute("paperDtos", paperDtos);
@@ -155,7 +154,7 @@ public class PaperController {
         List<MessageDto> messageDtos = messageService.getMessages(paperId)
                 .stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("email", auth.getName());
         model.addAttribute("paperId", paperId);
@@ -191,7 +190,7 @@ public class PaperController {
         List<PaperDto> paperDtos = paperService.getMyPublicPapers()
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("paperDtos", paperDtos);
 
@@ -204,7 +203,7 @@ public class PaperController {
         List<PaperDto> paperDtos = paperService.getMyFriendPapers()
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("paperDtos", paperDtos);
 
@@ -217,7 +216,7 @@ public class PaperController {
         List<PaperDto> paperDtos = paperService.searchPublicPapers(keyword)
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("paperDtos", paperDtos);
         model.addAttribute("email", auth.getName());
@@ -231,7 +230,7 @@ public class PaperController {
         List<PaperDto> paperDtos = paperService.searchFriendPapers(keyword)
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         model.addAttribute("paperDtos", paperDtos);
         model.addAttribute("email", auth.getName());

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/papers")
@@ -57,7 +56,7 @@ public class PaperApiController {
         List<PaperDto> responseDtos = paperService.getPublicPapers()
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(responseDtos);
     }
@@ -68,7 +67,7 @@ public class PaperApiController {
         List<PaperDto> responseDtos = paperService.getFriendPapers()
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(responseDtos);
     }
@@ -80,7 +79,7 @@ public class PaperApiController {
         List<PaperDto> responseDtos = paperService.getMyPublicPapers()
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(responseDtos);
     }
@@ -91,7 +90,7 @@ public class PaperApiController {
         List<PaperDto> responseDtos = paperService.getMyFriendPapers()
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(responseDtos);
     }
@@ -119,7 +118,7 @@ public class PaperApiController {
         List<PaperDto> responseDtos = paperService.searchPublicPapers(keyword)
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(responseDtos);
     }
@@ -130,7 +129,7 @@ public class PaperApiController {
         List<PaperDto> responseDtos = paperService.searchFriendPapers(keyword)
                 .stream()
                 .map(PaperDto::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(responseDtos);
     }

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -143,7 +142,7 @@ public class MessageService {
 
         List<Message> messages = papers.stream()
                 .flatMap(paper -> messageRepository.findByPaperAndUser(paper, user).stream())
-                .collect(Collectors.toList());
+                .toList();
 
         return messages;
     }
@@ -157,7 +156,7 @@ public class MessageService {
 
         List<Message> messages = papers.stream()
                 .flatMap(paper -> messageRepository.findByPaperAndUser(paper, user).stream())
-                .collect(Collectors.toList());
+                .toList();
 
         return messages;
     }
@@ -194,7 +193,7 @@ public class MessageService {
         List<Like> likes = likeRepository.findAllByUser(user);
         List<Message> likedMessages = likes.stream()
                 .map(Like::getMessage)
-                .collect(Collectors.toList());
+                .toList();
 
         return likedMessages;
     }

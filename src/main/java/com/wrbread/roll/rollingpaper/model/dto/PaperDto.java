@@ -12,7 +12,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -50,6 +49,6 @@ public class PaperDto {
         this.isPublic = paper.getIsPublic();
         this.messages = paper.getMessages().stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -286,3 +286,29 @@ header {
 .footer-nav ul li a:hover {
     color: #86D8C9;
 }
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    margin: 40px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    text-decoration: none;
+    color: black;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #86D8C9;
+    color: white;
+    border: 1px solid #86D8C9;
+}

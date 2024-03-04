@@ -35,30 +35,58 @@
             <button type="submit"></button>
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         </form>
-        <div class="col">
-            <div class="paper-img" th:each="paperDto : ${paperDtos}">
-                <a th:href="@{'/papers/' + ${paperDto.id}}">
-                    <div class="relax" th:text="${paperDto.title}"></div>
-                    <div th:if="${#strings.equals(paperDto.getEmail(), email)}">
-                        <a th:href="@{'/papers/edit/' + ${paperDto.id}}" class="btn-edit play-pause">
-                            <div class="icon-container">
-                                <div class="icon edit">
-                                    <i class="fas fa-edit"></i>
+        <div class="page">
+            <div class="col">
+                <div class="paper-img" th:each="paperDto : ${paperDtoPage}">
+                    <a th:href="@{'/papers/' + ${paperDto.id}}">
+                        <div class="relax" th:text="${paperDto.title}"></div>
+                        <div th:if="${#strings.equals(paperDto.getEmail(), email)}">
+                            <a th:href="@{'/papers/edit/' + ${paperDto.id}}" class="btn-edit play-pause">
+                                <div class="icon-container">
+                                    <div class="icon edit">
+                                        <i class="fas fa-edit"></i>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <a th:href="@{'/papers/delete/' + ${paperDto.id}}" class="btn-delete play-pause">
-                            <div class="icon-container">
-                                <div class="icon delete">
-                                    <i class="fas fa-trash-alt"></i>
+                            </a>
+                            <a th:href="@{'/papers/delete/' + ${paperDto.id}}" class="btn-delete play-pause">
+                                <div class="icon-container">
+                                    <div class="icon delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div th:if="${paperCnt >= 6}">
+                <ul class="pagination"
+                    th:with="
+            pageNumber = ${paperDtoPage.pageable.pageNumber},
+            pageSize = ${paperDtoPage.pageable.pageSize},
+            totalPages = ${paperDtoPage.totalPages},
+            startPage = ${startPage},
+            tempEndPage = ${tempEndPage},
+            endPage = (${endPage})">
+
+                    <li th:classappend="${paperDtoPage.first} ? 'disabled'" class="page-item">
+                        <a class="page-link" th:href="${paperDtoPage.first} ? '#' : @{/papers/all-public-papers(page=${pageNumber - 1})}">
+                            <span aria-hidden="true">&lt;</span>
                         </a>
-                    </div>
-                </a>
+                    </li>
+
+                    <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                        <a th:text="${page}" class="page-link" th:href="@{/papers/all-public-papers(page=${page - 1})}"></a>
+                    </li>
+
+                    <li th:classappend="${paperDtoPage.last} ? 'disabled'" class="page-item">
+                        <a class="page-link" th:href="${paperDtoPage.last} ? '#' : @{/papers/all-public-papers(page=${pageNumber + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
-
     </div>
 
     <div class="footer">

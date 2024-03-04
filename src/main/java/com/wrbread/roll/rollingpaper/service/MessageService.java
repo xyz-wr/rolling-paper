@@ -13,6 +13,8 @@ import com.wrbread.roll.rollingpaper.repository.LikeRepository;
 import com.wrbread.roll.rollingpaper.repository.MessageRepository;
 import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -123,7 +125,7 @@ public class MessageService {
     /** 특정 롤링페이퍼의 전체 메시지 조회
      * 친구 초대 롤링 페이퍼 작성자와 초대장을 수락한 유저만 롤링 페이퍼의 전체 페이지 조회 가능
      **/
-    public List<Message> getMessages(Long paperId) {
+    public Page<Message> getMessages(Long paperId, Pageable pageable) {
         User user = userService.verifiedEmail();
 
         Paper paper = paperRepository.findById(paperId)
@@ -131,7 +133,7 @@ public class MessageService {
 
         invitationService.checkOwnerAndAccepted(user, paper);
 
-        return messageRepository.findByPaper(paper);
+        return messageRepository.findByPaper(paper, pageable);
     }
 
     /** 내가 작성한 public 메시지 전체 조회 */

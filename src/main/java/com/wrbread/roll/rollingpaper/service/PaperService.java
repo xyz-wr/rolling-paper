@@ -13,10 +13,11 @@ import com.wrbread.roll.rollingpaper.repository.PaperRepository;
 import com.wrbread.roll.rollingpaper.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -110,31 +111,37 @@ public class PaperService {
     }
 
     /** IsPublic이 PUBLIC인 롤링 페이퍼 전체 조회 */
-    public List<Paper> getPublicPapers() {
+    public Page<Paper> getPublicPapers(Pageable pageable) {
 
-        return paperRepository.findByIsPublic(IsPublic.PUBLIC);
+        return paperRepository.findByIsPublic(IsPublic.PUBLIC, pageable);
     }
 
 
     /** IsPublic이 FRIEND인 롤링 페이퍼 전체 조회
      * 내가 작성한 friend인 롤링페이퍼와 초대받은 롤링페이퍼 조회
      * */
-    public List<Paper> getFriendPapers() {
+    public Page<Paper> getFriendPapers(Pageable pageable) {
         User user = userService.verifiedEmail();
-
         Sort sort = Sort.by(Sort.Direction.ASC, "createdDate");
-        List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort);
 
-        //초대 수락한 책 추가
+        List<Paper> myPapers =
+                paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort)
+        ;
+
+        // 초대 수락한 Paper 추가
         List<Invitation> invitations = invitationRepository.findAllByReceiverAndStatus(user, InvitationStatus.ACCEPTED);
         for (Invitation invitation : invitations) {
-            papers.add(invitation.getPaper());
+            myPapers.add(invitation.getPaper());
         }
 
-        papers.sort(Comparator.comparing(Paper::getCreatedDate));
+        // 정렬과 페이징을 적용하여 새로운 Page 객체 생성
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), myPapers.size());
+        List<Paper> papers = myPapers.subList(start, end);
 
-        return papers;
+        return new PageImpl<>(papers, pageable, myPapers.size());
     }
+
 
     /** 내가 작성한 public 롤링 페이퍼 전체 조회 */
     public List<Paper> getMyPublicPapers() {
@@ -183,23 +190,23 @@ public class PaperService {
     }
 
     /** public 롤링 페이퍼 검색 */
-    public List<Paper> searchPublicPapers (String keyword) {
-        List<Paper> papers = paperRepository.findByTitleContainingAndIsPublic(keyword, IsPublic.PUBLIC);
+    public Page<Paper> searchPublicPapers (String keyword, Pageable pageable) {
+        Page<Paper> papers = paperRepository.findByTitleContainingAndIsPublic(keyword, IsPublic.PUBLIC, pageable);
 
         return papers;
     }
 
     /** friend 롤링 페이퍼 검색 */
-    public List<Paper> searchFriendPapers (String keyword) {
+    public Page<Paper> searchFriendPapers (String keyword, Pageable pageable) {
         User user = userService.verifiedEmail();
 
-        List<Paper> papers = paperRepository.findAllByUserAndTitleContainingAndIsPublic(user, keyword, IsPublic.FRIEND);
+        Page<Paper> papers = paperRepository.findAllByUserAndTitleContainingAndIsPublic(user, keyword, IsPublic.FRIEND, pageable);
 
         // 초대 수락한 책 추가
         List<Invitation> invitations = invitationRepository.findAllByReceiverAndStatus(user, InvitationStatus.ACCEPTED);
         for (Invitation invitation : invitations) {
             if (invitation.getPaper().getTitle().contains(keyword)) {
-                papers.add(invitation.getPaper());
+                papers.getContent().add(invitation.getPaper());
             }
         }
 

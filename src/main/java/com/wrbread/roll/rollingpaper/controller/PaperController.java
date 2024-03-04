@@ -4,6 +4,7 @@ import com.wrbread.roll.rollingpaper.exception.BusinessLogicException;
 import com.wrbread.roll.rollingpaper.exception.ExceptionCode;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
+import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
@@ -11,6 +12,11 @@ import com.wrbread.roll.rollingpaper.service.MessageService;
 import com.wrbread.roll.rollingpaper.service.PaperService;
 import com.wrbread.roll.rollingpaper.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,33 +41,56 @@ public class PaperController {
 
     /** public 롤링 페이퍼 전체 조회 */
     @GetMapping("/all-public-papers")
-    public String publicList(Model model, Authentication auth) {
+    public String publicList(@PageableDefault(page = 0, size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable,
+                             Model model, Authentication auth) {
         // 사용자가 인증되어 있지 않은 경우
         if (auth == null) {
             return "redirect:/";
         }
 
-        List<PaperDto> paperDtos = paperService.getPublicPapers()
-                .stream()
-                .map(PaperDto::new)
-                .toList();
+        Page<Paper> paper = paperService.getPublicPapers(pageable);
+        List<PaperDto> paperDtos = paper.map(PaperDto::new).getContent();
+        Page<PaperDto> paperDtoPage = new PageImpl<>(paperDtos, pageable, paper.getTotalElements());
+
+
+        int totalPages = paperDtoPage.getTotalPages();
+        int pageNumber = pageable.getPageNumber();
+        int navPageSize = 3;
+        int startPage = Math.max(0, ((pageNumber / navPageSize) * navPageSize) + 1);
+        int tempEndPage = startPage + navPageSize - 1;
+        int endPage = (tempEndPage < totalPages) ? tempEndPage : totalPages;
 
         model.addAttribute("email", auth.getName());
-        model.addAttribute("paperDtos", paperDtos);
+        model.addAttribute("paperDtoPage", paperDtoPage);
+        model.addAttribute("paperCnt", paper.getTotalElements());
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("tempEndPage", tempEndPage);
+        model.addAttribute("endPage", endPage);
 
         return "paper/all-public-papers";
     }
 
     /** friend 롤링 페이퍼 전체 조회 */
     @GetMapping("/all-friend-papers")
-    public String friendList(Model model, Authentication auth) {
-        List<PaperDto> paperDtos = paperService.getFriendPapers()
-                .stream()
-                .map(PaperDto::new)
-                .toList();
+    public String friendList(@PageableDefault(page = 0, size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable,
+                             Model model, Authentication auth) {
+        Page<Paper> paper = paperService.getFriendPapers(pageable);
+        List<PaperDto> paperDtos = paper.map(PaperDto::new).getContent();
+        Page<PaperDto> paperDtoPage = new PageImpl<>(paperDtos, pageable, paper.getTotalElements());
+
+        int totalPages = paperDtoPage.getTotalPages();
+        int pageNumber = pageable.getPageNumber();
+        int navPageSize = 3;
+        int startPage = Math.max(0, ((pageNumber / navPageSize) * navPageSize) + 1);
+        int tempEndPage = startPage + navPageSize - 1;
+        int endPage = (tempEndPage < totalPages) ? tempEndPage : totalPages;
 
         model.addAttribute("email", auth.getName());
-        model.addAttribute("paperDtos", paperDtos);
+        model.addAttribute("paperDtoPage", paperDtoPage);
+        model.addAttribute("paperCnt", paper.getTotalElements());
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("tempEndPage", tempEndPage);
+        model.addAttribute("endPage", endPage);
 
         return "paper/all-friend-papers";
     }
@@ -146,20 +175,35 @@ public class PaperController {
      * 메시지 목록 포함
      * */
     @GetMapping("/{paper-id}")
-    public String detail(@PathVariable("paper-id") Long paperId, Model model,
-                         Authentication auth) {
+    public String detail(@PathVariable("paper-id") Long paperId,
+                         @PageableDefault(page = 0, size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable,
+                         Model model,  Authentication auth) {
         Paper paper = paperService.getPaper(paperId);
         PaperDto paperDto = new PaperDto(paper);
 
-        List<MessageDto> messageDtos = messageService.getMessages(paperId)
-                .stream()
-                .map(MessageDto::new)
-                .toList();
+
+
+        Page<Message> message = messageService.getMessages(paperId, pageable);
+        List<MessageDto> messageDtos = message.map(MessageDto::new).getContent();
+        Page<MessageDto> messageDtoPage = new PageImpl<>(messageDtos, pageable, message.getTotalElements());
+
+        int totalPages = messageDtoPage.getTotalPages();
+        int pageNumber = pageable.getPageNumber();
+        int navPageSize = 3;
+        int startPage = Math.max(0, ((pageNumber / navPageSize) * navPageSize) + 1);
+        int tempEndPage = startPage + navPageSize - 1;
+        int endPage = (tempEndPage < totalPages) ? tempEndPage : totalPages;
+
+        model.addAttribute("email", auth.getName());
+        model.addAttribute("messageDtoPage", messageDtoPage);
+        model.addAttribute("paperCnt", message.getTotalElements());
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("tempEndPage", tempEndPage);
+        model.addAttribute("endPage", endPage);
 
         model.addAttribute("email", auth.getName());
         model.addAttribute("paperId", paperId);
         model.addAttribute("paperDto", paperDto);
-        model.addAttribute("messageDtos", messageDtos);
         return "paper/detail";
     }
 
@@ -212,28 +256,55 @@ public class PaperController {
 
     /** PUBLIC 롤링 페이퍼 검색 */
     @GetMapping("/search-public-paper")
-    public String searchPublicPaper(String keyword, Model model, Authentication auth) {
-        List<PaperDto> paperDtos = paperService.searchPublicPapers(keyword)
-                .stream()
-                .map(PaperDto::new)
-                .toList();
+    public String searchPublicPaper(@PageableDefault(page = 0, size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable,
+                                    String keyword, Model model, Authentication auth) {
 
-        model.addAttribute("paperDtos", paperDtos);
+        Page<Paper> paper = paperService.searchPublicPapers(keyword,pageable);
+        List<PaperDto> paperDtos = paper.map(PaperDto::new).getContent();
+        Page<PaperDto> paperDtoPage = new PageImpl<>(paperDtos, pageable, paper.getTotalElements());
+
+
+        int totalPages = paperDtoPage.getTotalPages();
+        int pageNumber = pageable.getPageNumber();
+        int navPageSize = 3;
+        int startPage = Math.max(0, ((pageNumber / navPageSize) * navPageSize) + 1);
+        int tempEndPage = startPage + navPageSize - 1;
+        int endPage = (tempEndPage < totalPages) ? tempEndPage : totalPages;
+
         model.addAttribute("email", auth.getName());
+        model.addAttribute("paperDtoPage", paperDtoPage);
+        model.addAttribute("paperCnt", paper.getTotalElements());
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("tempEndPage", tempEndPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("keyword", keyword);
 
         return "paper/search-public-papers";
     }
 
     /** FRIEND 롤링 페이퍼 검색 */
     @GetMapping("/search-friend-paper")
-    public String searchFriendPaper(String keyword, Model model, Authentication auth) {
-        List<PaperDto> paperDtos = paperService.searchFriendPapers(keyword)
-                .stream()
-                .map(PaperDto::new)
-                .toList();
+    public String searchFriendPaper(@PageableDefault(page = 0, size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable,
+                                    String keyword, Model model, Authentication auth) {
+        Page<Paper> paper = paperService.searchFriendPapers(keyword,pageable);
+        List<PaperDto> paperDtos = paper.map(PaperDto::new).getContent();
+        Page<PaperDto> paperDtoPage = new PageImpl<>(paperDtos, pageable, paper.getTotalElements());
 
-        model.addAttribute("paperDtos", paperDtos);
+
+        int totalPages = paperDtoPage.getTotalPages();
+        int pageNumber = pageable.getPageNumber();
+        int navPageSize = 3;
+        int startPage = Math.max(0, ((pageNumber / navPageSize) * navPageSize) + 1);
+        int tempEndPage = startPage + navPageSize - 1;
+        int endPage = (tempEndPage < totalPages) ? tempEndPage : totalPages;
+
         model.addAttribute("email", auth.getName());
+        model.addAttribute("paperDtoPage", paperDtoPage);
+        model.addAttribute("paperCnt", paper.getTotalElements());
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("tempEndPage", tempEndPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("keyword", keyword);
 
         return "paper/search-friend-papers";
     }

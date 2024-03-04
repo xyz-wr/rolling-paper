@@ -2,6 +2,7 @@ package com.wrbread.roll.rollingpaper.model.dto;
 
 import com.wrbread.roll.rollingpaper.model.entity.Invitation;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
+import com.wrbread.roll.rollingpaper.model.entity.ProfileImg;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;
 import lombok.Getter;
@@ -39,12 +40,15 @@ public class InvitationDto {
 
         private String senNickname;
 
+        private String senProfileImg;
+
         public Response(Invitation invitation) {
             this.id = invitation.getId();
             this.paperId = invitation.getPaper().getId();
             this.status = invitation.getStatus();
             this.title = invitation.getPaper().getTitle();
             this.senNickname = invitation.getSender().getNickname();
+            this.senProfileImg = invitation.getSender().getProfileImg().getImgUrl();
         }
 
     }

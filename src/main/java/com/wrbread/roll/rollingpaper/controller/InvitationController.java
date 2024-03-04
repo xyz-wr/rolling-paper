@@ -2,7 +2,9 @@ package com.wrbread.roll.rollingpaper.controller;
 
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.dto.InvitationDto;
+import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.service.InvitationService;
+import com.wrbread.roll.rollingpaper.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InvitationController {
     private final InvitationService invitationService;
+
+    private final UserService userService;
 
     /** 롤링 페이퍼 초대 요청 */
     @PostMapping("/papers/{paper-id}/invite")
@@ -37,6 +41,7 @@ public class InvitationController {
                 .toList();
 
         model.addAttribute("invitationDtos", invitationDtos);
+
         return "invitation/list";
     }
 

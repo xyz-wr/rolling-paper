@@ -81,6 +81,7 @@ public class AuthDto {
         private String email;
         private ProfileImgDto profileImgDto;
         private Long profileImgId;
+        private String profileImgUrl;
 
         public UserDto(User user) {
             this.id = user.getId();
@@ -89,6 +90,7 @@ public class AuthDto {
             this.codename = user.getCodename();
             this.profileImgDto = new ProfileImgDto(user.getProfileImg());
             this.profileImgId = user.getProfileImg().getId();
+            this.profileImgUrl = user.getProfileImg().getImgUrl();
         }
     }
 }

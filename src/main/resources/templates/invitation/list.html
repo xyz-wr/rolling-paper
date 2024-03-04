@@ -114,12 +114,22 @@
             border-bottom: 1px solid #f1f1f1;
         }
 
-        .requests__request-image {
+        .requests__request-image{
+            position: relative;
             height: 37px;
             width: 37px;
-            background: #d1d1d1;
+            border: 1px solid #59626D;
             border-radius: 100%;
         }
+
+        .requests__request-image img{
+            position: absolute;
+            right: 7px;
+            top: 7px;
+            height: 22px;
+            width: 22px;
+        }
+
 
         .requests__user-details {
             margin-left: 8px;
@@ -188,7 +198,9 @@
     <div class="content">
         <div class="requests__list">
             <div class="requests__request" th:each="invitationDto : ${invitationDtos}">
-                <div class="requests__request-image"></div>
+                <div class="requests__request-image">
+                    <img th:src='${invitationDto.senProfileImg}' alt="" />
+                </div>
                 <div class="requests__user-details">
                     <div class="requests__name" th:text="${invitationDto.title}"></div>
                     <div class="requests__id" th:text="${#strings.length(invitationDto.senNickname) &gt; 15 ? #strings.substring(invitationDto.senNickname, 0, 15) + '...' : invitationDto.senNickname}"></div>

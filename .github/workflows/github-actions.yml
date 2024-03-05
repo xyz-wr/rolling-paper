@@ -60,7 +60,8 @@ jobs:
           username: ${{ secrets.USER }}
           envs: GITHUB_SHA
           script: |
-            sudo docker-compose -f $COMPOSE up --build
+            sudo docker-compose -f $COMPOSE build
+            sudo docker-compose -f $COMPOSE up
               
       
 

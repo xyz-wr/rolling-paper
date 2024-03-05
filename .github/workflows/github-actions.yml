@@ -48,13 +48,6 @@ jobs:
         echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
       shell: bash
 
-    #Docker build & push
-    # - name: Docker build & push 
-    #   run: |
-    #       docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-    #       docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/rolling-paper .
-    #       docker push ${{ secrets.DOCKER_REPO }}/rolling-paper
-
     #deploy 
     - name: Deploy 
       uses: appleboy/ssh-action@master
@@ -67,6 +60,7 @@ jobs:
           username: ${{ secrets.USER }}
           envs: GITHUB_SHA
           script: |
+            sudo docker-compose -f $COMPOSE build
             sudo docker-compose -f $COMPOSE up
               
       

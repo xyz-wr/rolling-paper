@@ -60,14 +60,16 @@
 
 ## 배포 방식
 <p align="middle">  EC2에서 Docker를 활용하여 배포를 진행하였습니다. </br>
-[AWS EC2, Docker Compose를 이용한 프로젝트 배포](https://www.notion.so/AWS-EC2-Docker-Compose-258e22a1a5a3440f98793943ddd3c52c)
+
+`기록` : [AWS EC2, Docker Compose를 이용한 프로젝트 배포](https://www.notion.so/AWS-EC2-Docker-Compose-258e22a1a5a3440f98793943ddd3c52c)
 </p>
 </br>
 
 ## CI/CD
 <p align="middle"> Github Actions를 사용하여 CI/CD를 구축하였습니다. </br>
 Github Actions를 사용하여 Docker Image를 빌드하고 EC2에 반영합니다. </br>
-[GitHub Actions CI/CD](https://www.notion.so/GitHub-Actions-CI-CD-ab1f0e8da0064aeba2dfcc45df5d1f68)
+
+`기록` : [GitHub Actions CI/CD](https://www.notion.so/GitHub-Actions-CI-CD-ab1f0e8da0064aeba2dfcc45df5d1f68)
 </p>
 
 

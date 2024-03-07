@@ -1,0 +1,19 @@
+<div align=center>
+
+<h2> [ Rolling Paper ] 롤링페이퍼 작성 서비스 </h2>
+
+<p align="middle">  Spring Boot를 사용하여 웹 개발을 학습하기 위해 진행한 개인 프로젝트입니다.
+  <br/> 전체 공개는 로그인한 모든 유저가 해당 롤링페이퍼에 메시지를 작성할 수 있고, 
+  <br/> 친구 공개는 롤링페이퍼 작성자와 초대 요청을 수락한 유저들만 메시지를 작성할 수 있습니다. 
+</p>
+</div>
+
+</br>
+</br>
+
+## 📃 프로젝트
+- `프로젝트명` : Rolling Paper
+- `프로젝트 기간` : 2024.01 ~ 2024.03
+- `배포 링크` : [rolling-paper](http://ec2-43-200-251-136.ap-northeast-2.compute.amazonaws.com:8080/)
+- `프로젝트 문서` : [Rolling Paper 서비스 소개](https://www.notion.so/Rolling-Paper-54274111cf854ddbb9b7ff92d2f35387)  
+<br/>

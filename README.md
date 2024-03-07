@@ -51,4 +51,11 @@
 </div>
 </br>
 
+## 📦 ERD 
+`dbdiagram` : [dbdiagram](https://dbdiagram.io/d/643ba6606b31947051aa49eb)
+<div align=center>
+<img width="720" alt="Architecture_Diagram" src="https://github.com/xyz-wr/rolling-paper/assets/63355903/0213c880-81b4-40cc-b7e6-89087b5f051f">
+</div>
+</br>
+
 

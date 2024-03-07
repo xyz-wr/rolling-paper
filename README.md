@@ -59,17 +59,28 @@
 </br>
 
 ## 배포 방식
-<p align="middle">  EC2에서 Docker를 활용하여 배포를 진행하였습니다. </br>
+EC2에서 Docker를 활용하여 배포를 진행하였습니다. </br>
 
-`기록` : [AWS EC2, Docker Compose를 이용한 프로젝트 배포](https://www.notion.so/AWS-EC2-Docker-Compose-258e22a1a5a3440f98793943ddd3c52c)
-</p>
+[AWS EC2, Docker Compose를 이용한 프로젝트 배포](https://www.notion.so/AWS-EC2-Docker-Compose-258e22a1a5a3440f98793943ddd3c52c)
 </br>
 
 ## CI/CD
-<p align="middle"> Github Actions를 사용하여 CI/CD를 구축하였습니다. </br>
+Github Actions를 사용하여 CI/CD를 구축하였습니다. </br>
 Github Actions를 사용하여 Docker Image를 빌드하고 EC2에 반영합니다. </br>
 
-`기록` : [GitHub Actions CI/CD](https://www.notion.so/GitHub-Actions-CI-CD-ab1f0e8da0064aeba2dfcc45df5d1f68)
+[GitHub Actions CI/CD](https://www.notion.so/GitHub-Actions-CI-CD-ab1f0e8da0064aeba2dfcc45df5d1f68)
 </p>
+
+## 트러블 슈팅
+[AWS EC2 메모리 부족 현상 해결](https://www.notion.so/AWS-EC2-ef2595c50bfb4d4ba2ab0aff1e60a092)
+</br>
+[invitation과 paper 연결 후 paper delete시 발생한 문제 해결](https://www.notion.so/invitation-paper-paper-delete-9421b8b6896a4a3bb9b47faf06074da0)
+</br>
+[MessageRepositoryTest에서 testFindByPaperIdAndId가 전체 테스트에서는 통과되지 않는 문제 해결](https://www.notion.so/MessageRepositoryTest-testFindByPaperIdAndId-52bd396b2a1d44568743f07567b1a43f)
+</br>
+[이메일 인증번호 구현 시 The sender address is unauthorized NkEL1BlcQ4yKzxc1hmQMQg - nsmtp 문제 해결](https://www.notion.so/The-sender-address-is-unauthorized-NkEL1BlcQ4yKzxc1hmQMQg-nsmtp-18781c6a95914b55b374d08ff73ee79f)
+</br>
+[Dockerfile 작성 시 failed to compute cache key 문제 해결](https://www.notion.so/Dockerfile-failed-to-compute-cache-key-12bfa8be67d14df4a0cf21e6a58472bb)
+</br>
 
 

@@ -167,14 +167,9 @@ public class UserService {
     public boolean checkEditNickname(String nickname, Long userId) {
         List<User> users = userRepository.findAll();
 
-        for (User user : users) {
-            // 자기 자신을 제외한 다른 유저들의 닉네임과 비교
-            if (!user.getId().equals(userId) && user.getNickname().equals(nickname)) {
-                return true; // 닉네임이 이미 사용 중인 경우
-            }
-        }
+        return users.stream()
+                .anyMatch(user -> !user.getId().equals(userId) && user.getNickname().equals(nickname));
 
-        return false;
     }
 
     /** 유저 삭제

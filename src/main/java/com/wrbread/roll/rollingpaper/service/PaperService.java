@@ -122,7 +122,7 @@ public class PaperService {
      * */
     public Page<Paper> getFriendPapers(Pageable pageable) {
         User user = userService.verifiedEmail();
-        Sort sort = Sort.by(Sort.Direction.ASC, "createdDate");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
 
         List<Paper> myPapers =
                 paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort)
@@ -130,11 +130,13 @@ public class PaperService {
 
         // 초대 수락한 Paper 추가
         List<Invitation> invitations = invitationRepository.findAllByReceiverAndStatus(user, InvitationStatus.ACCEPTED);
-        for (Invitation invitation : invitations) {
-            myPapers.add(invitation.getPaper());
-        }
+        invitations.stream()
+                .map(Invitation::getPaper)
+                .forEach(myPapers::add);
 
-        // 정렬과 페이징을 적용하여 새로운 Page 객체 생성
+        myPapers.sort(Comparator.comparing(Paper::getCreatedDate).reversed());
+
+        // 페이징을 적용하여 새로운 Page 객체 생성
         int start = (int)pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), myPapers.size());
         List<Paper> papers = myPapers.subList(start, end);
@@ -147,7 +149,7 @@ public class PaperService {
     public List<Paper> getMyPublicPapers() {
         User user = userService.verifiedEmail();
 
-        Sort sort = Sort.by(Sort.Direction.ASC, "createdDate");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
 
         List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC, sort);
 
@@ -158,7 +160,7 @@ public class PaperService {
     /** 내가 작성한 friend 롤링 페이퍼 전체 조회 */
     public List<Paper> getMyFriendPapers() {
         User user = userService.verifiedEmail();
-        Sort sort = Sort.by(Sort.Direction.ASC, "createdDate");
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         List<Paper> papers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort);
 
         return papers;
@@ -204,11 +206,14 @@ public class PaperService {
 
         // 초대 수락한 책 추가
         List<Invitation> invitations = invitationRepository.findAllByReceiverAndStatus(user, InvitationStatus.ACCEPTED);
-        for (Invitation invitation : invitations) {
-            if (invitation.getPaper().getTitle().contains(keyword)) {
-                papers.getContent().add(invitation.getPaper());
-            }
-        }
+        List<Paper> acceptedPapers = invitations.stream()
+                .map(Invitation::getPaper)
+                .filter(paper -> paper.getTitle().contains(keyword))
+                .toList();
+
+        List<Paper> addPapers = new ArrayList<>(papers.getContent());
+        addPapers.addAll(acceptedPapers);
+        papers = new PageImpl<>(addPapers, pageable, addPapers.size());
 
         return papers;
     }

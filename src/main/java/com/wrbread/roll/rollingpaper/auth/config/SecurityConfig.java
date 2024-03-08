@@ -9,13 +9,18 @@
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.config.Customizer;
 //import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+//import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+//import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 //import org.springframework.security.config.http.SessionCreationPolicy;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.web.SecurityFilterChain;
 //import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+//
+//import static org.springframework.security.config.Customizer.withDefaults;
 //
 //@Configuration
 //@RequiredArgsConstructor
@@ -46,9 +51,9 @@
 //        //인터셉터로 요청을 안전하게 보호하는 방법 설정
 //        http
 //                // jwt 토큰 사용을 위한 설정
-//                .csrf().disable()
-//                .httpBasic().disable()
-//                .formLogin().disable()
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .httpBasic(withDefaults())
+//                .formLogin(withDefaults())
 //                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 //                .sessionManagement()
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -65,9 +70,10 @@
 //                                "/api/messages/**", "/api/auth/purchase/subscription",
 //                                "api/auth/user/**").hasRole("USER")
 //                        .anyRequest().permitAll())
-//                .headers()
-//                .frameOptions()
-//                .sameOrigin();
+//                .headers(headersConfigurer ->
+//                        headersConfigurer
+//                                .frameOptions(
+//                                        HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 //        return http.build();
 //    }
 //

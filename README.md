@@ -65,18 +65,18 @@
 ### 유저
 <div align=center>
   
-|![회원가입 및 로그인](https://github.com/xyz-wr/rolling-paper/assets/63355903/c735afb9-bec4-4254-aa18-621aa14ba935) |![OAuth 2 0](https://github.com/xyz-wr/rolling-paper/assets/63355903/b0344f31-0594-4655-8708-3c2f41478d25)|![프로필 수정](https://github.com/xyz-wr/rolling-paper/assets/63355903/746684d4-04a0-4d7d-9520-ab7d06822c7d) |![유저 정보 리스트](https://github.com/xyz-wr/rolling-paper/assets/63355903/7ff3a637-ba37-4704-ad5f-ce8200b0d0f6)|
-|:---:|:---:|:---:|:---:|
-| 회원가입 및 로그인 | OAuth 2.0 로그인 | 프로필 수정 | 유저 정보 리스트 |
+|![회원가입 및 로그인](https://github.com/xyz-wr/rolling-paper/assets/63355903/c735afb9-bec4-4254-aa18-621aa14ba935) |![OAuth 2 0](https://github.com/xyz-wr/rolling-paper/assets/63355903/b0344f31-0594-4655-8708-3c2f41478d25)|![프로필 수정](https://github.com/xyz-wr/rolling-paper/assets/63355903/746684d4-04a0-4d7d-9520-ab7d06822c7d) |![유저 정보 리스트](https://github.com/xyz-wr/rolling-paper/assets/63355903/7ff3a637-ba37-4704-ad5f-ce8200b0d0f6)|![이용권 구매](https://github.com/xyz-wr/rolling-paper/assets/63355903/74028a45-4661-4536-824f-c2a1cc01a0dd)|
+|:---:|:---:|:---:|:---:|:---:|
+| 회원가입 및 로그인 | OAuth 2.0 로그인 | 프로필 수정 | 유저 정보 리스트 | 이용권 구매 |
 </div>
 </br>
 
 ### 롤링페이퍼
 <div align=center>
   
-|![롤링페이퍼 작성](https://github.com/xyz-wr/rolling-paper/assets/63355903/c7c7635d-85ef-4dca-826b-a79158e3a7c8) |![롤링페이퍼 수정 및 삭제](https://github.com/xyz-wr/rolling-paper/assets/63355903/53a2171c-ec7d-4ad6-9a42-3058f9663149)|![롤링페이퍼 검색](https://github.com/xyz-wr/rolling-paper/assets/63355903/fe2c2819-9cc8-4381-929d-c5985c9e4938) |![롤링페이퍼 탈퇴](https://github.com/xyz-wr/rolling-paper/assets/63355903/c2f00e0c-f884-4694-88a3-6cbd39aa2f2e)|![페이지네이션](https://github.com/xyz-wr/rolling-paper/assets/63355903/5b79d9df-82bd-4ed4-9a9d-3acb5049ab2a)|![이용권 구매](https://github.com/xyz-wr/rolling-paper/assets/63355903/74028a45-4661-4536-824f-c2a1cc01a0dd)|
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| 롤링페이퍼 작성 | 롤링페이퍼 수정 및 삭제 | 롤링페이퍼 검색 | 롤링페이퍼 탈퇴 | 페이지네이션 | 이용권 구매|
+|![롤링페이퍼 작성](https://github.com/xyz-wr/rolling-paper/assets/63355903/c7c7635d-85ef-4dca-826b-a79158e3a7c8) |![롤링페이퍼 수정 및 삭제](https://github.com/xyz-wr/rolling-paper/assets/63355903/53a2171c-ec7d-4ad6-9a42-3058f9663149)|![롤링페이퍼 검색](https://github.com/xyz-wr/rolling-paper/assets/63355903/fe2c2819-9cc8-4381-929d-c5985c9e4938) |![롤링페이퍼 탈퇴](https://github.com/xyz-wr/rolling-paper/assets/63355903/c2f00e0c-f884-4694-88a3-6cbd39aa2f2e)|![페이지네이션](https://github.com/xyz-wr/rolling-paper/assets/63355903/5b79d9df-82bd-4ed4-9a9d-3acb5049ab2a)|
+|:---:|:---:|:---:|:---:|:---:|
+| 롤링페이퍼 작성 | 롤링페이퍼 수정 및 삭제 | 롤링페이퍼 검색 | 롤링페이퍼 탈퇴 | 페이지네이션 | 
 </div>
 </br>
 

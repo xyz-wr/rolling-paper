@@ -58,6 +58,15 @@
 </div>
 </br>
 
+## ✅ 주요 기능 및 사용 방법
+### 유저
+<div align=center>
+  
+|![회원가입 및 로그인](https://github.com/xyz-wr/rolling-paper/assets/63355903/c735afb9-bec4-4254-aa18-621aa14ba935) |![OAuth 2 0](https://github.com/xyz-wr/rolling-paper/assets/63355903/b0344f31-0594-4655-8708-3c2f41478d25)|![프로필 수정](https://github.com/xyz-wr/rolling-paper/assets/63355903/746684d4-04a0-4d7d-9520-ab7d06822c7d) |![유저 정보 리스트](https://github.com/xyz-wr/rolling-paper/assets/63355903/7ff3a637-ba37-4704-ad5f-ce8200b0d0f6)|
+|:---:|:---:|:---:|:---:|
+| 회원가입 및 로그인 | OAuth 2.0 로그인 | 프로필 수정 | 유저 정보 리스트 |
+</div>
+
 ## 배포 방식
 EC2에서 Docker를 활용하여 배포를 진행하였습니다. </br>
 
@@ -76,11 +85,7 @@ Github Actions를 사용하여 Docker Image를 빌드하고 EC2에 반영합니�
 </br>
 ❗[invitation과 paper 연결 후 paper delete시 발생한 문제 해결](https://www.notion.so/invitation-paper-paper-delete-9421b8b6896a4a3bb9b47faf06074da0)
 </br>
-❗[MessageRepositoryTest에서 testFindByPaperIdAndId가 전체 테스트에서는 통과되지 않는 문제 해결](https://www.notion.so/MessageRepositoryTest-testFindByPaperIdAndId-52bd396b2a1d44568743f07567b1a43f)
-</br>
-❗[이메일 인증번호 구현 시 The sender address is unauthorized NkEL1BlcQ4yKzxc1hmQMQg - nsmtp 문제 해결](https://www.notion.so/The-sender-address-is-unauthorized-NkEL1BlcQ4yKzxc1hmQMQg-nsmtp-18781c6a95914b55b374d08ff73ee79f)
-</br>
-❗[Dockerfile 작성 시 failed to compute cache key 문제 해결](https://www.notion.so/Dockerfile-failed-to-compute-cache-key-12bfa8be67d14df4a0cf21e6a58472bb)
+❗[이미 이메일이 존재하는 경우에도 회원가입 시 인증번호가 발송되는 문제](https://www.notion.so/77710ceca90b4c9e8140fa86fffef8f7)
 </br>
 
 

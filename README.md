@@ -103,6 +103,13 @@
 </div>
 </br>
 
+## API 설계
+### 1) RESTful API
+[RESTful API](https://docs.google.com/spreadsheets/d/1rr44hdJHzL1d2XegidktHY1Tk-6BB-2xd7IgAdPji-8/edit#gid=0)
+
+### 2) MVC
+[MVC](https://docs.google.com/spreadsheets/d/1tPKW0C0OMZWPcnCPozfFfCAAVe35cQb18xEZXdAlEls/edit#gid=992728778)
+
 ## 배포 방식
 EC2에서 Docker를 활용하여 배포를 진행하였습니다. </br>
 

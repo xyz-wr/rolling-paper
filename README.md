@@ -1,4 +1,4 @@
-<div align=center>
+![롤링페이퍼 작성](https://github.com/xyz-wr/rolling-paper/assets/63355903/3249931e-579e-44d7-99ac-572909789100)<div align=center>
 
 <h2> [ Rolling Paper ] 롤링페이퍼 작성 서비스 </h2>
 
@@ -66,6 +66,42 @@
 |:---:|:---:|:---:|:---:|
 | 회원가입 및 로그인 | OAuth 2.0 로그인 | 프로필 수정 | 유저 정보 리스트 |
 </div>
+</br>
+
+### 롤링페이퍼
+<div align=center>
+  
+|![롤링페이퍼 작성](https://github.com/xyz-wr/rolling-paper/assets/63355903/c7c7635d-85ef-4dca-826b-a79158e3a7c8) |![롤링페이퍼 수정 및 삭제](https://github.com/xyz-wr/rolling-paper/assets/63355903/53a2171c-ec7d-4ad6-9a42-3058f9663149)|![롤링페이퍼 검색](https://github.com/xyz-wr/rolling-paper/assets/63355903/fe2c2819-9cc8-4381-929d-c5985c9e4938) |![롤링페이퍼 탈퇴](https://github.com/xyz-wr/rolling-paper/assets/63355903/c2f00e0c-f884-4694-88a3-6cbd39aa2f2e)|![페이지네이션](https://github.com/xyz-wr/rolling-paper/assets/63355903/5b79d9df-82bd-4ed4-9a9d-3acb5049ab2a)|![이용권 구매](https://github.com/xyz-wr/rolling-paper/assets/63355903/74028a45-4661-4536-824f-c2a1cc01a0dd)|
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 롤링페이퍼 작성 | 롤링페이퍼 수정 및 삭제 | 롤링페이퍼 검색 | 롤링페이퍼 탈퇴 | 페이지네이션 | 이용권 구매|
+</div>
+</br>
+
+### 롤링페이퍼 메시지
+<div align=center>
+  
+|![메시지 작성](https://github.com/xyz-wr/rolling-paper/assets/63355903/80fed528-d9a1-4ed1-8eb8-c7f503fa0a77) |![메시지 수정 및 삭제](https://github.com/xyz-wr/rolling-paper/assets/63355903/c5803bda-6fe4-4e4f-a4b3-92e8e9d66e8d)|
+|:---:|:---:|
+| 롤링페이퍼 메시지 작성 | 롤링페이퍼 메시지 수정 및 삭제 | 
+</div>
+</br>
+
+### 초대장
+<div align=center>
+  
+|![초대장 발송](https://github.com/xyz-wr/rolling-paper/assets/63355903/14418764-81f5-4b7b-8f84-fd04a1d953f3) |![초대 수락](https://github.com/xyz-wr/rolling-paper/assets/63355903/d21bf6d0-f211-4348-aafd-3223b8ef2aa4)| ![초대 수락 유저 리스트 및 탈퇴](https://github.com/xyz-wr/rolling-paper/assets/63355903/032a3583-6951-4fb6-bb34-e89bff731978)|
+|:---:|:---:|:---:|
+| 초대장 발송 | 초대 수락 | 초대 수락 유저 리스트 및 탈퇴 |
+</div>
+</br>
+
+### 좋아요
+<div align=center>
+  
+|![좋아요](https://github.com/xyz-wr/rolling-paper/assets/63355903/487db44f-b488-4dd3-a82f-0db20840648c)|
+|:---:|
+</div>
+</br>
 
 ## 배포 방식
 EC2에서 Docker를 활용하여 배포를 진행하였습니다. </br>

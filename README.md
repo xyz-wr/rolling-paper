@@ -1,5 +1,3 @@
-![롤링페이퍼 작성](https://github.com/xyz-wr/rolling-paper/assets/63355903/3249931e-579e-44d7-99ac-572909789100)<div align=center>
-
 <h2> [ Rolling Paper ] 롤링페이퍼 작성 서비스 </h2>
 
 <p align="middle">  Spring Boot를 사용하여 웹 개발을 학습하기 위해 진행한 개인 프로젝트입니다.

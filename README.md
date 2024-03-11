@@ -101,6 +101,9 @@
 </div>
 </br>
 
+## 사용자 요구 사항 정의서
+[사용자 요구 사항 정의서](https://docs.google.com/spreadsheets/d/1CS3VXJqUbttb2THD6iwtLbXJvIlF1-yeu_pCPaEp5d0/edit#gid=0)
+
 ## API 설계
 ### 1) RESTful API
 [RESTful API](https://docs.google.com/spreadsheets/d/1rr44hdJHzL1d2XegidktHY1Tk-6BB-2xd7IgAdPji-8/edit#gid=0)

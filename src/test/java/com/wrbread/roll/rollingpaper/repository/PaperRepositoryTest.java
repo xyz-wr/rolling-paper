@@ -3,12 +3,11 @@ package com.wrbread.roll.rollingpaper.repository;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,13 +64,15 @@ class PaperRepositoryTest {
         List<Paper> papers = Arrays.asList(paper1, paper2, paper3);
         paperRepository.saveAll(papers);
 
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+
         // when
-        List<Paper> result = paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC);
+        List<Paper> result = paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC, sort);
 
         // then
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals("Paper 1", result.get(0).getTitle());
-        assertEquals("Paper 3", result.get(1).getTitle());
+        assertEquals("Paper 3", result.get(0).getTitle());
+        assertEquals("Paper 1", result.get(1).getTitle());
     }
 }

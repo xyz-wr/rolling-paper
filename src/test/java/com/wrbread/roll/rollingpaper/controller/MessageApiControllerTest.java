@@ -2,7 +2,6 @@ package com.wrbread.roll.rollingpaper.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wrbread.roll.rollingpaper.model.dto.MessageDto;
-import com.wrbread.roll.rollingpaper.model.entity.Like;
 import com.wrbread.roll.rollingpaper.model.entity.Message;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
 import com.wrbread.roll.rollingpaper.model.entity.User;
@@ -13,17 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,6 +30,7 @@ import static com.wrbread.roll.rollingpaper.model.enums.IsPublic.PUBLIC;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -202,7 +201,7 @@ class MessageApiControllerTest {
                 new Message(user, paper, 2L, "name2", "Test Content2", 0)
         );
 
-        given(messageService.getMessages(paperId)).willReturn(messages);
+        given(messageService.getMessages(eq(paperId), any())).willReturn(new PageImpl<>(messages));
 
         URI uri = UriComponentsBuilder
                 .newInstance()

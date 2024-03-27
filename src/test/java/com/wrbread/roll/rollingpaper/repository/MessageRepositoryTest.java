@@ -9,6 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 
 import java.util.Arrays;
@@ -92,14 +95,16 @@ class MessageRepositoryTest {
         List<Message> messages = Arrays.asList(message1, message2);
         messageRepository.saveAll(messages);
 
+        Pageable pageable = PageRequest.of(0, 6);
+
         // when
-        List<Message> result = messageRepository.findByPaper(paper);
+        Page<Message> result = messageRepository.findByPaper(paper, pageable);
 
         // then
         assertNotNull(result);
-        assertEquals(2, result.size());
-        assertTrue(result.contains(message1));
-        assertTrue(result.contains(message2));
+        assertEquals(2, result.getTotalElements());
+        assertTrue(result.getContent().contains(message1));
+        assertTrue(result.getContent().contains(message2));
     }
 
     @Test

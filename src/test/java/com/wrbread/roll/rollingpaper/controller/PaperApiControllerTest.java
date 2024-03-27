@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.dto.PaperDto;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
+import com.wrbread.roll.rollingpaper.model.entity.ProfileImg;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
 import com.wrbread.roll.rollingpaper.service.PaperService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,15 +27,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -136,7 +135,7 @@ class PaperApiControllerTest {
 
         Long paperId = 1L;
         PaperDto updatedPaperDto = new PaperDto();
-        updatedPaperDto.setTitle("Updated Paper");
+        updatedPaperDto.setTitle("Updated");
         updatedPaperDto.setIsPublic(IsPublic.PUBLIC);
 
         Paper paper = Paper.builder()
@@ -187,7 +186,8 @@ class PaperApiControllerTest {
                 new Paper(user, 2L, "Public Paper 2", IsPublic.PUBLIC)
         );
 
-        given(paperService.getPublicPapers()).willReturn(publicPapers);
+
+        given(paperService.getPublicPapers(any())).willReturn(new PageImpl<>(publicPapers));
 
         URI uri = UriComponentsBuilder
                 .newInstance()
@@ -228,7 +228,7 @@ class PaperApiControllerTest {
                 new Paper(user, 2L, "Friend Paper 2", IsPublic.FRIEND)
         );
 
-        given(paperService.getFriendPapers()).willReturn(friendPapers);
+        given(paperService.getFriendPapers(any())).willReturn(new PageImpl<>(friendPapers));
 
         URI uri = UriComponentsBuilder
                 .newInstance()
@@ -366,6 +366,11 @@ class PaperApiControllerTest {
     @DisplayName("롤링 페이퍼에 초대할 유저 검색 테스트")
     void testSearchCodename() throws Exception {
         // Given
+        ProfileImg profileImg = ProfileImg.builder()
+                .oriImgNm("oriImgNm")
+                .imgUrl("imgUrl")
+                .build();
+
         AuthDto.UserDto userDto = new AuthDto.UserDto();
         userDto.setEmail("test@gmail.com");
         userDto.setCodename("ABCDEF");
@@ -375,6 +380,7 @@ class PaperApiControllerTest {
                 .email(userDto.getEmail())
                 .codename(userDto.getCodename())
                 .nickname(userDto.getNickname())
+                .profileImg(profileImg)
                 .build();
 
         Long paperId = 1L;
@@ -422,7 +428,7 @@ class PaperApiControllerTest {
         );
 
         String keyword = "Public";
-        given(paperService.searchPublicPapers(keyword)).willReturn(publicPapers);
+        given(paperService.searchPublicPapers(eq(keyword), any())).willReturn(new PageImpl<>(publicPapers));
 
         URI uri = UriComponentsBuilder
                 .newInstance()
@@ -465,7 +471,7 @@ class PaperApiControllerTest {
         );
 
         String keyword = "Friend";
-        given(paperService.searchFriendPapers(keyword)).willReturn(friendPapers);
+        given(paperService.searchFriendPapers(eq(keyword), any())).willReturn(new PageImpl<>(friendPapers));
 
         URI uri = UriComponentsBuilder
                 .newInstance()

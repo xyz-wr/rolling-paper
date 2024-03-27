@@ -51,13 +51,14 @@ public class User extends BaseTimeEntity{
     private boolean isSubscriber;
 
     @Builder(builderClassName = "UserDetail",builderMethodName = "userDetail")
-    public User(Long id, String nickname, String email, String password, String codename, Role role) {
+    public User(Long id, String nickname, String email, String password, String codename, Role role, ProfileImg profileImg) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.role = role;
         this.codename = codename;
+        this.profileImg = profileImg;
     }
 
     @Builder(builderClassName = "OAuth2User",builderMethodName = "oAuth2User")

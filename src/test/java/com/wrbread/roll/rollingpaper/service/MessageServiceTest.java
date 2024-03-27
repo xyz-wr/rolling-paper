@@ -16,6 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -162,8 +166,8 @@ class MessageServiceTest {
         Long messageId = 1L;
         MessageDto updatedMessageDto = new MessageDto();
         updatedMessageDto.setId(messageId);
-        updatedMessageDto.setName("Updated Name");
-        updatedMessageDto.setContent("Updated Content");
+        updatedMessageDto.setName("UpdatedNm");
+        updatedMessageDto.setContent("Updated");
 
         Message message = Message.builder()
                 .id(1L)
@@ -185,8 +189,8 @@ class MessageServiceTest {
         //then
         assertEquals(updatedMessage.getId(), messageId);
         assertEquals(updatedMessage.getPaper().getId(), paperId);
-        assertEquals(updatedMessage.getName(), "Updated Name");
-        assertEquals(updatedMessage.getContent(), "Updated Content");
+        assertEquals(updatedMessage.getName(), "UpdatedNm");
+        assertEquals(updatedMessage.getContent(), "Updated");
 
         verify(messageRepository, times(1)).findById(messageId);
         verify(paperRepository, times(1)).findById(paperId);
@@ -234,19 +238,21 @@ class MessageServiceTest {
                 .content(updatedMessageDto.getContent())
                 .build();
 
+        Pageable pageable = PageRequest.of(0, 6);
+
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
         when(paperRepository.findById(paperId)).thenReturn(Optional.of(paper));
-        when(messageRepository.findByPaper(paper)).thenReturn(Arrays.asList(message1, message2));
+        when(messageRepository.findByPaper(paper, pageable)).thenReturn(new PageImpl<>(Arrays.asList(message1, message2)));
 
         // When
-        List<Message> messages = messageService.getMessages(paperId);
+       Page<Message> messages = messageService.getMessages(paperId, pageable);
 
         // Then
-        assertEquals(messages.size(), 2);
+        assertEquals(messages.getTotalElements(), 2);
 
         verify(paperRepository, times(1)).findById(paperId);
-        verify(messageRepository, times(1)).findByPaper(paper);
+        verify(messageRepository, times(1)).findByPaper(paper, pageable);
     }
 
     @Test

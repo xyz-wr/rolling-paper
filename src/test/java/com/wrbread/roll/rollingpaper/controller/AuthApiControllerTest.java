@@ -163,7 +163,7 @@ class AuthApiControllerTest {
         doNothing().when(authService).sendAuthEmail(email);
 
         //when
-        ResultActions actions = mockMvc.perform(post("/api/auth/send-email")
+        ResultActions actions = mockMvc.perform(post("/api/auth/send/auth-key")
                         .param("email", email));
 
         //then
@@ -181,7 +181,7 @@ class AuthApiControllerTest {
         given(authService.checkAuthKey(email, authKey)).willReturn(Boolean.TRUE);
 
         //when
-        ResultActions actions = mockMvc.perform(post("/api/auth/check-auth-key")
+        ResultActions actions = mockMvc.perform(post("/api/auth/check/auth-key")
                 .param("email", email)
                 .param("auth-key", authKey));
 

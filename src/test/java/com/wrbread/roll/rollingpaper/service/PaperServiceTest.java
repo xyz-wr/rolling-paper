@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -19,6 +20,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -128,7 +130,7 @@ class PaperServiceTest {
         Long paperId = 1L;
         PaperDto updatedPaperDto = new PaperDto();
         updatedPaperDto.setId(paperId);
-        updatedPaperDto.setTitle("Updated Paper");
+        updatedPaperDto.setTitle("Updated");
         updatedPaperDto.setIsPublic(IsPublic.PUBLIC);
 
         Paper paper = Paper.builder()
@@ -148,7 +150,7 @@ class PaperServiceTest {
 
         // then
         assertEquals(updatedPaper.getId(), paperId);
-        assertEquals(updatedPaper.getTitle(), "Updated Paper");
+        assertEquals(updatedPaper.getTitle(), "Updated");
         assertEquals(updatedPaper.getIsPublic(), IsPublic.PUBLIC);
 
         // verify
@@ -178,18 +180,20 @@ class PaperServiceTest {
                 .isPublic(paperDto.getIsPublic())
                 .build();
 
-        when(paperRepository.findByIsPublic(IsPublic.PUBLIC)).thenReturn(Arrays.asList(paper1, paper2));
+        Pageable pageable = PageRequest.of(0, 6);
+
+        when(paperRepository.findByIsPublic(IsPublic.PUBLIC, pageable)).thenReturn(new PageImpl<>(Arrays.asList(paper1, paper2)));
 
         //when
-        List<Paper> publicPapers = paperService.getPublicPapers();
+        Page<Paper> publicPapers = paperService.getPublicPapers(pageable);
 
         // then
-        assertEquals(publicPapers.size(), 2);
-        assertTrue(publicPapers.contains(paper1));
-        assertTrue(publicPapers.contains(paper2));
+        assertEquals(publicPapers.getTotalElements(), 2);
+        assertTrue(publicPapers.getContent().contains(paper1));
+        assertTrue(publicPapers.getContent().contains(paper2));
 
         // verify
-        verify(paperRepository, times(1)).findByIsPublic(IsPublic.PUBLIC);
+        verify(paperRepository, times(1)).findByIsPublic(IsPublic.PUBLIC, pageable);
     }
 
     @Test
@@ -221,21 +225,31 @@ class PaperServiceTest {
                 .isPublic(paperDto.getIsPublic())
                 .build();
 
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+        Pageable pageable = PageRequest.of(0, 6);
+
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
-        when(paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND)).thenReturn(Arrays.asList(paper1, paper2));
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort)).thenReturn(Arrays.asList(paper1, paper2));
 
         //when
-        List<Paper> friendPapers = paperService.getFriendPapers();
+        List<Paper> friendPapers = paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort);
+        friendPapers.sort(Comparator.comparing(Paper::getCreatedDate, Comparator.nullsLast(Comparator.reverseOrder())));
+
+
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), friendPapers.size());
+        List<Paper> papers = friendPapers.subList(start, end);
+
+        Page<Paper> allFriendPapers = new PageImpl<>(papers, pageable, friendPapers.size());
 
         // then
-        assertEquals(friendPapers.size(), 2);
-        assertTrue(friendPapers.contains(paper1));
-        assertTrue(friendPapers.contains(paper2));
+        assertEquals(allFriendPapers.getTotalElements(), 2);
+        assertTrue(allFriendPapers.getContent().contains(paper1));
+        assertTrue(allFriendPapers.getContent().contains(paper2));
 
         // verify
-        verify(userRepository, times(1)).findByEmail(email);
-        verify(paperRepository, times(1)).findAllByUserAndIsPublic(user, IsPublic.FRIEND);
+        verify(paperRepository, times(1)).findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort);
     }
 
     @Test
@@ -267,9 +281,11 @@ class PaperServiceTest {
                 .isPublic(paperDto.getIsPublic())
                 .build();
 
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
-        when(paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC)).thenReturn(Arrays.asList(paper1, paper2));
+        when(paperRepository.findAllByUserAndIsPublic(user, IsPublic.PUBLIC, sort)).thenReturn(Arrays.asList(paper1, paper2));
 
         //when
         List<Paper> publicPapers = paperService.getMyPublicPapers();
@@ -281,7 +297,7 @@ class PaperServiceTest {
 
         // verify
         verify(userRepository, times(1)).findByEmail(email);
-        verify(paperRepository, times(1)).findAllByUserAndIsPublic(user, IsPublic.PUBLIC);
+        verify(paperRepository, times(1)).findAllByUserAndIsPublic(user, IsPublic.PUBLIC, sort);
     }
 
     @Test
@@ -313,9 +329,11 @@ class PaperServiceTest {
                 .isPublic(paperDto.getIsPublic())
                 .build();
 
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
+
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
-        when(paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND)).thenReturn(Arrays.asList(paper1, paper2));
+        when(paperRepository.findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort)).thenReturn(Arrays.asList(paper1, paper2));
 
         //when
         List<Paper> friendPapers = paperService.getMyFriendPapers();
@@ -327,7 +345,7 @@ class PaperServiceTest {
 
         // verify
         verify(userRepository, times(1)).findByEmail(email);
-        verify(paperRepository, times(1)).findAllByUserAndIsPublic(user, IsPublic.FRIEND);
+        verify(paperRepository, times(1)).findAllByUserAndIsPublic(user, IsPublic.FRIEND, sort);
     }
 
     @Test
@@ -390,19 +408,21 @@ class PaperServiceTest {
                 .isPublic(paperDto.getIsPublic())
                 .build();
 
+        Pageable pageable = PageRequest.of(0, 6);
+
         String keyword = "Test";
-        when(paperRepository.findByTitleContainingAndIsPublic(keyword, IsPublic.PUBLIC)).thenReturn(Arrays.asList(paper1, paper2));
+        when(paperRepository.findByTitleContainingAndIsPublic(keyword, IsPublic.PUBLIC, pageable)).thenReturn(new PageImpl<>(Arrays.asList(paper1, paper2)));
 
         //when
-        List<Paper> publicPapers = paperService.searchPublicPapers(keyword);
+        Page<Paper> publicPapers = paperService.searchPublicPapers(keyword, pageable);
 
         // then
-        assertEquals(publicPapers.size(), 2);
-        assertTrue(publicPapers.contains(paper1));
-        assertTrue(publicPapers.contains(paper2));
+        assertEquals(publicPapers.getTotalElements(), 2);
+        assertTrue(publicPapers.getContent().contains(paper1));
+        assertTrue(publicPapers.getContent().contains(paper2));
 
         // verify
-        verify(paperRepository, times(1)).findByTitleContainingAndIsPublic(keyword, IsPublic.PUBLIC);
+        verify(paperRepository, times(1)).findByTitleContainingAndIsPublic(keyword, IsPublic.PUBLIC, pageable);
     }
 
     @Test
@@ -436,20 +456,23 @@ class PaperServiceTest {
 
         String keyword = "Test";
 
+        Pageable pageable = PageRequest.of(0, 6);
+
+
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.ofNullable(user));
-        when(paperRepository.findAllByUserAndTitleContainingAndIsPublic(user, keyword, IsPublic.FRIEND)).thenReturn(Arrays.asList(paper1, paper2));
+        when(paperRepository.findAllByUserAndTitleContainingAndIsPublic(user, keyword, IsPublic.FRIEND, pageable)).thenReturn(new PageImpl<>(Arrays.asList(paper1, paper2)));
 
         //when
-        List<Paper> friendPapers = paperService.searchFriendPapers(keyword);
+        Page<Paper> friendPapers = paperService.searchFriendPapers(keyword, pageable);
 
         // then
-        assertEquals(friendPapers.size(), 2);
-        assertTrue(friendPapers.contains(paper1));
-        assertTrue(friendPapers.contains(paper2));
+        assertEquals(friendPapers.getTotalElements(), 2);
+        assertTrue(friendPapers.getContent().contains(paper1));
+        assertTrue(friendPapers.getContent().contains(paper2));
 
         // verify
         verify(userRepository, times(1)).findByEmail(email);
-        verify(paperRepository, times(1)).findAllByUserAndTitleContainingAndIsPublic(user, keyword, IsPublic.FRIEND);
+        verify(paperRepository, times(1)).findAllByUserAndTitleContainingAndIsPublic(user, keyword, IsPublic.FRIEND, pageable);
     }
 }

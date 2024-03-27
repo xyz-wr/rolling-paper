@@ -6,6 +6,7 @@ import com.wrbread.roll.rollingpaper.model.dto.AuthDto;
 import com.wrbread.roll.rollingpaper.model.dto.InvitationDto;
 import com.wrbread.roll.rollingpaper.model.entity.Invitation;
 import com.wrbread.roll.rollingpaper.model.entity.Paper;
+import com.wrbread.roll.rollingpaper.model.entity.ProfileImg;
 import com.wrbread.roll.rollingpaper.model.entity.User;
 import com.wrbread.roll.rollingpaper.model.enums.InvitationStatus;
 import com.wrbread.roll.rollingpaper.model.enums.IsPublic;
@@ -57,6 +58,12 @@ class InvitationApiControllerTest {
     void testSendInvitation() throws Exception {
         //given
         Long paperId = 1L;
+
+        ProfileImg profileImg = ProfileImg.builder()
+                .oriImgNm("oriImgNm")
+                .imgUrl("imgUrl")
+                .build();
+
         String senEmail = "sender@gmail.com";
         String receiverEmail = "receiver@gmail.com";
 
@@ -65,10 +72,12 @@ class InvitationApiControllerTest {
 
         User sender = User.userDetail()
                 .email(senEmail)
+                .profileImg(profileImg)
                 .build();
 
         User receiver = User.userDetail()
                 .email(receiverEmail)
+                .profileImg(profileImg)
                 .build();
 
         Paper paper = Paper.builder()
@@ -174,6 +183,11 @@ class InvitationApiControllerTest {
         //given
         Long paperId = 1L;
 
+        ProfileImg profileImg = ProfileImg.builder()
+                .oriImgNm("oriImgNm")
+                .imgUrl("imgUrl")
+                .build();
+
         String senderEmail = "sender@gmail.com";
         String receiverEmail1 = "receiver1@gmail.com";
         String receiverEmail2 = "receiver2@gmail.com";
@@ -181,14 +195,17 @@ class InvitationApiControllerTest {
         User sender = User.userDetail()
                 .email(senderEmail)
                 .nickname("Test Nickname")
+                .profileImg(profileImg)
                 .build();
 
         User receiver1 = User.userDetail()
                 .email(receiverEmail1)
+                .profileImg(profileImg)
                 .build();
 
         User receiver2 = User.userDetail()
                 .email(receiverEmail2)
+                .profileImg(profileImg)
                 .build();
 
         Paper paper = Paper.builder()
@@ -241,6 +258,11 @@ class InvitationApiControllerTest {
         //given
         Long paperId = 1L;
 
+        ProfileImg profileImg = ProfileImg.builder()
+                .oriImgNm("oriImgNm")
+                .imgUrl("imgUrl")
+                .build();
+
         AuthDto.UserDto userDto = new AuthDto.UserDto();
         userDto.setEmail("testNickname");
         userDto.setCodename("TESTAB");
@@ -248,11 +270,13 @@ class InvitationApiControllerTest {
         User receiver1 = User.userDetail()
                 .nickname(userDto.getEmail())
                 .codename(userDto.getCodename())
+                .profileImg(profileImg)
                 .build();
 
         User receiver2 = User.userDetail()
                 .nickname(userDto.getEmail())
                 .codename(userDto.getCodename())
+                .profileImg(profileImg)
                 .build();
 
 

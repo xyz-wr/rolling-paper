@@ -13,6 +13,8 @@
 - `프로젝트명` : Rolling Paper
 - `프로젝트 기간` : 2024.01 ~ 2024.03
 - `배포 링크` : [rolling-paper](http://ec2-43-200-251-136.ap-northeast-2.compute.amazonaws.com:8080/)
+- `테스트 계정` :  test@gmail.com
+- `테스트 비밀번호` : testtesttest
 - `프로젝트 문서` : [Rolling Paper 서비스 소개](https://www.notion.so/Rolling-Paper-54274111cf854ddbb9b7ff92d2f35387)  
 
 </br>

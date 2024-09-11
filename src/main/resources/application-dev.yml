@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   mail:
     host: smtp.naver.com
     port: 465

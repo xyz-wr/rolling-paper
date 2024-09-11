@@ -39,7 +39,7 @@ public class UserService {
 
     private final InvitationRepository invitationRepository;
 
-    private final String DEFAULT_PROFILE_IMG = "https://rolling-paper.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
+    private final String DEFAULT_PROFILE_IMG = "https://rollingpaper.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
 
     @Transactional
     public User join(AuthDto.JoinDto joinDto) {

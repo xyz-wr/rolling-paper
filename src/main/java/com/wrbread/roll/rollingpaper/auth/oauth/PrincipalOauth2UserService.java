@@ -23,7 +23,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     private final RandomUtil randomUtil;
     private final UserRepository userRepository;
 
-    private final String DEFAULT_PROFILE_IMG = "https://rolling-paper.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
+    private final String DEFAULT_PROFILE_IMG = "https://rollingpaper.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
 
     private final ProfileImgRepository profileImgRepository;
 

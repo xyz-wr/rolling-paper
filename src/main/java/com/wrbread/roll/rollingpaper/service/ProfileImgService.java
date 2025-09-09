@@ -25,7 +25,7 @@ public class ProfileImgService {
 
     private final String imgFolder = "profileImg";
 
-    private final String DEFAULT_PROFILE_IMG = "https://rollingpaper.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
+    private final String DEFAULT_PROFILE_IMG = "https://rolling-paper-project.s3.ap-northeast-2.amazonaws.com/default/default_profileImg.png";
 
 
     /** 이미지 파일 업로드 */
